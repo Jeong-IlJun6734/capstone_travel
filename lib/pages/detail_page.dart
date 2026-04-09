@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/page_section.dart';
 import 'indoor_navigation_page.dart';
+import 'schedule_management_page.dart';
 
 class DetailPage extends StatelessWidget {
   const DetailPage({super.key, required this.section});
@@ -132,9 +133,16 @@ class DetailPage extends StatelessWidget {
   }
 
   void _handleActionTap(BuildContext context, String label) {
-    if (label == '실내 길찾기') {
+    if (label.contains('길찾기')) {
       Navigator.of(context).push(
         MaterialPageRoute<void>(builder: (_) => const IndoorNavigationPage()),
+      );
+      return;
+    }
+
+    if (label.contains('일정')) {
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(builder: (_) => const ScheduleManagementPage()),
       );
       return;
     }
