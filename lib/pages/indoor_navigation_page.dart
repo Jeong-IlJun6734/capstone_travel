@@ -23,6 +23,9 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   static const EventChannel _rotationVectorChannel = EventChannel(
     'demo_app/rotation_vectors',
   );
+  static const EventChannel _stepDetectorChannel = EventChannel(
+    'demo_app/step_detector',
+  );
 
   final DeadReckoningCalculator _deadReckoningCalculator =
       DeadReckoningCalculator();
@@ -36,6 +39,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   StreamSubscription<GyroscopeEvent>? _gyroscopeSubscription;
   StreamSubscription<MagnetometerEvent>? _magnetometerSubscription;
   StreamSubscription<dynamic>? _rotationVectorSubscription;
+  StreamSubscription<dynamic>? _stepDetectorSubscription;
 
   AccelerometerEvent? _accelerometerEvent;
   UserAccelerometerEvent? _userAccelerometerEvent;
@@ -44,12 +48,15 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   double? _geomagneticRotationAzimuth;
   double? _gameRotationAzimuth;
   bool? _cameraPermissionGranted;
+  bool? _activityRecognitionGranted;
+  bool _stepDetectorAvailable = false;
+  int _stepDetectorEventCount = 0;
+  DateTime? _lastStepDetectorEventAt;
+  bool _pendingHardwareStepDetected = false;
   DeadReckoningState _deadReckoningState = DeadReckoningState.initial();
   Timer? _logFlushTimer;
   File? _logFile;
-  String? _logFilePath;
   String? _cameraError;
-  String? _logError;
   bool _hasShownCameraErrorDialog = false;
   bool _isFlushingLog = false;
 
@@ -60,15 +67,18 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   }
 
   Future<void> _initializePage() async {
-    await _requestCameraPermission();
+    await _requestPermissions();
     _cameraReady = _initializeCamera();
     _startSensorStreams();
     _startRotationVectorStream();
+    _startStepDetectorStream();
     await _initializeLogging();
   }
 
-  Future<void> _requestCameraPermission() async {
+  Future<void> _requestPermissions() async {
     final cameraStatus = await Permission.camera.request();
+    final activityRecognitionStatus =
+        await Permission.activityRecognition.request();
 
     if (!mounted) {
       return;
@@ -76,6 +86,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
 
     setState(() {
       _cameraPermissionGranted = cameraStatus.isGranted;
+      _activityRecognitionGranted = activityRecognitionStatus.isGranted;
     });
   }
 
@@ -221,12 +232,33 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
           setState(() {
             _geomagneticRotationAzimuth = geomagneticAzimuth;
             _gameRotationAzimuth = gameAzimuth;
-            _updateDeadReckoning();
           });
         });
   }
 
-  void _updateDeadReckoning({bool hardwareStepDetected = false}) {
+  void _startStepDetectorStream() {
+    _stepDetectorSubscription = _stepDetectorChannel
+        .receiveBroadcastStream()
+        .listen((dynamic event) {
+          if (!mounted || event is! Map<Object?, Object?>) {
+            return;
+          }
+
+          final available = event['available'] == true;
+          final stepDetected = event['stepDetected'] == true;
+
+          setState(() {
+            _stepDetectorAvailable = available;
+            if (stepDetected) {
+              _stepDetectorEventCount += 1;
+              _lastStepDetectorEventAt = DateTime.now();
+              _pendingHardwareStepDetected = true;
+            }
+          });
+        });
+  }
+
+  void _updateDeadReckoning() {
     final accelerometer = _accelerometerEvent;
     final linearAcceleration = _userAccelerometerEvent;
     final gyroscope = _gyroscopeEvent;
@@ -240,6 +272,8 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     }
 
     final timestamp = DateTime.now();
+    final hardwareStepDetected = _pendingHardwareStepDetected;
+    _pendingHardwareStepDetected = false;
 
     final sample = SensorSample(
       timestamp: timestamp,
@@ -261,11 +295,16 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
       gameRotationAzimuth: _gameRotationAzimuth,
     );
 
+    final previousStepCount = _deadReckoningState.stepCount;
     _deadReckoningState = _deadReckoningCalculator.processSample(
       sample,
       _deadReckoningState,
     );
-    _enqueueLogLine(sample, _deadReckoningState);
+    _enqueueLogLine(
+      sample,
+      _deadReckoningState,
+      imuStepDetected: _deadReckoningState.stepCount > previousStepCount,
+    );
   }
 
   Future<void> _initializeLogging() async {
@@ -285,8 +324,6 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
 
       setState(() {
         _logFile = file;
-        _logFilePath = file.path;
-        _logError = null;
       });
 
       _logFlushTimer = Timer.periodic(
@@ -294,17 +331,15 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
         (_) => unawaited(_flushPendingLogLines()),
       );
     } catch (error) {
-      if (!mounted) {
-        return;
-      }
-
-      setState(() {
-        _logError = 'Log initialization failed: $error';
-      });
+      debugPrint('Log initialization failed: $error');
     }
   }
 
-  void _enqueueLogLine(SensorSample sample, DeadReckoningState state) {
+  void _enqueueLogLine(
+    SensorSample sample,
+    DeadReckoningState state, {
+    required bool imuStepDetected,
+  }) {
     final accelerometer = _accelerometerEvent;
     final userAccelerometer = _userAccelerometerEvent;
     final gyroscope = _gyroscopeEvent;
@@ -316,6 +351,24 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
         magnetometer == null) {
       return;
     }
+
+    final userAccelMagnitude = math.sqrt(
+      userAccelerometer.x * userAccelerometer.x +
+          userAccelerometer.y * userAccelerometer.y +
+          userAccelerometer.z * userAccelerometer.z,
+    );
+    final gyroMagnitude = math.sqrt(
+      gyroscope.x * gyroscope.x +
+          gyroscope.y * gyroscope.y +
+          gyroscope.z * gyroscope.z,
+    );
+    final tiltGyroMagnitude = math.sqrt(
+      gyroscope.x * gyroscope.x + gyroscope.y * gyroscope.y,
+    );
+    final hardwareStepGatePassed =
+        userAccelMagnitude >= 0.4 &&
+        userAccelMagnitude <= 3.6 &&
+        gyroMagnitude <= 2.5;
 
     final fields = <String>[
       sample.timestamp.toIso8601String(),
@@ -336,21 +389,27 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
       userAccelerometer.x.toStringAsFixed(6),
       userAccelerometer.y.toStringAsFixed(6),
       userAccelerometer.z.toStringAsFixed(6),
+      userAccelMagnitude.toStringAsFixed(6),
       gyroscope.x.toStringAsFixed(6),
       gyroscope.y.toStringAsFixed(6),
       gyroscope.z.toStringAsFixed(6),
+      gyroMagnitude.toStringAsFixed(6),
+      tiltGyroMagnitude.toStringAsFixed(6),
       magnetometer.x.toStringAsFixed(6),
       magnetometer.y.toStringAsFixed(6),
       magnetometer.z.toStringAsFixed(6),
       (_geomagneticRotationAzimuth ?? double.nan).toStringAsFixed(6),
       (_gameRotationAzimuth ?? double.nan).toStringAsFixed(6),
+      _stepDetectorAvailable.toString(),
+      _stepDetectorEventCount.toString(),
+      _lastStepDetectorEventAt?.toIso8601String() ?? '',
+      (_activityRecognitionGranted ?? false).toString(),
       'false',
-      '0',
-      '',
-      'false',
-      'false',
-      'disabled',
-      'LINEAR_ACCELERATION',
+      _stepDetectorStatus,
+      'IMU_LINEAR_ACCELERATION',
+      sample.hardwareStepDetected.toString(),
+      hardwareStepGatePassed.toString(),
+      imuStepDetected.toString(),
     ];
 
     _pendingLogLines.add('${fields.join(',')}\n');
@@ -369,11 +428,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     try {
       await file.writeAsString(chunk, mode: FileMode.append, flush: true);
     } catch (error) {
-      if (mounted) {
-        setState(() {
-          _logError = 'Log write failed: $error';
-        });
-      }
+      debugPrint('Log write failed: $error');
     } finally {
       _isFlushingLog = false;
     }
@@ -399,6 +454,19 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     return labels[index];
   }
 
+  String get _stepDetectorStatus {
+    if (_activityRecognitionGranted == false) {
+      return 'permission_denied';
+    }
+    if (!_stepDetectorAvailable) {
+      return 'unavailable';
+    }
+    if (_stepDetectorEventCount == 0) {
+      return 'waiting_first_event';
+    }
+    return 'active';
+  }
+
   @override
   void dispose() {
     _logFlushTimer?.cancel();
@@ -408,6 +476,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     _gyroscopeSubscription?.cancel();
     _magnetometerSubscription?.cancel();
     _rotationVectorSubscription?.cancel();
+    _stepDetectorSubscription?.cancel();
     _cameraController?.dispose();
     super.dispose();
   }
@@ -566,40 +635,12 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
-            Text(
-              'Start position is fixed at (0.0, 0.0). Movement is estimated from live sensor data.',
-              style: theme.textTheme.bodySmall?.copyWith(color: Colors.white70),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              _logError ?? 'Logging to: ${_logFilePath ?? 'preparing...'}',
-              style: theme.textTheme.bodySmall?.copyWith(color: Colors.white60),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              'Permissions: camera ${_cameraPermissionGranted == true
-                  ? 'granted'
-                  : _cameraPermissionGranted == false
-                  ? 'denied'
-                  : 'checking'}',
-              style: theme.textTheme.bodySmall?.copyWith(color: Colors.white60),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              'Step source: LINEAR_ACCELERATION',
-              style: theme.textTheme.bodySmall?.copyWith(color: Colors.white60),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              'Hardware STEP_DETECTOR is disabled for step counting.',
-              style: theme.textTheme.bodySmall?.copyWith(color: Colors.white60),
-            ),
             const SizedBox(height: 14),
             _DeadReckoningStatus(
               positionX: _deadReckoningState.position.x,
               positionY: _deadReckoningState.position.y,
               stepCount: _deadReckoningState.stepCount,
+              recentStepIntervals: _deadReckoningState.recentStepIntervals,
               thresholdCrossings: _deadReckoningState.thresholdCrossings,
               totalDistanceMeters: _deadReckoningState.totalDistanceMeters,
               headingDegrees: _headingDegrees,
@@ -609,13 +650,6 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
                   _deadReckoningState.filteredAccelerationMagnitude,
               activeStepThreshold: _deadReckoningState.activeStepThreshold,
             ),
-            const SizedBox(height: 14),
-            _SensorValueList(
-              accelerometerEvent: _accelerometerEvent,
-              userAccelerometerEvent: _userAccelerometerEvent,
-              gyroscopeEvent: _gyroscopeEvent,
-              magnetometerEvent: _magnetometerEvent,
-            ),
           ],
         ),
       ),
@@ -624,13 +658,14 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
 }
 
 const String _csvHeader =
-    'timestamp,position_x,position_y,heading_radians,heading_degrees,heading_label,steps,crossings,distance_m,filtered_accel,active_threshold,motion_magnitude,accel_x,accel_y,accel_z,user_accel_x,user_accel_y,user_accel_z,gyro_x,gyro_y,gyro_z,mag_x,mag_y,mag_z,geomagnetic_rotation_azimuth,game_rotation_azimuth,step_detector_available,step_detector_event_count,last_step_detector_event_at,activity_recognition_granted,prefer_hardware_step_detector,step_detector_status,step_source\n';
+    'timestamp,position_x,position_y,heading_radians,heading_degrees,heading_label,steps,crossings,distance_m,filtered_accel,active_threshold,motion_magnitude,accel_x,accel_y,accel_z,user_accel_x,user_accel_y,user_accel_z,user_accel_magnitude,gyro_x,gyro_y,gyro_z,gyro_magnitude,tilt_gyro_magnitude,mag_x,mag_y,mag_z,geomagnetic_rotation_azimuth,game_rotation_azimuth,step_detector_available,step_detector_event_count,last_step_detector_event_at,activity_recognition_granted,prefer_hardware_step_detector,step_detector_status,step_source,hardware_step_detected,hardware_step_gate_passed,imu_step_detected\n';
 
 class _DeadReckoningStatus extends StatelessWidget {
   const _DeadReckoningStatus({
     required this.positionX,
     required this.positionY,
     required this.stepCount,
+    required this.recentStepIntervals,
     required this.thresholdCrossings,
     required this.totalDistanceMeters,
     required this.headingDegrees,
@@ -643,6 +678,7 @@ class _DeadReckoningStatus extends StatelessWidget {
   final double positionX;
   final double positionY;
   final int stepCount;
+  final List<double> recentStepIntervals;
   final int thresholdCrossings;
   final double totalDistanceMeters;
   final double headingDegrees;
@@ -654,6 +690,13 @@ class _DeadReckoningStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final recentFiveDuration = recentStepIntervals.fold<double>(
+      0,
+      (sum, interval) => sum + interval,
+    );
+    final recentFiveDurationText = recentStepIntervals.isEmpty
+        ? 'Recent 5-step time: waiting for more steps'
+        : 'Recent 5-step time: ${recentFiveDuration.toStringAsFixed(1)} s';
 
     return Container(
       padding: const EdgeInsets.all(14),
@@ -719,6 +762,11 @@ class _DeadReckoningStatus extends StatelessWidget {
             'Motion: ${motionMagnitude.toStringAsFixed(2)}   Filtered: ${filteredAccelerationMagnitude.toStringAsFixed(2)}   Threshold: ${activeStepThreshold.toStringAsFixed(2)}',
             style: theme.textTheme.bodySmall?.copyWith(color: Colors.white70),
           ),
+          const SizedBox(height: 6),
+          Text(
+            recentFiveDurationText,
+            style: theme.textTheme.bodySmall?.copyWith(color: Colors.white70),
+          ),
         ],
       ),
     );
@@ -748,96 +796,6 @@ class _CameraStatus extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _SensorValueList extends StatelessWidget {
-  const _SensorValueList({
-    required this.accelerometerEvent,
-    required this.userAccelerometerEvent,
-    required this.gyroscopeEvent,
-    required this.magnetometerEvent,
-  });
-
-  final AccelerometerEvent? accelerometerEvent;
-  final UserAccelerometerEvent? userAccelerometerEvent;
-  final GyroscopeEvent? gyroscopeEvent;
-  final MagnetometerEvent? magnetometerEvent;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return DefaultTextStyle(
-      style: theme.textTheme.bodyLarge!.copyWith(color: Colors.white),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _SensorRow(
-            label: 'Accelerometer',
-            event: accelerometerEvent == null
-                ? null
-                : [
-                    accelerometerEvent!.x,
-                    accelerometerEvent!.y,
-                    accelerometerEvent!.z,
-                  ],
-          ),
-          const SizedBox(height: 12),
-          _SensorRow(
-            label: 'User Accel',
-            event: userAccelerometerEvent == null
-                ? null
-                : [
-                    userAccelerometerEvent!.x,
-                    userAccelerometerEvent!.y,
-                    userAccelerometerEvent!.z,
-                  ],
-          ),
-          const SizedBox(height: 12),
-          _SensorRow(
-            label: 'Gyroscope',
-            event: gyroscopeEvent == null
-                ? null
-                : [gyroscopeEvent!.x, gyroscopeEvent!.y, gyroscopeEvent!.z],
-          ),
-          const SizedBox(height: 12),
-          _SensorRow(
-            label: 'Magnetometer Raw',
-            event: magnetometerEvent == null
-                ? null
-                : [
-                    magnetometerEvent!.x,
-                    magnetometerEvent!.y,
-                    magnetometerEvent!.z,
-                  ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _SensorRow extends StatelessWidget {
-  const _SensorRow({required this.label, required this.event});
-
-  final String label;
-  final List<double>? event;
-
-  @override
-  Widget build(BuildContext context) {
-    final values = event;
-    final valueText = values == null
-        ? 'waiting...'
-        : 'x ${values[0].toStringAsFixed(2)}  y ${values[1].toStringAsFixed(2)}  z ${values[2].toStringAsFixed(2)}';
-
-    return Text(
-      '$label  $valueText',
-      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-        color: Colors.white,
-        fontWeight: FontWeight.w600,
       ),
     );
   }

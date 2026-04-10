@@ -31,6 +31,7 @@ class DeadReckoningState {
     required this.position,
     required this.headingRadians,
     required this.stepCount,
+    required this.recentStepIntervals,
     required this.thresholdCrossings,
     required this.totalDistanceMeters,
     required this.filteredAccelerationMagnitude,
@@ -43,6 +44,7 @@ class DeadReckoningState {
       position: vm.Vector2.zero(),
       headingRadians: 0,
       stepCount: 0,
+      recentStepIntervals: const <double>[],
       thresholdCrossings: 0,
       totalDistanceMeters: 0,
       filteredAccelerationMagnitude: 0,
@@ -54,6 +56,7 @@ class DeadReckoningState {
   final vm.Vector2 position;
   final double headingRadians;
   final int stepCount;
+  final List<double> recentStepIntervals;
   final int thresholdCrossings;
   final double totalDistanceMeters;
   final double filteredAccelerationMagnitude;
@@ -64,6 +67,7 @@ class DeadReckoningState {
     vm.Vector2? position,
     double? headingRadians,
     int? stepCount,
+    List<double>? recentStepIntervals,
     int? thresholdCrossings,
     double? totalDistanceMeters,
     double? filteredAccelerationMagnitude,
@@ -75,6 +79,7 @@ class DeadReckoningState {
       position: position ?? this.position,
       headingRadians: headingRadians ?? this.headingRadians,
       stepCount: stepCount ?? this.stepCount,
+      recentStepIntervals: recentStepIntervals ?? this.recentStepIntervals,
       thresholdCrossings: thresholdCrossings ?? this.thresholdCrossings,
       totalDistanceMeters: totalDistanceMeters ?? this.totalDistanceMeters,
       filteredAccelerationMagnitude:
@@ -97,6 +102,9 @@ class DeadReckoningConfig {
     this.stepBaselineAlpha = 0.96,
     this.stepRearmHysteresis = 0.35,
     this.minimumStepPeak = 1.1,
+    this.minimumHardwareStepMotion = 0.4,
+    this.maximumHardwareStepMotion = 3.6,
+    this.maximumHardwareStepGyroscopeMagnitude = 2.5,
   });
 
   final double stepSensitivity;
@@ -107,6 +115,9 @@ class DeadReckoningConfig {
   final double stepBaselineAlpha;
   final double stepRearmHysteresis;
   final double minimumStepPeak;
+  final double minimumHardwareStepMotion;
+  final double maximumHardwareStepMotion;
+  final double maximumHardwareStepGyroscopeMagnitude;
 }
 
 class DeadReckoningCalculator {
@@ -145,11 +156,24 @@ class DeadReckoningCalculator {
       current.position.x + _config.stepLengthMeters * math.cos(heading),
       current.position.y + _config.stepLengthMeters * math.sin(heading),
     );
+    final nextRecentStepIntervals = <double>[
+      ...current.recentStepIntervals,
+      if (current.lastStepTimestamp != null)
+        sample.timestamp.difference(current.lastStepTimestamp!).inMilliseconds /
+            1000.0,
+    ];
+    if (nextRecentStepIntervals.length > 5) {
+      nextRecentStepIntervals.removeRange(
+        0,
+        nextRecentStepIntervals.length - 5,
+      );
+    }
 
     return current.copyWith(
       position: nextPosition,
       headingRadians: heading,
       stepCount: nextStepCount,
+      recentStepIntervals: nextRecentStepIntervals,
       thresholdCrossings: nextStepState.thresholdCrossings,
       totalDistanceMeters: nextStepCount * _config.stepLengthMeters,
       filteredAccelerationMagnitude:
@@ -201,6 +225,7 @@ class DeadReckoningCalculator {
 
   _StepState _updateStepState(SensorSample sample, DeadReckoningState current) {
     final rawMagnitude = sample.linearAcceleration.length;
+    final gyroscopeMagnitude = sample.gyroscope.length;
     _filteredAccelerationMagnitude = _lowPassScalar(
       input: rawMagnitude,
       previous: _filteredAccelerationMagnitude,
@@ -226,7 +251,12 @@ class DeadReckoningCalculator {
     _activeStepThreshold = upperThreshold;
 
     if (sample.preferHardwareStepDetector) {
-      if (!sample.hardwareStepDetected) {
+      final hardwareStepPlausible =
+          rawMagnitude >= _config.minimumHardwareStepMotion &&
+          rawMagnitude <= _config.maximumHardwareStepMotion &&
+          gyroscopeMagnitude <= _config.maximumHardwareStepGyroscopeMagnitude;
+
+      if (!sample.hardwareStepDetected || !hardwareStepPlausible) {
         return _StepState(
           stepCount: current.stepCount,
           thresholdCrossings: current.thresholdCrossings,
