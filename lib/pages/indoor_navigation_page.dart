@@ -11,6 +11,7 @@ import 'package:sensors_plus/sensors_plus.dart';
 import 'package:vector_math/vector_math.dart' as vm;
 
 import '../services/dead_reckoning_calculator.dart';
+import '../services/step_classifier_model.dart';
 
 class IndoorNavigationPage extends StatefulWidget {
   const IndoorNavigationPage({super.key});
@@ -67,6 +68,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   }
 
   Future<void> _initializePage() async {
+    await _loadStepClassifierModel();
     await _requestPermissions();
     _cameraReady = _initializeCamera();
     _startSensorStreams();
@@ -75,10 +77,21 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     await _initializeLogging();
   }
 
+  Future<void> _loadStepClassifierModel() async {
+    try {
+      final model = await StepClassifierModel.loadAsset(
+        'models/step_classifier.json',
+      );
+      _deadReckoningCalculator.setStepClassifierModel(model);
+    } catch (_) {
+      _deadReckoningCalculator.setStepClassifierModel(null);
+    }
+  }
+
   Future<void> _requestPermissions() async {
     final cameraStatus = await Permission.camera.request();
-    final activityRecognitionStatus =
-        await Permission.activityRecognition.request();
+    final activityRecognitionStatus = await Permission.activityRecognition
+        .request();
 
     if (!mounted) {
       return;
