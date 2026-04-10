@@ -24,9 +24,12 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   static const EventChannel _rotationVectorChannel = EventChannel(
     'demo_app/rotation_vectors',
   );
-  static const EventChannel _stepDetectorChannel = EventChannel(
-    'demo_app/step_detector',
-  );
+  static const double _flatPhoneEnterGravityRatioThreshold = 0.76;
+  static const double _flatPhoneExitGravityRatioThreshold = 0.6;
+  static const double _flatPhoneEnterHorizontalGravityThreshold = 6.2;
+  static const double _flatPhoneExitHorizontalGravityThreshold = 8.4;
+  static const int _flatPhoneEnterSampleCount = 4;
+  static const int _flatPhoneExitSampleCount = 6;
 
   final DeadReckoningCalculator _deadReckoningCalculator =
       DeadReckoningCalculator();
@@ -40,7 +43,6 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   StreamSubscription<GyroscopeEvent>? _gyroscopeSubscription;
   StreamSubscription<MagnetometerEvent>? _magnetometerSubscription;
   StreamSubscription<dynamic>? _rotationVectorSubscription;
-  StreamSubscription<dynamic>? _stepDetectorSubscription;
 
   AccelerometerEvent? _accelerometerEvent;
   UserAccelerometerEvent? _userAccelerometerEvent;
@@ -50,16 +52,17 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   double? _gameRotationAzimuth;
   bool? _cameraPermissionGranted;
   bool? _activityRecognitionGranted;
-  bool _stepDetectorAvailable = false;
-  int _stepDetectorEventCount = 0;
-  DateTime? _lastStepDetectorEventAt;
-  bool _pendingHardwareStepDetected = false;
   DeadReckoningState _deadReckoningState = DeadReckoningState.initial();
   Timer? _logFlushTimer;
   File? _logFile;
   String? _cameraError;
   bool _hasShownCameraErrorDialog = false;
+  bool _hasShownFlatPhoneDialog = false;
+  bool _isFlatPhoneDialogVisible = false;
   bool _isFlushingLog = false;
+  bool _isPhoneFlat = false;
+  int _flatPhoneEnterStreak = 0;
+  int _flatPhoneExitStreak = 0;
 
   @override
   void initState() {
@@ -73,7 +76,6 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     _cameraReady = _initializeCamera();
     _startSensorStreams();
     _startRotationVectorStream();
-    _startStepDetectorStream();
     await _initializeLogging();
   }
 
@@ -189,6 +191,108 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     });
   }
 
+  void _handlePhoneFlatStateChanged(AccelerometerEvent event) {
+    final nextState = _nextPhoneFlatState(event);
+    if (nextState == null || _isPhoneFlat == nextState) {
+      return;
+    }
+
+    _isPhoneFlat = nextState;
+
+    if (nextState) {
+      _showFlatPhoneDialog();
+    } else {
+      _dismissFlatPhoneDialog();
+    }
+  }
+
+  bool? _nextPhoneFlatState(AccelerometerEvent event) {
+    final isFlatCandidate = _matchesFlatEnterThreshold(event);
+    final isUprightCandidate = _matchesFlatExitThreshold(event);
+
+    if (!_isPhoneFlat) {
+      if (isFlatCandidate) {
+        _flatPhoneEnterStreak += 1;
+      } else {
+        _flatPhoneEnterStreak = 0;
+      }
+      _flatPhoneExitStreak = 0;
+      if (_flatPhoneEnterStreak >= _flatPhoneEnterSampleCount) {
+        _flatPhoneEnterStreak = 0;
+        return true;
+      }
+      return null;
+    }
+
+    if (isUprightCandidate) {
+      _flatPhoneExitStreak += 1;
+    } else {
+      _flatPhoneExitStreak = 0;
+    }
+    _flatPhoneEnterStreak = 0;
+    if (_flatPhoneExitStreak >= _flatPhoneExitSampleCount) {
+      _flatPhoneExitStreak = 0;
+      return false;
+    }
+    return null;
+  }
+
+  bool _matchesFlatEnterThreshold(AccelerometerEvent event) {
+    const gravity = 9.81;
+    final zRatio = event.z.abs() / gravity;
+    final horizontalGravity = math.sqrt(event.x * event.x + event.y * event.y);
+    return zRatio >= _flatPhoneEnterGravityRatioThreshold &&
+        horizontalGravity <= _flatPhoneEnterHorizontalGravityThreshold;
+  }
+
+  bool _matchesFlatExitThreshold(AccelerometerEvent event) {
+    const gravity = 9.81;
+    final zRatio = event.z.abs() / gravity;
+    final horizontalGravity = math.sqrt(event.x * event.x + event.y * event.y);
+    return zRatio <= _flatPhoneExitGravityRatioThreshold ||
+        horizontalGravity >= _flatPhoneExitHorizontalGravityThreshold;
+  }
+
+  void _showFlatPhoneDialog() {
+    if (!mounted || _hasShownFlatPhoneDialog) {
+      return;
+    }
+
+    _hasShownFlatPhoneDialog = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_isPhoneFlat) {
+        _hasShownFlatPhoneDialog = false;
+        return;
+      }
+
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (dialogContext) {
+          return const AlertDialog(
+            title: Text('주의'),
+            content: Text('스마트폰을 세워주세요'),
+          );
+        },
+      ).then((_) {
+        _hasShownFlatPhoneDialog = false;
+        _isFlatPhoneDialogVisible = false;
+      });
+      _isFlatPhoneDialogVisible = true;
+    });
+  }
+
+  void _dismissFlatPhoneDialog() {
+    if (!mounted || !_isFlatPhoneDialogVisible) {
+      return;
+    }
+
+    final navigator = Navigator.of(context, rootNavigator: true);
+    if (navigator.canPop()) {
+      navigator.pop();
+    }
+  }
+
   void _startSensorStreams() {
     _accelerometerSubscription = accelerometerEventStream().listen((event) {
       if (!mounted) {
@@ -196,6 +300,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
       }
       setState(() {
         _accelerometerEvent = event;
+        _handlePhoneFlatStateChanged(event);
       });
     });
 
@@ -249,28 +354,6 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
         });
   }
 
-  void _startStepDetectorStream() {
-    _stepDetectorSubscription = _stepDetectorChannel
-        .receiveBroadcastStream()
-        .listen((dynamic event) {
-          if (!mounted || event is! Map<Object?, Object?>) {
-            return;
-          }
-
-          final available = event['available'] == true;
-          final stepDetected = event['stepDetected'] == true;
-
-          setState(() {
-            _stepDetectorAvailable = available;
-            if (stepDetected) {
-              _stepDetectorEventCount += 1;
-              _lastStepDetectorEventAt = DateTime.now();
-              _pendingHardwareStepDetected = true;
-            }
-          });
-        });
-  }
-
   void _updateDeadReckoning() {
     final accelerometer = _accelerometerEvent;
     final linearAcceleration = _userAccelerometerEvent;
@@ -283,10 +366,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
         magnetometer == null) {
       return;
     }
-
     final timestamp = DateTime.now();
-    final hardwareStepDetected = _pendingHardwareStepDetected;
-    _pendingHardwareStepDetected = false;
 
     final sample = SensorSample(
       timestamp: timestamp,
@@ -302,8 +382,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
       ),
       gyroscope: vm.Vector3(gyroscope.x, gyroscope.y, gyroscope.z),
       magnetometer: vm.Vector3(magnetometer.x, magnetometer.y, magnetometer.z),
-      hardwareStepDetected: hardwareStepDetected,
-      preferHardwareStepDetector: false,
+      isPhoneFlat: _isPhoneFlat,
       geomagneticRotationAzimuth: _geomagneticRotationAzimuth,
       gameRotationAzimuth: _gameRotationAzimuth,
     );
@@ -378,11 +457,6 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     final tiltGyroMagnitude = math.sqrt(
       gyroscope.x * gyroscope.x + gyroscope.y * gyroscope.y,
     );
-    final hardwareStepGatePassed =
-        userAccelMagnitude >= 0.4 &&
-        userAccelMagnitude <= 3.6 &&
-        gyroMagnitude <= 2.5;
-
     final fields = <String>[
       sample.timestamp.toIso8601String(),
       state.position.x.toStringAsFixed(6),
@@ -391,6 +465,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
       _headingDegrees.toStringAsFixed(3),
       _headingLabel,
       state.stepCount.toString(),
+      state.lastStepLengthMeters.toStringAsFixed(6),
       state.thresholdCrossings.toString(),
       state.totalDistanceMeters.toStringAsFixed(6),
       state.filteredAccelerationMagnitude.toStringAsFixed(6),
@@ -413,15 +488,9 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
       magnetometer.z.toStringAsFixed(6),
       (_geomagneticRotationAzimuth ?? double.nan).toStringAsFixed(6),
       (_gameRotationAzimuth ?? double.nan).toStringAsFixed(6),
-      _stepDetectorAvailable.toString(),
-      _stepDetectorEventCount.toString(),
-      _lastStepDetectorEventAt?.toIso8601String() ?? '',
       (_activityRecognitionGranted ?? false).toString(),
-      'false',
-      _stepDetectorStatus,
       'IMU_LINEAR_ACCELERATION',
-      sample.hardwareStepDetected.toString(),
-      hardwareStepGatePassed.toString(),
+      sample.isPhoneFlat.toString(),
       imuStepDetected.toString(),
     ];
 
@@ -467,19 +536,6 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     return labels[index];
   }
 
-  String get _stepDetectorStatus {
-    if (_activityRecognitionGranted == false) {
-      return 'permission_denied';
-    }
-    if (!_stepDetectorAvailable) {
-      return 'unavailable';
-    }
-    if (_stepDetectorEventCount == 0) {
-      return 'waiting_first_event';
-    }
-    return 'active';
-  }
-
   @override
   void dispose() {
     _logFlushTimer?.cancel();
@@ -489,7 +545,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     _gyroscopeSubscription?.cancel();
     _magnetometerSubscription?.cancel();
     _rotationVectorSubscription?.cancel();
-    _stepDetectorSubscription?.cancel();
+    _dismissFlatPhoneDialog();
     _cameraController?.dispose();
     super.dispose();
   }
@@ -653,6 +709,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
               positionX: _deadReckoningState.position.x,
               positionY: _deadReckoningState.position.y,
               stepCount: _deadReckoningState.stepCount,
+              lastStepLengthMeters: _deadReckoningState.lastStepLengthMeters,
               recentStepIntervals: _deadReckoningState.recentStepIntervals,
               thresholdCrossings: _deadReckoningState.thresholdCrossings,
               totalDistanceMeters: _deadReckoningState.totalDistanceMeters,
@@ -662,6 +719,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
               filteredAccelerationMagnitude:
                   _deadReckoningState.filteredAccelerationMagnitude,
               activeStepThreshold: _deadReckoningState.activeStepThreshold,
+              isPhoneFlat: _isPhoneFlat,
             ),
           ],
         ),
@@ -671,13 +729,14 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
 }
 
 const String _csvHeader =
-    'timestamp,position_x,position_y,heading_radians,heading_degrees,heading_label,steps,crossings,distance_m,filtered_accel,active_threshold,motion_magnitude,accel_x,accel_y,accel_z,user_accel_x,user_accel_y,user_accel_z,user_accel_magnitude,gyro_x,gyro_y,gyro_z,gyro_magnitude,tilt_gyro_magnitude,mag_x,mag_y,mag_z,geomagnetic_rotation_azimuth,game_rotation_azimuth,step_detector_available,step_detector_event_count,last_step_detector_event_at,activity_recognition_granted,prefer_hardware_step_detector,step_detector_status,step_source,hardware_step_detected,hardware_step_gate_passed,imu_step_detected\n';
+    'timestamp,position_x,position_y,heading_radians,heading_degrees,heading_label,steps,last_step_length_m,crossings,distance_m,filtered_accel,active_threshold,motion_magnitude,accel_x,accel_y,accel_z,user_accel_x,user_accel_y,user_accel_z,user_accel_magnitude,gyro_x,gyro_y,gyro_z,gyro_magnitude,tilt_gyro_magnitude,mag_x,mag_y,mag_z,geomagnetic_rotation_azimuth,game_rotation_azimuth,activity_recognition_granted,step_source,phone_flat,imu_step_detected\n';
 
 class _DeadReckoningStatus extends StatelessWidget {
   const _DeadReckoningStatus({
     required this.positionX,
     required this.positionY,
     required this.stepCount,
+    required this.lastStepLengthMeters,
     required this.recentStepIntervals,
     required this.thresholdCrossings,
     required this.totalDistanceMeters,
@@ -686,11 +745,13 @@ class _DeadReckoningStatus extends StatelessWidget {
     required this.motionMagnitude,
     required this.filteredAccelerationMagnitude,
     required this.activeStepThreshold,
+    required this.isPhoneFlat,
   });
 
   final double positionX;
   final double positionY;
   final int stepCount;
+  final double lastStepLengthMeters;
   final List<double> recentStepIntervals;
   final int thresholdCrossings;
   final double totalDistanceMeters;
@@ -699,6 +760,7 @@ class _DeadReckoningStatus extends StatelessWidget {
   final double motionMagnitude;
   final double filteredAccelerationMagnitude;
   final double activeStepThreshold;
+  final bool isPhoneFlat;
 
   @override
   Widget build(BuildContext context) {
@@ -759,7 +821,23 @@ class _DeadReckoningStatus extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
+            isPhoneFlat ? 'Phone posture: flat' : 'Phone posture: upright',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: isPhoneFlat ? Colors.amber.shade200 : Colors.white70,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
             'Estimated distance: ${totalDistanceMeters.toStringAsFixed(2)} m',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Current step length: ${lastStepLengthMeters.toStringAsFixed(2)} m',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.w600,

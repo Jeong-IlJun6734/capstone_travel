@@ -18,10 +18,6 @@ class MainActivity : FlutterActivity() {
             flutterEngine.dartExecutor.binaryMessenger,
             "demo_app/rotation_vectors",
         ).setStreamHandler(RotationVectorStreamHandler(applicationContext))
-        EventChannel(
-            flutterEngine.dartExecutor.binaryMessenger,
-            "demo_app/step_detector",
-        ).setStreamHandler(StepDetectorStreamHandler(applicationContext))
     }
 }
 
@@ -94,61 +90,4 @@ private class RotationVectorStreamHandler(
         }
         return normalized
     }
-}
-
-private class StepDetectorStreamHandler(
-    context: Context,
-) : EventChannel.StreamHandler, SensorEventListener {
-    private val sensorManager =
-        context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-
-    private val stepDetectorSensor =
-        sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR)
-
-    private var events: EventChannel.EventSink? = null
-
-    override fun onListen(arguments: Any?, eventSink: EventChannel.EventSink) {
-        events = eventSink
-        if (stepDetectorSensor == null) {
-            eventSink.success(
-                mapOf(
-                    "available" to false,
-                    "stepDetected" to false,
-                ),
-            )
-            return
-        }
-
-        eventSink.success(
-            mapOf(
-                "available" to true,
-                "stepDetected" to false,
-            ),
-        )
-        sensorManager.registerListener(
-            this,
-            stepDetectorSensor,
-            SensorManager.SENSOR_DELAY_FASTEST,
-        )
-    }
-
-    override fun onCancel(arguments: Any?) {
-        sensorManager.unregisterListener(this)
-        events = null
-    }
-
-    override fun onSensorChanged(event: SensorEvent) {
-        if (event.sensor.type != Sensor.TYPE_STEP_DETECTOR) {
-            return
-        }
-
-        events?.success(
-            mapOf(
-                "available" to true,
-                "stepDetected" to (event.values.firstOrNull() == 1.0f),
-            ),
-        )
-    }
-
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
 }

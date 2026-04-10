@@ -11,8 +11,7 @@ class SensorSample {
     required this.linearAcceleration,
     required this.gyroscope,
     required this.magnetometer,
-    this.hardwareStepDetected = false,
-    this.preferHardwareStepDetector = false,
+    this.isPhoneFlat = false,
     this.geomagneticRotationAzimuth,
     this.gameRotationAzimuth,
   });
@@ -22,8 +21,7 @@ class SensorSample {
   final vm.Vector3 linearAcceleration;
   final vm.Vector3 gyroscope;
   final vm.Vector3 magnetometer;
-  final bool hardwareStepDetected;
-  final bool preferHardwareStepDetector;
+  final bool isPhoneFlat;
   final double? geomagneticRotationAzimuth;
   final double? gameRotationAzimuth;
 }
@@ -33,6 +31,7 @@ class DeadReckoningState {
     required this.position,
     required this.headingRadians,
     required this.stepCount,
+    required this.lastStepLengthMeters,
     required this.recentStepIntervals,
     required this.lastStepHeadingRadians,
     required this.thresholdCrossings,
@@ -47,6 +46,7 @@ class DeadReckoningState {
       position: vm.Vector2.zero(),
       headingRadians: 0,
       stepCount: 0,
+      lastStepLengthMeters: 0,
       recentStepIntervals: const <double>[],
       lastStepHeadingRadians: null,
       thresholdCrossings: 0,
@@ -60,6 +60,7 @@ class DeadReckoningState {
   final vm.Vector2 position;
   final double headingRadians;
   final int stepCount;
+  final double lastStepLengthMeters;
   final List<double> recentStepIntervals;
   final double? lastStepHeadingRadians;
   final int thresholdCrossings;
@@ -72,6 +73,7 @@ class DeadReckoningState {
     vm.Vector2? position,
     double? headingRadians,
     int? stepCount,
+    double? lastStepLengthMeters,
     List<double>? recentStepIntervals,
     double? lastStepHeadingRadians,
     int? thresholdCrossings,
@@ -85,6 +87,7 @@ class DeadReckoningState {
       position: position ?? this.position,
       headingRadians: headingRadians ?? this.headingRadians,
       stepCount: stepCount ?? this.stepCount,
+      lastStepLengthMeters: lastStepLengthMeters ?? this.lastStepLengthMeters,
       recentStepIntervals: recentStepIntervals ?? this.recentStepIntervals,
       lastStepHeadingRadians:
           lastStepHeadingRadians ?? this.lastStepHeadingRadians,
@@ -103,16 +106,15 @@ class DeadReckoningState {
 class DeadReckoningConfig {
   const DeadReckoningConfig({
     this.stepSensitivity = 0.55,
-    this.stepLengthMeters = 0.72,
+    this.baseStepLengthMeters = 0.917,
+    this.minimumStepLengthMeters = 0.832,
+    this.maximumStepLengthMeters = 0.95,
     this.minStepGap = const Duration(milliseconds: 550),
     this.headingSmoothing = 0.2,
     this.accelerationFilterAlpha = 0.84,
     this.stepBaselineAlpha = 0.96,
     this.stepRearmHysteresis = 0.35,
     this.minimumStepPeak = 1.1,
-    this.minimumHardwareStepMotion = 0.4,
-    this.maximumHardwareStepMotion = 3.6,
-    this.maximumHardwareStepGyroscopeMagnitude = 2.5,
     this.maximumImuStepGyroscopeMagnitude = 2.2,
     this.maximumRapidTurnDegrees = 70,
     this.rapidTurnWindow = const Duration(milliseconds: 1200),
@@ -121,16 +123,15 @@ class DeadReckoningConfig {
   });
 
   final double stepSensitivity;
-  final double stepLengthMeters;
+  final double baseStepLengthMeters;
+  final double minimumStepLengthMeters;
+  final double maximumStepLengthMeters;
   final Duration minStepGap;
   final double headingSmoothing;
   final double accelerationFilterAlpha;
   final double stepBaselineAlpha;
   final double stepRearmHysteresis;
   final double minimumStepPeak;
-  final double minimumHardwareStepMotion;
-  final double maximumHardwareStepMotion;
-  final double maximumHardwareStepGyroscopeMagnitude;
   final double maximumImuStepGyroscopeMagnitude;
   final double maximumRapidTurnDegrees;
   final Duration rapidTurnWindow;
@@ -184,9 +185,15 @@ class DeadReckoningCalculator {
       );
     }
 
+    final nextStepLengthMeters = _estimateStepLengthMeters(
+      sample: sample,
+      current: current,
+      filteredMagnitude: _filteredAccelerationMagnitude ?? 0,
+      heading: heading,
+    );
     final nextPosition = vm.Vector2(
-      current.position.x + _config.stepLengthMeters * math.cos(heading),
-      current.position.y + _config.stepLengthMeters * math.sin(heading),
+      current.position.x + nextStepLengthMeters * math.cos(heading),
+      current.position.y + nextStepLengthMeters * math.sin(heading),
     );
     final nextRecentStepIntervals = <double>[
       ...current.recentStepIntervals,
@@ -205,9 +212,10 @@ class DeadReckoningCalculator {
       position: nextPosition,
       headingRadians: heading,
       stepCount: nextStepCount,
+      lastStepLengthMeters: nextStepLengthMeters,
       recentStepIntervals: nextRecentStepIntervals,
       thresholdCrossings: nextStepState.thresholdCrossings,
-      totalDistanceMeters: nextStepCount * _config.stepLengthMeters,
+      totalDistanceMeters: current.totalDistanceMeters + nextStepLengthMeters,
       filteredAccelerationMagnitude:
           _filteredAccelerationMagnitude ??
           current.filteredAccelerationMagnitude,
@@ -303,31 +311,12 @@ class DeadReckoningCalculator {
         _stepBlockedUntil != null &&
         !sample.timestamp.isAfter(_stepBlockedUntil!);
 
-    if (sample.preferHardwareStepDetector) {
-      final hardwareStepPlausible =
-          rawMagnitude >= _config.minimumHardwareStepMotion &&
-          rawMagnitude <= _config.maximumHardwareStepMotion &&
-          gyroscopeMagnitude <= _config.maximumHardwareStepGyroscopeMagnitude;
-
-      if (!sample.hardwareStepDetected || !hardwareStepPlausible) {
-        return _StepState(
-          stepCount: current.stepCount,
-          thresholdCrossings: current.thresholdCrossings,
-        );
-      }
-
-      final lastStepTimestamp = current.lastStepTimestamp;
-      if (lastStepTimestamp != null &&
-          sample.timestamp.difference(lastStepTimestamp) < _config.minStepGap) {
-        return _StepState(
-          stepCount: current.stepCount,
-          thresholdCrossings: current.thresholdCrossings,
-        );
-      }
-
+    if (sample.isPhoneFlat) {
+      _peakFound = false;
+      _pushSampleHistory(sample, gyroscopeMagnitude);
       return _StepState(
-        stepCount: current.stepCount + 1,
-        thresholdCrossings: current.thresholdCrossings + 1,
+        stepCount: current.stepCount,
+        thresholdCrossings: current.thresholdCrossings,
       );
     }
 
@@ -549,6 +538,83 @@ class DeadReckoningCalculator {
 
   double _tiltGyroscopeMagnitude(vm.Vector3 gyroscope) {
     return math.sqrt(gyroscope.x * gyroscope.x + gyroscope.y * gyroscope.y);
+  }
+
+  double _estimateStepLengthMeters({
+    required SensorSample sample,
+    required DeadReckoningState current,
+    required double filteredMagnitude,
+    required double heading,
+  }) {
+    const baselineIntervalSeconds = 1.1;
+    const fastStepIntervalSeconds = 0.55;
+    const slowStepIntervalSeconds = 1.7;
+    const baselineMotionMagnitude = 2.85;
+    const baselineFilteredMagnitude = 2.05;
+
+    final latestIntervalSeconds = current.lastStepTimestamp == null
+        ? baselineIntervalSeconds
+        : math.max(
+            0.35,
+            sample.timestamp
+                    .difference(current.lastStepTimestamp!)
+                    .inMilliseconds /
+                1000.0,
+          );
+    final cadenceProgress = _normalizedProgress(
+      baselineIntervalSeconds - latestIntervalSeconds,
+      baselineIntervalSeconds - slowStepIntervalSeconds,
+      baselineIntervalSeconds - fastStepIntervalSeconds,
+    );
+
+    final motionMagnitude = sample.linearAcceleration.length;
+    final motionProgress = _normalizedProgress(motionMagnitude, 1.3, 4.6);
+    final filteredProgress = _normalizedProgress(filteredMagnitude, 1.3, 3.6);
+    final headingStabilityProgress =
+        1.0 -
+        _normalizedProgress(
+          current.lastStepHeadingRadians == null
+              ? 0.0
+              : _headingDeltaDegrees(heading, current.lastStepHeadingRadians!),
+          0,
+          45,
+        );
+
+    final blendedProgress =
+        0.4 * cadenceProgress +
+        0.3 * motionProgress +
+        0.2 * filteredProgress +
+        0.1 * headingStabilityProgress;
+
+    final centeredBlend = (blendedProgress * 2.0) - 1.0;
+    final cadenceAdjustment =
+        (baselineIntervalSeconds - latestIntervalSeconds) * 0.07;
+    final motionAdjustment =
+        ((motionMagnitude - baselineMotionMagnitude) /
+            baselineMotionMagnitude) *
+        0.055;
+    final filteredAdjustment =
+        ((filteredMagnitude - baselineFilteredMagnitude) /
+            baselineFilteredMagnitude) *
+        0.03;
+
+    final estimatedStepLength =
+        _config.baseStepLengthMeters +
+        centeredBlend * 0.03 +
+        cadenceAdjustment +
+        motionAdjustment +
+        filteredAdjustment;
+    return estimatedStepLength.clamp(
+      _config.minimumStepLengthMeters,
+      _config.maximumStepLengthMeters,
+    );
+  }
+
+  double _normalizedProgress(double value, double minValue, double maxValue) {
+    if (maxValue <= minValue) {
+      return 0.5;
+    }
+    return ((value - minValue) / (maxValue - minValue)).clamp(0.0, 1.0);
   }
 }
 
