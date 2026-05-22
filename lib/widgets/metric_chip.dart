@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/route_in_palette.dart';
+
 class MetricChip extends StatelessWidget {
   const MetricChip({super.key, required this.label, required this.value});
 
@@ -11,7 +13,7 @@ class MetricChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white10,
+        color: RouteInPalette.denim,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Row(
@@ -20,7 +22,7 @@ class MetricChip extends StatelessWidget {
           Text(
             value,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: Colors.white,
+              color: RouteInPalette.white,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -29,7 +31,7 @@ class MetricChip extends StatelessWidget {
             label,
             style: Theme.of(
               context,
-            ).textTheme.bodyMedium?.copyWith(color: Colors.white70),
+            ).textTheme.bodyMedium?.copyWith(color: RouteInPalette.white),
           ),
         ],
       ),

@@ -1,11 +1,11 @@
 {
-    "name": "demo_app",
-    "short_name": "demo_app",
+    "name": "RouteIn",
+    "short_name": "RouteIn",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#FFFFFF",
+    "theme_color": "#3D5A80",
+    "description": "RouteIn travel application.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

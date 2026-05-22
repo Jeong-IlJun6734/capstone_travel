@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/route_in_palette.dart';
+
 class ScheduleManagementPage extends StatefulWidget {
   const ScheduleManagementPage({super.key});
 
@@ -179,12 +181,12 @@ class _ScheduleManagementPageState extends State<ScheduleManagementPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('일정관리'),
-        backgroundColor: Colors.transparent,
+        backgroundColor: RouteInPalette.white,
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _showAddPlaceDialog,
-        backgroundColor: const Color(0xFF1B1B1B),
-        foregroundColor: Colors.white,
+        backgroundColor: RouteInPalette.navy,
+        foregroundColor: RouteInPalette.white,
         icon: const Icon(Icons.add),
         label: const Text('일정 추가'),
       ),
@@ -230,11 +232,13 @@ class _ScheduleManagementPageState extends State<ScheduleManagementPage> {
                     });
                   },
                   labelStyle: TextStyle(
-                    color: isSelected ? Colors.white : const Color(0xFF1B1B1B),
+                    color: isSelected
+                        ? RouteInPalette.white
+                        : RouteInPalette.ink,
                     fontWeight: FontWeight.w700,
                   ),
-                  selectedColor: const Color(0xFF1B1B1B),
-                  backgroundColor: Colors.white,
+                  selectedColor: RouteInPalette.navy,
+                  backgroundColor: RouteInPalette.white,
                   side: BorderSide.none,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -249,7 +253,9 @@ class _ScheduleManagementPageState extends State<ScheduleManagementPage> {
           const SizedBox(height: 12),
           Text(
             '카드를 길게 눌러 순서를 바꿀 수 있습니다.',
-            style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black54),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: RouteInPalette.ink,
+            ),
           ),
           const SizedBox(height: 12),
           ReorderableListView.builder(
@@ -397,7 +403,7 @@ class _MapPreviewSection extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         gradient: const LinearGradient(
-          colors: [Color(0xFFD8E6F2), Color(0xFFF0E6D8)],
+          colors: [RouteInPalette.sky, RouteInPalette.mist],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -417,7 +423,7 @@ class _MapPreviewSection extends StatelessWidget {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.9),
+                    color: RouteInPalette.white,
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: const Text(
@@ -434,7 +440,7 @@ class _MapPreviewSection extends StatelessWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.72),
+                    color: RouteInPalette.navy,
                     borderRadius: BorderRadius.circular(22),
                   ),
                   child: Column(
@@ -443,7 +449,7 @@ class _MapPreviewSection extends StatelessWidget {
                       Text(
                         '실제 지도 자리',
                         style: theme.textTheme.titleMedium?.copyWith(
-                          color: Colors.white,
+                          color: RouteInPalette.white,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -451,14 +457,14 @@ class _MapPreviewSection extends StatelessWidget {
                       Text(
                         '${day.label} · ${day.area}',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: Colors.white70,
+                          color: RouteInPalette.white,
                         ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         '이 영역은 이후 실제 지도와 장소 마커, 경로 선을 붙일 수 있도록 남겨둔 공간입니다.',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: Colors.white70,
+                          color: RouteInPalette.white,
                           height: 1.4,
                         ),
                       ),
@@ -486,7 +492,7 @@ class _DaySummaryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: const Color(0xFFE8DED0),
+        color: RouteInPalette.sky,
         borderRadius: BorderRadius.circular(24),
       ),
       child: Column(
@@ -501,7 +507,9 @@ class _DaySummaryCard extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             day.area,
-            style: theme.textTheme.bodyLarge?.copyWith(color: Colors.black54),
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: RouteInPalette.ink,
+            ),
           ),
           const SizedBox(height: 14),
           Row(
@@ -547,7 +555,7 @@ class _PlaceTimelineCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: RouteInPalette.white,
         borderRadius: BorderRadius.circular(24),
       ),
       child: Row(
@@ -560,13 +568,13 @@ class _PlaceTimelineCard extends StatelessWidget {
                 height: 36,
                 alignment: Alignment.center,
                 decoration: const BoxDecoration(
-                  color: Color(0xFF1B1B1B),
+                  color: RouteInPalette.navy,
                   shape: BoxShape.circle,
                 ),
                 child: Text(
                   '${index + 1}',
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: RouteInPalette.white,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -576,7 +584,7 @@ class _PlaceTimelineCard extends StatelessWidget {
                   width: 2,
                   height: 48,
                   margin: const EdgeInsets.symmetric(vertical: 8),
-                  color: const Color(0xFFE0D6C8),
+                  color: RouteInPalette.mist,
                 ),
             ],
           ),
@@ -593,7 +601,7 @@ class _PlaceTimelineCard extends StatelessWidget {
                         vertical: 5,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF1ECE3),
+                        color: RouteInPalette.mist,
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Text(
@@ -609,13 +617,16 @@ class _PlaceTimelineCard extends StatelessWidget {
                       index: index,
                       child: const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 4),
-                        child: Icon(Icons.drag_handle, color: Colors.black45),
+                        child: Icon(
+                          Icons.drag_handle,
+                          color: RouteInPalette.ink,
+                        ),
                       ),
                     ),
                     IconButton(
                       onPressed: onDelete,
                       icon: const Icon(Icons.delete_outline),
-                      color: Colors.black45,
+                      color: RouteInPalette.ink,
                       tooltip: '삭제',
                     ),
                   ],
@@ -631,7 +642,7 @@ class _PlaceTimelineCard extends StatelessWidget {
                 Text(
                   place.note,
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.black54,
+                    color: RouteInPalette.ink,
                     height: 1.4,
                   ),
                 ),
@@ -642,13 +653,13 @@ class _PlaceTimelineCard extends StatelessWidget {
                       const Icon(
                         Icons.route_outlined,
                         size: 18,
-                        color: Color(0xFF7C6A55),
+                        color: RouteInPalette.coral,
                       ),
                       const SizedBox(width: 6),
                       Text(
                         '다음 장소까지 ${place.move}',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: const Color(0xFF7C6A55),
+                          color: RouteInPalette.coral,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -682,12 +693,12 @@ class _MetricTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.65),
+        color: RouteInPalette.white,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Row(
         children: [
-          Icon(icon, color: const Color(0xFF1B1B1B)),
+          Icon(icon, color: RouteInPalette.navy),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
@@ -696,7 +707,7 @@ class _MetricTile extends StatelessWidget {
                 Text(
                   label,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: Colors.black54,
+                    color: RouteInPalette.ink,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -719,12 +730,12 @@ class _MapPlaceholderPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final linePaint = Paint()
-      ..color = const Color(0x55FFFFFF)
+      ..color = RouteInPalette.white
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
 
     final routePaint = Paint()
-      ..color = const Color(0xFF1B1B1B)
+      ..color = RouteInPalette.navy
       ..strokeWidth = 4
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
@@ -769,8 +780,8 @@ class _MapPlaceholderPainter extends CustomPainter {
     ];
 
     for (final point in points) {
-      canvas.drawCircle(point, 10, Paint()..color = const Color(0xFFFF7A59));
-      canvas.drawCircle(point, 4, Paint()..color = Colors.white);
+      canvas.drawCircle(point, 10, Paint()..color = RouteInPalette.coral);
+      canvas.drawCircle(point, 4, Paint()..color = RouteInPalette.white);
     }
   }
 

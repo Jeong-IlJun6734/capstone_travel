@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/page_section.dart';
+import '../theme/route_in_palette.dart';
 import 'indoor_navigation_page.dart';
 import 'schedule_management_page.dart';
 
@@ -16,7 +17,7 @@ class DetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(section.title),
-        backgroundColor: Colors.transparent,
+        backgroundColor: RouteInPalette.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -33,12 +34,12 @@ class DetailPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(section.icon, color: Colors.white, size: 32),
+                  Icon(section.icon, color: RouteInPalette.white, size: 32),
                   const SizedBox(height: 16),
                   Text(
                     section.category,
                     style: theme.textTheme.labelLarge?.copyWith(
-                      color: Colors.white70,
+                      color: RouteInPalette.white,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -46,7 +47,7 @@ class DetailPage extends StatelessWidget {
                   Text(
                     section.title,
                     style: theme.textTheme.headlineSmall?.copyWith(
-                      color: Colors.white,
+                      color: RouteInPalette.white,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -54,7 +55,7 @@ class DetailPage extends StatelessWidget {
                   Text(
                     section.subtitle,
                     style: theme.textTheme.bodyLarge?.copyWith(
-                      color: Colors.white,
+                      color: RouteInPalette.white,
                     ),
                   ),
                 ],
@@ -70,7 +71,7 @@ class DetailPage extends StatelessWidget {
                     onPressed: () => _handleActionTap(context, label),
                     style: FilledButton.styleFrom(
                       backgroundColor: section.accent,
-                      foregroundColor: Colors.white,
+                      foregroundColor: RouteInPalette.white,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 20,
                         vertical: 14,
@@ -97,7 +98,7 @@ class DetailPage extends StatelessWidget {
                   return Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: RouteInPalette.white,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Row(
@@ -108,7 +109,7 @@ class DetailPage extends StatelessWidget {
                           height: 28,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: section.accent.withValues(alpha: 0.15),
+                            color: RouteInPalette.mist,
                             shape: BoxShape.circle,
                           ),
                           child: Text('${index + 1}'),

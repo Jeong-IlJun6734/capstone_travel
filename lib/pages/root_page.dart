@@ -17,7 +17,7 @@ class _RootPageState extends State<RootPage> {
   @override
   Widget build(BuildContext context) {
     final pages = [
-      const OverviewPage(sections: pageSections),
+      const OverviewPage(),
       FeatureListPage(
         heading: '2번 페이지 모음',
         description: '보조 기능별로 상세 페이지에 들어갈 수 있습니다.',

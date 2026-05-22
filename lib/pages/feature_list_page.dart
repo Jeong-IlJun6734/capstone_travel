@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/page_section.dart';
+import '../theme/route_in_palette.dart';
 import '../widgets/metric_chip.dart';
 import '../widgets/section_card.dart';
 import 'detail_page.dart';
@@ -43,7 +44,7 @@ class FeatureListPage extends StatelessWidget {
                     Text(
                       description,
                       style: theme.textTheme.bodyLarge?.copyWith(
-                        color: Colors.black54,
+                        color: RouteInPalette.ink,
                       ),
                     ),
                   ],
@@ -53,7 +54,7 @@ class FeatureListPage extends StatelessWidget {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: RouteInPalette.white,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: const Icon(Icons.wb_sunny_outlined),
@@ -69,7 +70,7 @@ class FeatureListPage extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF1B1B1B), Color(0xFF3C332C)],
+                  colors: [RouteInPalette.navy, RouteInPalette.denim],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -81,7 +82,7 @@ class FeatureListPage extends StatelessWidget {
                   Text(
                     '페이지 이동 데모',
                     style: theme.textTheme.titleLarge?.copyWith(
-                      color: Colors.white,
+                      color: RouteInPalette.white,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -89,7 +90,7 @@ class FeatureListPage extends StatelessWidget {
                   Text(
                     '각 카드 탭 시 체크 대신 전용 상세 페이지로 이동합니다.',
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: Colors.white70,
+                      color: RouteInPalette.white,
                     ),
                   ),
                   const SizedBox(height: 20),

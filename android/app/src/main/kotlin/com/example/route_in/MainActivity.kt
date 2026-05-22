@@ -1,4 +1,4 @@
-package com.example.demo_app
+package com.example.route_in
 
 import android.content.Context
 import android.hardware.Sensor
@@ -16,7 +16,7 @@ class MainActivity : FlutterActivity() {
 
         EventChannel(
             flutterEngine.dartExecutor.binaryMessenger,
-            "demo_app/rotation_vectors",
+            "route_in/rotation_vectors",
         ).setStreamHandler(RotationVectorStreamHandler(applicationContext))
     }
 }

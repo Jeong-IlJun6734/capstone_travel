@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/page_section.dart';
+import '../theme/route_in_palette.dart';
 
 class SectionCard extends StatelessWidget {
   const SectionCard({super.key, required this.section, required this.onTap});
@@ -11,7 +12,7 @@ class SectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.white,
+      color: RouteInPalette.white,
       borderRadius: BorderRadius.circular(24),
       child: InkWell(
         onTap: onTap,
@@ -50,9 +51,9 @@ class SectionCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       section.subtitle,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodyMedium?.copyWith(color: Colors.black54),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: RouteInPalette.ink,
+                      ),
                     ),
                   ],
                 ),

@@ -11,7 +11,8 @@ import 'package:sensors_plus/sensors_plus.dart';
 import 'package:vector_math/vector_math.dart' as vm;
 
 import '../services/dead_reckoning_calculator.dart';
-import '../services/step_classifier_model.dart';
+import '../services/self_supervised_step_model.dart';
+import '../theme/route_in_palette.dart';
 
 class IndoorNavigationPage extends StatefulWidget {
   const IndoorNavigationPage({super.key});
@@ -22,7 +23,7 @@ class IndoorNavigationPage extends StatefulWidget {
 
 class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   static const EventChannel _rotationVectorChannel = EventChannel(
-    'demo_app/rotation_vectors',
+    'route_in/rotation_vectors',
   );
   static const double _flatPhoneEnterGravityRatioThreshold = 0.76;
   static const double _flatPhoneExitGravityRatioThreshold = 0.6;
@@ -71,7 +72,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   }
 
   Future<void> _initializePage() async {
-    await _loadStepClassifierModel();
+    await _loadSelfSupervisedStepModel();
     await _requestPermissions();
     _cameraReady = _initializeCamera();
     _startSensorStreams();
@@ -79,14 +80,14 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     await _initializeLogging();
   }
 
-  Future<void> _loadStepClassifierModel() async {
+  Future<void> _loadSelfSupervisedStepModel() async {
     try {
-      final model = await StepClassifierModel.loadAsset(
-        'models/step_classifier.json',
+      final model = await SelfSupervisedStepModel.loadAsset(
+        'models/self_supervised_step_model.json',
       );
-      _deadReckoningCalculator.setStepClassifierModel(model);
+      _deadReckoningCalculator.setSelfSupervisedStepModel(model);
     } catch (_) {
-      _deadReckoningCalculator.setStepClassifierModel(null);
+      _deadReckoningCalculator.setSelfSupervisedStepModel(null);
     }
   }
 
@@ -457,6 +458,30 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     final tiltGyroMagnitude = math.sqrt(
       gyroscope.x * gyroscope.x + gyroscope.y * gyroscope.y,
     );
+    final secondsSincePrevStep = state.lastStepTimestamp == null
+        ? 0.0
+        : sample.timestamp.difference(state.lastStepTimestamp!).inMilliseconds /
+              1000.0;
+    final headingChangeSincePrevStep = state.lastStepHeadingRadians == null
+        ? 0.0
+        : _headingDeltaDegrees(
+            state.headingRadians,
+            state.lastStepHeadingRadians!,
+          );
+    final headingChangeRateSincePrevStep = secondsSincePrevStep <= 1e-6
+        ? 0.0
+        : headingChangeSincePrevStep / secondsSincePrevStep;
+    final recentStepIntervalMean = state.recentStepIntervals.isEmpty
+        ? 0.0
+        : state.recentStepIntervals.reduce((a, b) => a + b) /
+              state.recentStepIntervals.length;
+    final recentStepIntervalStd = _stddev(state.recentStepIntervals);
+    final filteredToUserAccelRatio = userAccelMagnitude <= 0.05
+        ? 0.0
+        : state.filteredAccelerationMagnitude / userAccelMagnitude;
+    final accelToGyroRatio = gyroMagnitude <= 0.05
+        ? 0.0
+        : userAccelMagnitude / gyroMagnitude;
     final fields = <String>[
       sample.timestamp.toIso8601String(),
       state.position.x.toStringAsFixed(6),
@@ -489,7 +514,15 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
       (_geomagneticRotationAzimuth ?? double.nan).toStringAsFixed(6),
       (_gameRotationAzimuth ?? double.nan).toStringAsFixed(6),
       (_activityRecognitionGranted ?? false).toString(),
-      'IMU_LINEAR_ACCELERATION',
+      state.lastStepDecisionSource,
+      state.lastStepDecisionConfidence.toStringAsFixed(6),
+      secondsSincePrevStep.toStringAsFixed(6),
+      headingChangeSincePrevStep.toStringAsFixed(6),
+      headingChangeRateSincePrevStep.toStringAsFixed(6),
+      recentStepIntervalMean.toStringAsFixed(6),
+      recentStepIntervalStd.toStringAsFixed(6),
+      filteredToUserAccelRatio.toStringAsFixed(6),
+      accelToGyroRatio.toStringAsFixed(6),
       sample.isPhoneFlat.toString(),
       imuStepDetected.toString(),
     ];
@@ -530,6 +563,25 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     return (90 - rawDegrees + 360) % 360;
   }
 
+  double _headingDeltaDegrees(double a, double b) {
+    final delta = (a - b).abs();
+    final normalizedDelta = delta > math.pi ? (2 * math.pi) - delta : delta;
+    return normalizedDelta * 180 / math.pi;
+  }
+
+  double _stddev(List<double> values) {
+    if (values.length < 2) {
+      return 0;
+    }
+    final mean = values.reduce((a, b) => a + b) / values.length;
+    final variance =
+        values
+            .map((value) => math.pow(value - mean, 2).toDouble())
+            .reduce((a, b) => a + b) /
+        values.length;
+    return math.sqrt(variance);
+  }
+
   String get _headingLabel {
     const labels = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
     final index = (((_headingDegrees + 22.5) % 360) / 45).floor();
@@ -556,7 +608,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: const Text('Indoor Navigation'),
-        backgroundColor: Colors.transparent,
+        backgroundColor: RouteInPalette.navy,
         elevation: 0,
       ),
       body: Stack(
@@ -598,7 +650,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
         }
 
         return ColoredBox(
-          color: Colors.black,
+          color: RouteInPalette.ink,
           child: LayoutBuilder(
             builder: (context, constraints) {
               final previewSize = controller.value.previewSize;
@@ -646,7 +698,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Color(0xA6000000), Color(0x00000000)],
+              colors: [RouteInPalette.navy, RouteInPalette.denim],
             ),
           ),
         ),
@@ -664,7 +716,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Color(0x00000000), Color(0xCC000000)],
+              colors: [RouteInPalette.denim, RouteInPalette.navy],
             ),
           ),
         ),
@@ -677,9 +729,9 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.62),
+        color: RouteInPalette.navy,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white24),
+        border: Border.all(color: RouteInPalette.sky),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -691,14 +743,14 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
               children: [
                 const Icon(
                   Icons.sensors_outlined,
-                  color: Colors.white,
+                  color: RouteInPalette.white,
                   size: 20,
                 ),
                 const SizedBox(width: 8),
                 Text(
                   'Live Sensor Feed',
                   style: theme.textTheme.titleMedium?.copyWith(
-                    color: Colors.white,
+                    color: RouteInPalette.white,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -719,6 +771,9 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
               filteredAccelerationMagnitude:
                   _deadReckoningState.filteredAccelerationMagnitude,
               activeStepThreshold: _deadReckoningState.activeStepThreshold,
+              stepDecisionSource: _deadReckoningState.lastStepDecisionSource,
+              stepDecisionConfidence:
+                  _deadReckoningState.lastStepDecisionConfidence,
               isPhoneFlat: _isPhoneFlat,
             ),
           ],
@@ -729,7 +784,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
 }
 
 const String _csvHeader =
-    'timestamp,position_x,position_y,heading_radians,heading_degrees,heading_label,steps,last_step_length_m,crossings,distance_m,filtered_accel,active_threshold,motion_magnitude,accel_x,accel_y,accel_z,user_accel_x,user_accel_y,user_accel_z,user_accel_magnitude,gyro_x,gyro_y,gyro_z,gyro_magnitude,tilt_gyro_magnitude,mag_x,mag_y,mag_z,geomagnetic_rotation_azimuth,game_rotation_azimuth,activity_recognition_granted,step_source,phone_flat,imu_step_detected\n';
+    'timestamp,position_x,position_y,heading_radians,heading_degrees,heading_label,steps,last_step_length_m,crossings,distance_m,filtered_accel,active_threshold,motion_magnitude,accel_x,accel_y,accel_z,user_accel_x,user_accel_y,user_accel_z,user_accel_magnitude,gyro_x,gyro_y,gyro_z,gyro_magnitude,tilt_gyro_magnitude,mag_x,mag_y,mag_z,geomagnetic_rotation_azimuth,game_rotation_azimuth,activity_recognition_granted,step_source,step_confidence,seconds_since_prev_step,heading_change_since_prev_step,heading_change_rate_since_prev_step,recent_step_interval_mean,recent_step_interval_std,filtered_to_user_accel_ratio,accel_to_gyro_ratio,phone_flat,imu_step_detected\n';
 
 class _DeadReckoningStatus extends StatelessWidget {
   const _DeadReckoningStatus({
@@ -745,6 +800,8 @@ class _DeadReckoningStatus extends StatelessWidget {
     required this.motionMagnitude,
     required this.filteredAccelerationMagnitude,
     required this.activeStepThreshold,
+    required this.stepDecisionSource,
+    required this.stepDecisionConfidence,
     required this.isPhoneFlat,
   });
 
@@ -760,6 +817,8 @@ class _DeadReckoningStatus extends StatelessWidget {
   final double motionMagnitude;
   final double filteredAccelerationMagnitude;
   final double activeStepThreshold;
+  final String stepDecisionSource;
+  final double stepDecisionConfidence;
   final bool isPhoneFlat;
 
   @override
@@ -776,9 +835,9 @@ class _DeadReckoningStatus extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
+        color: RouteInPalette.denim,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white12),
+        border: Border.all(color: RouteInPalette.sky),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -789,7 +848,7 @@ class _DeadReckoningStatus extends StatelessWidget {
                 angle: (headingDegrees - 90) * math.pi / 180,
                 child: const Icon(
                   Icons.navigation_rounded,
-                  color: Colors.white,
+                  color: RouteInPalette.white,
                   size: 18,
                 ),
               ),
@@ -797,7 +856,7 @@ class _DeadReckoningStatus extends StatelessWidget {
               Text(
                 'Estimated Movement',
                 style: theme.textTheme.titleSmall?.copyWith(
-                  color: Colors.white,
+                  color: RouteInPalette.white,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -807,7 +866,7 @@ class _DeadReckoningStatus extends StatelessWidget {
           Text(
             'Current position: (${positionX.toStringAsFixed(2)}, ${positionY.toStringAsFixed(2)}) m',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.white,
+              color: RouteInPalette.white,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -815,7 +874,7 @@ class _DeadReckoningStatus extends StatelessWidget {
           Text(
             'Direction: $headingLabel  ${headingDegrees.toStringAsFixed(0)} deg',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.white,
+              color: RouteInPalette.white,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -823,7 +882,7 @@ class _DeadReckoningStatus extends StatelessWidget {
           Text(
             isPhoneFlat ? 'Phone posture: flat' : 'Phone posture: upright',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: isPhoneFlat ? Colors.amber.shade200 : Colors.white70,
+              color: isPhoneFlat ? RouteInPalette.coral : RouteInPalette.white,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -831,7 +890,7 @@ class _DeadReckoningStatus extends StatelessWidget {
           Text(
             'Estimated distance: ${totalDistanceMeters.toStringAsFixed(2)} m',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.white,
+              color: RouteInPalette.white,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -839,24 +898,37 @@ class _DeadReckoningStatus extends StatelessWidget {
           Text(
             'Current step length: ${lastStepLengthMeters.toStringAsFixed(2)} m',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.white,
+              color: RouteInPalette.white,
               fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(height: 6),
           Text(
             'Axis: +x East, +y North   Steps: $stepCount   Crossings: $thresholdCrossings',
-            style: theme.textTheme.bodySmall?.copyWith(color: Colors.white70),
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: RouteInPalette.white,
+            ),
           ),
           const SizedBox(height: 6),
           Text(
             'Motion: ${motionMagnitude.toStringAsFixed(2)}   Filtered: ${filteredAccelerationMagnitude.toStringAsFixed(2)}   Threshold: ${activeStepThreshold.toStringAsFixed(2)}',
-            style: theme.textTheme.bodySmall?.copyWith(color: Colors.white70),
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: RouteInPalette.white,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Step judge: $stepDecisionSource ${(stepDecisionConfidence * 100).toStringAsFixed(0)}%',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: RouteInPalette.white,
+            ),
           ),
           const SizedBox(height: 6),
           Text(
             recentFiveDurationText,
-            style: theme.textTheme.bodySmall?.copyWith(color: Colors.white70),
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: RouteInPalette.white,
+            ),
           ),
         ],
       ),
@@ -874,7 +946,7 @@ class _CameraStatus extends StatelessWidget {
     final theme = Theme.of(context);
 
     return DecoratedBox(
-      decoration: const BoxDecoration(color: Color(0xFF1B1B1B)),
+      decoration: const BoxDecoration(color: RouteInPalette.navy),
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -882,7 +954,7 @@ class _CameraStatus extends StatelessWidget {
             message,
             textAlign: TextAlign.center,
             style: theme.textTheme.titleMedium?.copyWith(
-              color: Colors.white70,
+              color: RouteInPalette.white,
               fontWeight: FontWeight.w600,
             ),
           ),

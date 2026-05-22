@@ -1,5 +1,5 @@
-name: demo_app
-description: "A new Flutter project."
+name: route_in
+description: "RouteIn travel application."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -64,6 +64,8 @@ flutter:
 
   assets:
     - models/step_classifier.json
+    - models/step_length_model.json
+    - models/self_supervised_step_model.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

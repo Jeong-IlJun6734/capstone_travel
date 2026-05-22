@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../models/page_section.dart';
+import '../theme/route_in_palette.dart';
 
 const List<PageSection> pageSections = [
   PageSection(
     title: '1번 페이지',
     category: 'PathFinding',
     subtitle: '길찾기 기능과 이동 동선을 확인합니다.',
-    accent: Color(0xFFCC5A2B),
+    accent: RouteInPalette.coral,
     icon: Icons.map_outlined,
     actions: ['실내 길찾기', '일정관리'],
     bullets: [
@@ -20,7 +21,7 @@ const List<PageSection> pageSections = [
     title: '2번 페이지',
     category: 'Other Helps',
     subtitle: '부가 기능과 여행 보조 도구를 모아둔 화면입니다.',
-    accent: Color(0xFF2F6B5F),
+    accent: RouteInPalette.denim,
     icon: Icons.travel_explore_outlined,
     actions: [],
     bullets: [
@@ -33,7 +34,7 @@ const List<PageSection> pageSections = [
     title: '3번 페이지',
     category: 'Todo',
     subtitle: '할 일과 준비 항목을 정리하는 화면입니다.',
-    accent: Color(0xFF355C9A),
+    accent: RouteInPalette.sky,
     icon: Icons.checklist_outlined,
     actions: [],
     bullets: [

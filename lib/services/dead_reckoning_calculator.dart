@@ -3,6 +3,8 @@ import 'dart:math' as math;
 import 'package:vector_math/vector_math.dart' as vm;
 
 import 'step_classifier_model.dart';
+import 'self_supervised_step_model.dart';
+import 'step_length_model.dart';
 
 class SensorSample {
   const SensorSample({
@@ -39,6 +41,8 @@ class DeadReckoningState {
     required this.filteredAccelerationMagnitude,
     required this.activeStepThreshold,
     required this.lastStepTimestamp,
+    required this.lastStepDecisionSource,
+    required this.lastStepDecisionConfidence,
   });
 
   factory DeadReckoningState.initial() {
@@ -54,6 +58,8 @@ class DeadReckoningState {
       filteredAccelerationMagnitude: 0,
       activeStepThreshold: 0,
       lastStepTimestamp: null,
+      lastStepDecisionSource: 'Learned classifier',
+      lastStepDecisionConfidence: 0,
     );
   }
 
@@ -68,6 +74,8 @@ class DeadReckoningState {
   final double filteredAccelerationMagnitude;
   final double activeStepThreshold;
   final DateTime? lastStepTimestamp;
+  final String lastStepDecisionSource;
+  final double lastStepDecisionConfidence;
 
   DeadReckoningState copyWith({
     vm.Vector2? position,
@@ -81,6 +89,8 @@ class DeadReckoningState {
     double? filteredAccelerationMagnitude,
     double? activeStepThreshold,
     DateTime? lastStepTimestamp,
+    String? lastStepDecisionSource,
+    double? lastStepDecisionConfidence,
     bool clearLastStepTimestamp = false,
   }) {
     return DeadReckoningState(
@@ -99,6 +109,10 @@ class DeadReckoningState {
       lastStepTimestamp: clearLastStepTimestamp
           ? null
           : (lastStepTimestamp ?? this.lastStepTimestamp),
+      lastStepDecisionSource:
+          lastStepDecisionSource ?? this.lastStepDecisionSource,
+      lastStepDecisionConfidence:
+          lastStepDecisionConfidence ?? this.lastStepDecisionConfidence,
     );
   }
 }
@@ -145,17 +159,20 @@ class DeadReckoningCalculator {
 
   final DeadReckoningConfig _config;
   StepClassifierModel? _stepClassifierModel;
+  SelfSupervisedStepModel? _selfSupervisedStepModel;
+  StepLengthModel? _stepLengthModel;
 
   double? _filteredAccelerationMagnitude;
   double? _activeStepThreshold;
   double? _dynamicAverageAccelerationMagnitude;
-  bool _peakFound = false;
   double? _initialGameRotationAzimuth;
   double? _lastHeadingSampleRadians;
   DateTime? _lastHeadingSampleTimestamp;
   DateTime? _stepBlockedUntil;
   double _lastHeadingChangeDegrees = 0;
   double _lastAngularVelocityDegreesPerSecond = 0;
+  String _lastStepDecisionSource = 'Learned classifier';
+  double _lastStepDecisionConfidence = 0;
   final List<double> _recentUserAccelerationMagnitudes = <double>[];
   final List<double> _recentGyroscopeMagnitudes = <double>[];
   final List<double> _recentHeadingChanges = <double>[];
@@ -163,6 +180,14 @@ class DeadReckoningCalculator {
 
   void setStepClassifierModel(StepClassifierModel? model) {
     _stepClassifierModel = model;
+  }
+
+  void setSelfSupervisedStepModel(SelfSupervisedStepModel? model) {
+    _selfSupervisedStepModel = model;
+  }
+
+  void setStepLengthModel(StepLengthModel? model) {
+    _stepLengthModel = model;
   }
 
   DeadReckoningState processSample(
@@ -182,6 +207,8 @@ class DeadReckoningCalculator {
             current.filteredAccelerationMagnitude,
         activeStepThreshold:
             _activeStepThreshold ?? current.activeStepThreshold,
+        lastStepDecisionSource: nextStepState.decisionSource,
+        lastStepDecisionConfidence: nextStepState.decisionConfidence,
       );
     }
 
@@ -189,7 +216,10 @@ class DeadReckoningCalculator {
       sample: sample,
       current: current,
       filteredMagnitude: _filteredAccelerationMagnitude ?? 0,
+      magnitude: _filteredAccelerationMagnitude ?? 0,
       heading: heading,
+      activeThreshold: _activeStepThreshold ?? current.activeStepThreshold,
+      gyroscopeMagnitude: sample.gyroscope.length,
     );
     final nextPosition = vm.Vector2(
       current.position.x + nextStepLengthMeters * math.cos(heading),
@@ -222,6 +252,8 @@ class DeadReckoningCalculator {
       activeStepThreshold: _activeStepThreshold ?? current.activeStepThreshold,
       lastStepHeadingRadians: heading,
       lastStepTimestamp: sample.timestamp,
+      lastStepDecisionSource: nextStepState.decisionSource,
+      lastStepDecisionConfidence: nextStepState.decisionConfidence,
     );
   }
 
@@ -289,10 +321,6 @@ class DeadReckoningCalculator {
       _config.minimumStepPeak,
       averageMagnitude + _config.stepSensitivity,
     );
-    final lowerThreshold = math.max(
-      0,
-      upperThreshold - _config.stepRearmHysteresis,
-    );
     _activeStepThreshold = upperThreshold;
     final rapidTurnDetected = _updateRapidTurnState(
       heading: heading,
@@ -307,66 +335,45 @@ class DeadReckoningCalculator {
             _config.rapidTurnWindow &&
         _headingDeltaDegrees(heading, current.lastStepHeadingRadians!) >
             _config.maximumRapidTurnDegrees;
+    _pushSampleHistory(sample, gyroscopeMagnitude);
+
+    final modelAccepted = _passesLearnedStepModel(
+      sample: sample,
+      current: current,
+      magnitude: magnitude,
+      activeThreshold: upperThreshold,
+      gyroscopeMagnitude: gyroscopeMagnitude,
+      heading: heading,
+    );
+
     final stepBlocked =
         _stepBlockedUntil != null &&
         !sample.timestamp.isAfter(_stepBlockedUntil!);
+    final spacingSatisfied = lastStepTimestamp == null ||
+        sample.timestamp.difference(lastStepTimestamp) >= _config.minStepGap;
+    final shouldCountStep =
+        modelAccepted &&
+        spacingSatisfied &&
+        !rapidTurnDetected &&
+        !stepBlocked &&
+        gyroscopeMagnitude <= _config.maximumImuStepGyroscopeMagnitude &&
+        !recentTurnTooLarge;
 
-    if (sample.isPhoneFlat) {
-      _peakFound = false;
-      _pushSampleHistory(sample, gyroscopeMagnitude);
+    if (shouldCountStep) {
+      _stepBlockedUntil = sample.timestamp.add(_config.minStepGap);
       return _StepState(
-        stepCount: current.stepCount,
-        thresholdCrossings: current.thresholdCrossings,
+        stepCount: current.stepCount + 1,
+        thresholdCrossings: current.thresholdCrossings + 1,
+        decisionSource: _lastStepDecisionSource,
+        decisionConfidence: _lastStepDecisionConfidence,
       );
     }
-
-    if (rapidTurnDetected ||
-        stepBlocked ||
-        gyroscopeMagnitude > _config.maximumImuStepGyroscopeMagnitude ||
-        recentTurnTooLarge) {
-      _peakFound = false;
-      _pushSampleHistory(sample, gyroscopeMagnitude);
-      return _StepState(
-        stepCount: current.stepCount,
-        thresholdCrossings: current.thresholdCrossings,
-      );
-    }
-
-    if (magnitude > upperThreshold) {
-      if (!_peakFound &&
-          (lastStepTimestamp == null ||
-              sample.timestamp.difference(lastStepTimestamp) >=
-                  _config.minStepGap) &&
-          _passesLearnedStepModel(
-            sample: sample,
-            current: current,
-            magnitude: magnitude,
-            activeThreshold: upperThreshold,
-            gyroscopeMagnitude: gyroscopeMagnitude,
-            heading: heading,
-          )) {
-        _peakFound = true;
-        return _StepState(
-          stepCount: current.stepCount + 1,
-          thresholdCrossings: current.thresholdCrossings + 1,
-        );
-      }
-
-      return _StepState(
-        stepCount: current.stepCount,
-        thresholdCrossings: current.thresholdCrossings,
-      );
-    }
-
-    if (magnitude < lowerThreshold && _peakFound) {
-      _peakFound = false;
-    }
-
-    _pushSampleHistory(sample, gyroscopeMagnitude);
 
     return _StepState(
       stepCount: current.stepCount,
       thresholdCrossings: current.thresholdCrossings,
+      decisionSource: _lastStepDecisionSource,
+      decisionConfidence: _lastStepDecisionConfidence,
     );
   }
 
@@ -441,57 +448,157 @@ class DeadReckoningCalculator {
     required double gyroscopeMagnitude,
     required double heading,
   }) {
-    final model = _stepClassifierModel;
-    if (model == null) {
-      return true;
+    final selfSupervisedModel = _selfSupervisedStepModel;
+    if (selfSupervisedModel != null) {
+      final features = _buildStepFeatureVector(
+        sample: sample,
+        current: current,
+        magnitude: magnitude,
+        activeThreshold: activeThreshold,
+        gyroscopeMagnitude: gyroscopeMagnitude,
+        heading: heading,
+      );
+      final probability = selfSupervisedModel.stepProbability(features);
+      _lastStepDecisionSource = 'Self-supervised model';
+      _lastStepDecisionConfidence = probability;
+      return probability >= selfSupervisedModel.stepDecisionThreshold;
     }
 
-    final userAccelerationMagnitude = sample.linearAcceleration.length;
-    final thresholdMargin = magnitude - activeThreshold;
-    final thresholdMarginRatio =
-        thresholdMargin / math.max(activeThreshold, 1e-3);
-    final secondsSincePrevStep = current.lastStepTimestamp == null
-        ? 0.0
-        : sample.timestamp
-                  .difference(current.lastStepTimestamp!)
-                  .inMilliseconds /
-              1000.0;
-    final headingChangeSincePrevStep = current.lastStepHeadingRadians == null
-        ? 0.0
-        : _headingDeltaDegrees(heading, current.lastStepHeadingRadians!);
-    final headingChangeRateSincePrevStep = secondsSincePrevStep <= 1e-6
-        ? 0.0
-        : headingChangeSincePrevStep / secondsSincePrevStep;
-    final accelToGyroRatio =
-        userAccelerationMagnitude / math.max(gyroscopeMagnitude, 0.05);
-    final filteredToUserAccelRatio =
-        magnitude / math.max(userAccelerationMagnitude, 0.05);
+    final model = _stepClassifierModel;
+    if (model == null) {
+      _lastStepDecisionSource = 'Model unavailable';
+      _lastStepDecisionConfidence = 0;
+      return false;
+    }
 
-    final features = <double>[
-      userAccelerationMagnitude,
-      gyroscopeMagnitude,
-      _tiltGyroscopeMagnitude(sample.gyroscope),
+    final features = _buildStepFeatureVector(
+      sample: sample,
+      current: current,
+      magnitude: magnitude,
+      activeThreshold: activeThreshold,
+      gyroscopeMagnitude: gyroscopeMagnitude,
+      heading: heading,
+    );
+
+    final baseProbability = model.predictProbability(features);
+    final secondsSincePrevStep = features[14];
+    final headingChangeSincePrevStep = features[15];
+    final headingChangeRateSincePrevStep = features[18];
+    final thresholdMarginRatio = features[6];
+    final userAccelerationMagnitude = features[0];
+    final filteredToUserAccelRatio = features[19];
+    final accelToGyroRatio = features[20];
+    final cadenceScore = _cadenceScore(
+      secondsSincePrevStep: secondsSincePrevStep,
+      recentStepIntervalMean: _mean(current.recentStepIntervals),
+      recentStepIntervalStd: _stddev(current.recentStepIntervals),
+    );
+    final motionScore = _motionScore(
+      magnitude: magnitude,
+      activeThreshold: activeThreshold,
+      thresholdMarginRatio: thresholdMarginRatio,
+      userAccelerationMagnitude: userAccelerationMagnitude,
+      filteredToUserAccelRatio: filteredToUserAccelRatio,
+      accelToGyroRatio: accelToGyroRatio,
+      gyroscopeMagnitude: gyroscopeMagnitude,
+    );
+    final stabilityScore = _stabilityScore(
+      headingChangeSincePrevStep: headingChangeSincePrevStep,
+      headingChangeRateSincePrevStep: headingChangeRateSincePrevStep,
+      recentHeadingChange: _lastHeadingChangeDegrees,
+      angularVelocityDegreesPerSecond: _lastAngularVelocityDegreesPerSecond,
+    );
+
+    final calibratedProbability = _clamp01(
+      0.58 * baseProbability +
+          0.16 * motionScore +
+          0.14 * cadenceScore +
+          0.12 * stabilityScore,
+    );
+    final dynamicThreshold = _clamp01(
+      model.decisionThreshold +
+          (current.recentStepIntervals.length >= 2 ? -0.02 : 0.03) +
+          (stabilityScore < 0.35 ? 0.05 : 0.0),
+    );
+
+    final accepted = calibratedProbability >= dynamicThreshold;
+    _lastStepDecisionSource = 'Learned classifier';
+    _lastStepDecisionConfidence = calibratedProbability;
+    return accepted;
+  }
+
+  double _cadenceScore({
+    required double secondsSincePrevStep,
+    required double recentStepIntervalMean,
+    required double recentStepIntervalStd,
+  }) {
+    final cadenceTarget = recentStepIntervalMean > 0 ? recentStepIntervalMean : 0.9;
+    final cadenceSpread = math.max(0.25, recentStepIntervalStd + 0.18);
+    final cadenceDelta = (secondsSincePrevStep - cadenceTarget).abs();
+    final normalizedCadence =
+        1.0 - _normalizedProgress(cadenceDelta, 0.0, cadenceSpread * 2.2);
+    return _clamp01(0.2 + 0.8 * normalizedCadence);
+  }
+
+  double _motionScore({
+    required double magnitude,
+    required double activeThreshold,
+    required double thresholdMarginRatio,
+    required double userAccelerationMagnitude,
+    required double filteredToUserAccelRatio,
+    required double accelToGyroRatio,
+    required double gyroscopeMagnitude,
+  }) {
+    final thresholdScore = _normalizedProgress(thresholdMarginRatio, -0.1, 0.7);
+    final filteredScore =
+        _normalizedProgress(filteredToUserAccelRatio, 0.75, 1.65);
+    final accelScore = _normalizedProgress(userAccelerationMagnitude, 1.0, 4.8);
+    final gyroPenalty = 1.0 - _normalizedProgress(gyroscopeMagnitude, 0.0, 2.2);
+    final accelGyroBalance = _normalizedProgress(accelToGyroRatio, 1.1, 9.0);
+    final absoluteMotionScore = _normalizedProgress(
       magnitude,
-      activeThreshold,
-      thresholdMargin,
-      thresholdMarginRatio,
-      _lastHeadingChangeDegrees,
-      _lastAngularVelocityDegreesPerSecond,
-      _mean(_recentUserAccelerationMagnitudes),
-      _stddev(_recentUserAccelerationMagnitudes),
-      _mean(_recentGyroscopeMagnitudes),
-      _stddev(_recentGyroscopeMagnitudes),
-      _maxValue(_recentHeadingChanges),
-      secondsSincePrevStep,
-      headingChangeSincePrevStep,
-      _mean(current.recentStepIntervals),
-      _stddev(current.recentStepIntervals),
-      headingChangeRateSincePrevStep,
-      filteredToUserAccelRatio,
-      accelToGyroRatio,
-    ];
+      activeThreshold - 0.15,
+      activeThreshold + 0.85,
+    );
 
-    return model.classify(features);
+    return _clamp01(
+      0.30 * thresholdScore +
+          0.20 * filteredScore +
+          0.18 * accelScore +
+          0.16 * accelGyroBalance +
+          0.10 * absoluteMotionScore +
+          0.06 * gyroPenalty,
+    );
+  }
+
+  double _stabilityScore({
+    required double headingChangeSincePrevStep,
+    required double headingChangeRateSincePrevStep,
+    required double recentHeadingChange,
+    required double angularVelocityDegreesPerSecond,
+  }) {
+    final headingScore = 1.0 - _normalizedProgress(
+      headingChangeSincePrevStep.abs(),
+      0.0,
+      55.0,
+    );
+    final rateScore = 1.0 - _normalizedProgress(
+      headingChangeRateSincePrevStep.abs(),
+      0.0,
+      45.0,
+    );
+    final recentScore = 1.0 - _normalizedProgress(recentHeadingChange, 0.0, 40.0);
+    final angularScore = 1.0 - _normalizedProgress(
+      angularVelocityDegreesPerSecond.abs(),
+      0.0,
+      70.0,
+    );
+    return _clamp01(
+      0.34 * headingScore +
+          0.26 * rateScore +
+          0.20 * recentScore +
+          0.20 * angularScore,
+    );
   }
 
   void _pushSampleHistory(SensorSample sample, double gyroscopeMagnitude) {
@@ -543,9 +650,31 @@ class DeadReckoningCalculator {
   double _estimateStepLengthMeters({
     required SensorSample sample,
     required DeadReckoningState current,
+    required double magnitude,
     required double filteredMagnitude,
     required double heading,
+    required double activeThreshold,
+    required double gyroscopeMagnitude,
   }) {
+    final features = _buildStepFeatureVector(
+      sample: sample,
+      current: current,
+      magnitude: magnitude,
+      activeThreshold: activeThreshold,
+      gyroscopeMagnitude: gyroscopeMagnitude,
+      heading: heading,
+    );
+
+    final selfSupervisedModel = _selfSupervisedStepModel;
+    if (selfSupervisedModel != null) {
+      return selfSupervisedModel.predictStepLengthMeters(features);
+    }
+
+    final model = _stepLengthModel;
+    if (model != null) {
+      return model.predictMeters(features);
+    }
+
     const baselineIntervalSeconds = 1.1;
     const fastStepIntervalSeconds = 0.55;
     const slowStepIntervalSeconds = 1.7;
@@ -610,17 +739,82 @@ class DeadReckoningCalculator {
     );
   }
 
+  List<double> _buildStepFeatureVector({
+    required SensorSample sample,
+    required DeadReckoningState current,
+    required double magnitude,
+    required double activeThreshold,
+    required double gyroscopeMagnitude,
+    required double heading,
+  }) {
+    final userAccelerationMagnitude = sample.linearAcceleration.length;
+    final thresholdMargin = magnitude - activeThreshold;
+    final thresholdMarginRatio =
+        thresholdMargin / math.max(activeThreshold, 1e-3);
+    final secondsSincePrevStep = current.lastStepTimestamp == null
+        ? 0.0
+        : sample.timestamp
+                  .difference(current.lastStepTimestamp!)
+                  .inMilliseconds /
+              1000.0;
+    final headingChangeSincePrevStep = current.lastStepHeadingRadians == null
+        ? 0.0
+        : _headingDeltaDegrees(heading, current.lastStepHeadingRadians!);
+    final headingChangeRateSincePrevStep = secondsSincePrevStep <= 1e-6
+        ? 0.0
+        : headingChangeSincePrevStep / secondsSincePrevStep;
+    final accelToGyroRatio =
+        userAccelerationMagnitude / math.max(gyroscopeMagnitude, 0.05);
+    final filteredToUserAccelRatio =
+        magnitude / math.max(userAccelerationMagnitude, 0.05);
+
+    return <double>[
+      userAccelerationMagnitude,
+      gyroscopeMagnitude,
+      _tiltGyroscopeMagnitude(sample.gyroscope),
+      magnitude,
+      activeThreshold,
+      thresholdMargin,
+      thresholdMarginRatio,
+      _lastHeadingChangeDegrees,
+      _lastAngularVelocityDegreesPerSecond,
+      _mean(_recentUserAccelerationMagnitudes),
+      _stddev(_recentUserAccelerationMagnitudes),
+      _mean(_recentGyroscopeMagnitudes),
+      _stddev(_recentGyroscopeMagnitudes),
+      _maxValue(_recentHeadingChanges),
+      secondsSincePrevStep,
+      headingChangeSincePrevStep,
+      _mean(current.recentStepIntervals),
+      _stddev(current.recentStepIntervals),
+      headingChangeRateSincePrevStep,
+      filteredToUserAccelRatio,
+      accelToGyroRatio,
+    ];
+  }
+
   double _normalizedProgress(double value, double minValue, double maxValue) {
     if (maxValue <= minValue) {
       return 0.5;
     }
     return ((value - minValue) / (maxValue - minValue)).clamp(0.0, 1.0);
   }
+
+  double _clamp01(double value) {
+    return value.clamp(0.0, 1.0);
+  }
 }
 
 class _StepState {
-  const _StepState({required this.stepCount, required this.thresholdCrossings});
+  const _StepState({
+    required this.stepCount,
+    required this.thresholdCrossings,
+    required this.decisionSource,
+    required this.decisionConfidence,
+  });
 
   final int stepCount;
   final int thresholdCrossings;
+  final String decisionSource;
+  final double decisionConfidence;
 }

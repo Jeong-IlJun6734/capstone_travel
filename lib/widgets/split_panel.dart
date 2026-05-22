@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/route_in_palette.dart';
+
 class SplitPanel extends StatelessWidget {
   const SplitPanel({
     super.key,
@@ -24,11 +26,7 @@ class SplitPanel extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [accent, accent.withValues(alpha: 0.78)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: accent,
         borderRadius: BorderRadius.circular(28),
       ),
       child: Column(
@@ -36,12 +34,12 @@ class SplitPanel extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(icon, color: Colors.white),
+              Icon(icon, color: RouteInPalette.white),
               const SizedBox(width: 10),
               Text(
                 title,
                 style: theme.textTheme.titleLarge?.copyWith(
-                  color: Colors.white,
+                  color: RouteInPalette.white,
                   fontWeight: FontWeight.w800,
                 ),
               ),
@@ -50,7 +48,9 @@ class SplitPanel extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             subtitle,
-            style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white70),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: RouteInPalette.white,
+            ),
           ),
           const SizedBox(height: 16),
           Expanded(child: child),
