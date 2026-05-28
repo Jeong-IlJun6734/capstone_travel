@@ -1,0 +1,263 @@
+{
+  "station_name": "장승배기역(7호선)역",
+  "crs": "EPSG:5179",
+  "station_polygon_geojson": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          950440.029538819,
+          1945207.56324298
+        ],
+        [
+          950288.703584688,
+          1945105.83118436
+        ],
+        [
+          950278.19325101,
+          1945121.46418383
+        ],
+        [
+          950429.519208578,
+          1945223.19624101
+        ],
+        [
+          950440.029538819,
+          1945207.56324298
+        ]
+      ]
+    ]
+  },
+  "nodes": [
+    {
+      "id": "station_centroid",
+      "kind": "station_centroid",
+      "map_xy": [
+        950359.1113936802,
+        1945164.513711659
+      ]
+    },
+    {
+      "id": "axis_start",
+      "kind": "axis_endpoint",
+      "map_xy": [
+        950440.029538819,
+        1945207.56324298
+      ]
+    },
+    {
+      "id": "axis_end",
+      "kind": "axis_endpoint",
+      "map_xy": [
+        950288.702877245,
+        1945105.8306549392
+      ]
+    },
+    {
+      "id": "entrance_3",
+      "kind": "entrance",
+      "entrance_no": "3",
+      "map_xy": [
+        950295.033546795,
+        1945115.3993081
+      ],
+      "distance_to_station_m": 0.0
+    },
+    {
+      "id": "axis_projection_entrance_3",
+      "kind": "axis_projection",
+      "entrance_no": "3",
+      "map_xy": [
+        950297.4934083407,
+        1945111.7402776673
+      ]
+    },
+    {
+      "id": "entrance_1",
+      "kind": "entrance",
+      "entrance_no": "1",
+      "map_xy": [
+        950416.481873648,
+        1945195.74813954
+      ],
+      "distance_to_station_m": 0.0
+    },
+    {
+      "id": "axis_projection_entrance_1",
+      "kind": "axis_projection",
+      "entrance_no": "1",
+      "map_xy": [
+        950418.341018965,
+        1945192.9826711721
+      ]
+    },
+    {
+      "id": "entrance_4",
+      "kind": "entrance",
+      "entrance_no": "4",
+      "map_xy": [
+        950288.768695231,
+        1945121.36028652
+      ],
+      "distance_to_station_m": 0.0
+    },
+    {
+      "id": "axis_projection_entrance_4",
+      "kind": "axis_projection",
+      "entrance_no": "4",
+      "map_xy": [
+        950295.9386316664,
+        1945110.6950457613
+      ]
+    },
+    {
+      "id": "entrance_5",
+      "kind": "entrance",
+      "entrance_no": "5",
+      "map_xy": [
+        950418.902182047,
+        1945212.29818872
+      ],
+      "distance_to_station_m": 0.0
+    },
+    {
+      "id": "axis_projection_entrance_5",
+      "kind": "axis_projection",
+      "entrance_no": "5",
+      "map_xy": [
+        950427.6708471514,
+        1945199.2548479156
+      ]
+    },
+    {
+      "id": "entrance_6",
+      "kind": "entrance",
+      "entrance_no": "6",
+      "map_xy": [
+        950432.33493325,
+        1945209.26071394
+      ],
+      "distance_to_station_m": 0.0
+    },
+    {
+      "id": "axis_projection_entrance_6",
+      "kind": "axis_projection",
+      "entrance_no": "6",
+      "map_xy": [
+        950435.5159883695,
+        1945204.5289120583
+      ]
+    },
+    {
+      "id": "entrance_2",
+      "kind": "entrance",
+      "entrance_no": "2",
+      "map_xy": [
+        950391.910719407,
+        1945179.19263078
+      ],
+      "distance_to_station_m": 0.0
+    },
+    {
+      "id": "axis_projection_entrance_2",
+      "kind": "axis_projection",
+      "entrance_no": "2",
+      "map_xy": [
+        950393.752722,
+        1945176.4526621192
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "axis_start",
+      "to": "station_centroid",
+      "kind": "axis",
+      "distance_m": 91.65701478697862
+    },
+    {
+      "from": "station_centroid",
+      "to": "axis_end",
+      "kind": "axis",
+      "distance_m": 91.65729830508333
+    },
+    {
+      "from": "entrance_3",
+      "to": "axis_projection_entrance_3",
+      "kind": "entrance_to_axis",
+      "distance_m": 4.409016050356276
+    },
+    {
+      "from": "entrance_1",
+      "to": "axis_projection_entrance_1",
+      "kind": "entrance_to_axis",
+      "distance_m": 3.332301997603118
+    },
+    {
+      "from": "entrance_4",
+      "to": "axis_projection_entrance_4",
+      "kind": "entrance_to_axis",
+      "distance_m": 12.851278104958231
+    },
+    {
+      "from": "entrance_5",
+      "to": "axis_projection_entrance_5",
+      "kind": "entrance_to_axis",
+      "distance_m": 15.716813514514808
+    },
+    {
+      "from": "entrance_6",
+      "to": "axis_projection_entrance_6",
+      "kind": "entrance_to_axis",
+      "distance_m": 5.701671747900105
+    },
+    {
+      "from": "entrance_2",
+      "to": "axis_projection_entrance_2",
+      "kind": "entrance_to_axis",
+      "distance_m": 3.301575656328053
+    },
+    {
+      "from": "axis_start",
+      "to": "axis_projection_entrance_6",
+      "kind": "axis_chain",
+      "distance_m": 5.438685668684571
+    },
+    {
+      "from": "axis_projection_entrance_6",
+      "to": "axis_projection_entrance_5",
+      "kind": "axis_chain",
+      "distance_m": 9.453147270227172
+    },
+    {
+      "from": "axis_projection_entrance_5",
+      "to": "axis_projection_entrance_1",
+      "kind": "axis_chain",
+      "distance_m": 11.242148152810895
+    },
+    {
+      "from": "axis_projection_entrance_1",
+      "to": "axis_projection_entrance_2",
+      "kind": "axis_chain",
+      "distance_m": 29.628120880836814
+    },
+    {
+      "from": "axis_projection_entrance_2",
+      "to": "axis_projection_entrance_3",
+      "kind": "axis_chain",
+      "distance_m": 115.9894312754522
+    },
+    {
+      "from": "axis_projection_entrance_3",
+      "to": "axis_projection_entrance_4",
+      "kind": "axis_chain",
+      "distance_m": 1.873456763440409
+    },
+    {
+      "from": "axis_projection_entrance_4",
+      "to": "axis_end",
+      "kind": "axis_chain",
+      "distance_m": 8.718855436133538
+    }
+  ]
+}

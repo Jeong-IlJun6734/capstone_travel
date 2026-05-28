@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>숭실대입구(살피재)역 Local Metric Viewer</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f9;
+      --panel: #ffffff;
+      --ink: #1f2933;
+      --muted: #64748b;
+      --line: #d8dee8;
+      --walk: #2563eb;
+      --vertical: #d44b2f;
+      --platform: #a43fb6;
+      --node: #111827;
+      --entrance: #1f9d55;
+      --hall: #0f70b7;
+      --warn: #b45309;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, "Malgun Gothic", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    header {
+      padding: 18px 22px 12px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel);
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 21px;
+      letter-spacing: 0;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+      padding: 14px;
+    }
+    section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    section h2 {
+      margin: 0;
+      padding: 11px 13px;
+      font-size: 15px;
+      border-bottom: 1px solid var(--line);
+    }
+    svg {
+      display: block;
+      width: 100%;
+      height: 560px;
+      background: white;
+    }
+    .profile svg { height: 320px; }
+    .warnings {
+      max-height: 260px;
+      overflow: auto;
+      padding: 10px 13px 13px;
+      font-size: 12px;
+      color: var(--ink);
+    }
+    .warning {
+      padding: 7px 0;
+      border-bottom: 1px solid #edf0f4;
+    }
+    .warning strong { color: var(--warn); }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 10px 13px 13px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .key {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--node);
+      display: inline-block;
+    }
+    .swatch.entrance { background: var(--entrance); }
+    .swatch.hall { background: var(--hall); }
+    .swatch.platform { background: var(--platform); }
+    .swatch.edge {
+      width: 18px;
+      height: 3px;
+      border-radius: 0;
+      background: var(--walk);
+    }
+    .swatch.vertical {
+      width: 18px;
+      height: 3px;
+      border-radius: 0;
+      background: var(--vertical);
+    }
+    .node-label {
+      font-size: 10.5px;
+      paint-order: stroke;
+      stroke: white;
+      stroke-width: 4px;
+      stroke-linejoin: round;
+      fill: #111827;
+    }
+    .axis-label {
+      font-size: 11px;
+      fill: #64748b;
+    }
+    .tooltip {
+      position: fixed;
+      pointer-events: none;
+      display: none;
+      max-width: 380px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(31, 41, 51, 0.16);
+      font-size: 12px;
+      white-space: pre-line;
+      z-index: 5;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>숭실대입구(살피재)역 Local Metric Viewer</h1>
+    <div class="meta">
+      <span>nodes: <strong id="node-count"></strong></span>
+      <span>edges: <strong id="edge-count"></strong></span>
+      <span>scale: <strong id="scale"></strong></span>
+      <span>projection y: <strong id="projection"></strong></span>
+      <span>warnings: <strong id="warning-count"></strong></span>
+    </div>
+  </header>
+  <main>
+    <section>
+      <h2>Local XY Metric Graph</h2>
+      <svg id="xy"></svg>
+      <div class="legend">
+        <span class="key"><span class="swatch entrance"></span>entrance</span>
+        <span class="key"><span class="swatch hall"></span>hall/turn</span>
+        <span class="key"><span class="swatch platform"></span>platform</span>
+        <span class="key"><span class="swatch edge"></span>walk</span>
+        <span class="key"><span class="swatch vertical"></span>vertical</span>
+      </div>
+    </section>
+    <section class="profile">
+      <h2>Local XZ Profile</h2>
+      <svg id="xz"></svg>
+    </section>
+    <section>
+      <h2>Validation Warnings</h2>
+      <div id="warnings" class="warnings"></div>
+    </section>
+  </main>
+  <div id="tooltip" class="tooltip"></div>
+  <script id="graph-data" type="application/json">{"station_name": "숭실대입구(살피재)역", "graph_type": "local_metric_from_image_annotation", "crs": "LOCAL_IMAGE_METRIC", "coordinate_policy": {"uses_epsg_for_node_coordinates": false, "scale_calibrated_from_epsg_entrance_distances": true, "origin_mode": "image_origin", "origin_image_xy": [0.0, 0.0], "y_axis": "positive_up_from_image", "projection_y_scale": 1.35, "projection_note": "Use projection_y_scale &gt; 1 for oblique 3D guide maps where image depth is visually compressed."}, "scale": {"method": "median_pairwise_entrance_distance_scale", "meters_per_pixel": 0.07223673326058055, "pair_count": 6, "rmse_m": 15.50338634923592, "pair_scales": [{"from_entrance_no": "1", "to_entrance_no": "2", "image_dist_px": 793.4532122311939, "map_dist_m": 69.19048007527068, "meters_per_pixel": 0.0872017139872769, "estimated_m": 57.31646804669557, "error_m": -11.874012028575116, "abs_error_m": 11.874012028575116}, {"from_entrance_no": "1", "to_entrance_no": "3", "image_dist_px": 951.5529412491982, "map_dist_m": 65.63581461687284, "meters_per_pixel": 0.06897757525787916, "estimated_m": 68.7370760003392, "error_m": 3.1012613834663654, "abs_error_m": 3.1012613834663654}, {"from_entrance_no": "1", "to_entrance_no": "4", "image_dist_px": 525.0190472735251, "map_dist_m": 9.880120292727335, "meters_per_pixel": 0.018818593999657268, "estimated_m": 37.92566087462176, "error_m": 28.04554058189443, "abs_error_m": 28.04554058189443}, {"from_entrance_no": "2", "to_entrance_no": "3", "image_dist_px": 456.40004382120736, "map_dist_m": 11.597069376361377, "meters_per_pixel": 0.025409877876577235, "estimated_m": 32.968848225629834, "error_m": 21.37177884926846, "abs_error_m": 21.37177884926846}, {"from_entrance_no": "2", "to_entrance_no": "4", "image_dist_px": 939.4450489517734, "map_dist_m": 70.92424126349167, "meters_per_pixel": 0.07549589126328195, "estimated_m": 67.86244141410229, "error_m": -3.0617998493893737, "abs_error_m": 3.0617998493893737}, {"from_entrance_no": "3", "to_entrance_no": "4", "image_dist_px": 824.7763333171, "map_dist_m": 65.81132657390079, "meters_per_pixel": 0.07979293769162803, "estimated_m": 59.57914798946703, "error_m": -6.232178584433754, "abs_error_m": 6.232178584433754}]}, "floor_depths_m": {"ground": 0.0, "G": 0.0, "1F": 0.0, "B1": -4.0, "B2": -8.0, "B3": -12.0, "B4": -16.0, "B5": -20.0, "B6": -24.0, "B1-B2": -6.0, "B3-B4": -14.0, "B5-B6": -22.0}, "validation": {"long_edge_threshold_m": 25.0, "warnings": [{"type": "long_edge_review", "from": "clicked_024", "to": "clicked_025", "kind": "stairs", "distance_2d_m": 61.66544753649893, "message": "Review whether this edge should be split by bend/landing nodes."}, {"type": "long_edge_review", "from": "clicked_029", "to": "clicked_034", "kind": "stairs", "distance_2d_m": 35.39625746935339, "message": "Review whether this edge should be split by bend/landing nodes."}, {"type": "cross_floor_non_vertical_edge", "from": "clicked_043", "to": "clicked_045", "kind": "walk", "from_floor": "B3-B4", "to_floor": "B2"}, {"type": "long_edge_review", "from": "clicked_043", "to": "clicked_045", "kind": "walk", "distance_2d_m": 61.715906150863205, "message": "Review whether this edge should be split by bend/landing nodes."}, {"type": "cross_floor_non_vertical_edge", "from": "clicked_027", "to": "clicked_028", "kind": "walk", "from_floor": "B3", "to_floor": "B4"}, {"type": "cross_floor_non_vertical_edge", "from": "clicked_028", "to": "clicked_044", "kind": "walk", "from_floor": "B4", "to_floor": "B3-B4"}, {"type": "long_edge_review", "from": "clicked_031", "to": "clicked_036", "kind": "stairs", "distance_2d_m": 38.02242899254896, "message": "Review whether this edge should be split by bend/landing nodes."}, {"type": "cross_floor_non_vertical_edge", "from": "clicked_032", "to": "clicked_033", "kind": "walk", "from_floor": "B4", "to_floor": "B5"}, {"type": "long_edge_review", "from": "clicked_032", "to": "clicked_033", "kind": "walk", "distance_2d_m": 34.688610515419214, "message": "Review whether this edge should be split by bend/landing nodes."}, {"type": "cross_floor_non_vertical_edge", "from": "clicked_034", "to": "clicked_042", "kind": "platform_walk", "from_floor": "B5", "to_floor": "B6"}, {"type": "long_edge_review", "from": "clicked_034", "to": "clicked_042", "kind": "platform_walk", "distance_2d_m": 46.67738550581958, "message": "Review whether this edge should be split by bend/landing nodes."}, {"type": "long_edge_review", "from": "clicked_034", "to": "clicked_035", "kind": "walk", "distance_2d_m": 35.200683836863135, "message": "Review whether this edge should be split by bend/landing nodes."}, {"type": "long_edge_review", "from": "clicked_036", "to": "clicked_033", "kind": "walk", "distance_2d_m": 37.25772265855711, "message": "Review whether this edge should be split by bend/landing nodes."}, {"type": "cross_floor_non_vertical_edge", "from": "clicked_035", "to": "clicked_038", "kind": "platform_walk", "from_floor": "B5", "to_floor": "B6"}, {"type": "long_edge_review", "from": "clicked_035", "to": "clicked_038", "kind": "platform_walk", "distance_2d_m": 56.175431598953075, "message": "Review whether this edge should be split by bend/landing nodes."}, {"type": "long_edge_review", "from": "clicked_035", "to": "clicked_044", "kind": "stairs", "distance_2d_m": 36.7344651100017, "message": "Review whether this edge should be split by bend/landing nodes."}, {"type": "cross_floor_non_vertical_edge", "from": "clicked_036", "to": "clicked_037", "kind": "platform_walk", "from_floor": "B5", "to_floor": "B6"}, {"type": "long_edge_review", "from": "clicked_036", "to": "clicked_037", "kind": "platform_walk", "distance_2d_m": 55.111598132672114, "message": "Review whether this edge should be split by bend/landing nodes."}, {"type": "cross_floor_non_vertical_edge", "from": "clicked_033", "to": "clicked_042", "kind": "platform_walk", "from_floor": "B5", "to_floor": "B6"}, {"type": "long_edge_review", "from": "clicked_033", "to": "clicked_042", "kind": "platform_walk", "distance_2d_m": 42.748070548148064, "message": "Review whether this edge should be split by bend/landing nodes."}, {"type": "cross_floor_non_vertical_edge", "from": "clicked_033", "to": "clicked_041", "kind": "platform_walk", "from_floor": "B5", "to_floor": "B6"}, {"type": "long_edge_review", "from": "clicked_033", "to": "clicked_041", "kind": "platform_walk", "distance_2d_m": 45.715941210005006, "message": "Review whether this edge should be split by bend/landing nodes."}]}, "nodes": [{"id": "clicked_001", "kind": "route_turn", "floor": "B1", "image_xy": [359, 737], "local_xy_m": [25.932987240548417, -71.87193775761462], "z_m": -4.0, "local_xyz_m": [25.932987240548417, -71.87193775761462, -4.0], "click_index": 1}, {"id": "clicked_002", "kind": "route_turn", "floor": "B1", "image_xy": [554, 831], "local_xy_m": [40.019150226361624, -81.0387792083823], "z_m": -4.0, "local_xyz_m": [40.019150226361624, -81.0387792083823, -4.0], "click_index": 2}, {"id": "clicked_003", "kind": "hall", "floor": "B1", "image_xy": [746, 856], "local_xy_m": [53.88860301239309, -83.47676895592689], "z_m": -4.0, "local_xyz_m": [53.88860301239309, -83.47676895592689, -4.0], "click_index": 3}, {"id": "clicked_004", "kind": "hall", "floor": "B1", "image_xy": [885, 853], "local_xy_m": [63.92950893561379, -83.18421018622155], "z_m": -4.0, "local_xyz_m": [63.92950893561379, -83.18421018622155, -4.0], "click_index": 4}, {"id": "clicked_005", "kind": "route_turn", "floor": "B1", "image_xy": [960, 793], "local_xy_m": [69.34726393015734, -77.33303479211452], "z_m": -4.0, "local_xyz_m": [69.34726393015734, -77.33303479211452, -4.0], "click_index": 5}, {"id": "clicked_006", "kind": "route_turn", "floor": "B1", "image_xy": [1045, 730], "local_xy_m": [75.48738625730668, -71.18930062830214], "z_m": -4.0, "local_xyz_m": [75.48738625730668, -71.18930062830214, -4.0], "click_index": 6}, {"id": "clicked_007", "kind": "route_turn", "floor": "B1", "image_xy": [1121, 670], "local_xy_m": [80.9773779851108, -65.33812523419512], "z_m": -4.0, "local_xyz_m": [80.9773779851108, -65.33812523419512, -4.0], "click_index": 7}, {"id": "clicked_008", "kind": "hall", "floor": "B1", "image_xy": [771, 998], "local_xy_m": [55.69452134390761, -97.32455072198017], "z_m": -4.0, "local_xyz_m": [55.69452134390761, -97.32455072198017, -4.0], "click_index": 8}, {"id": "clicked_009", "kind": "route_turn", "floor": "B1", "image_xy": [812, 1212], "local_xy_m": [58.65622740759141, -118.19374296096191], "z_m": -4.0, "local_xyz_m": [58.65622740759141, -118.19374296096191, -4.0], "click_index": 9}, {"id": "clicked_010", "kind": "route_turn", "floor": "B1", "image_xy": [645, 1215], "local_xy_m": [46.592692953074454, -118.48630173066726], "z_m": -4.0, "local_xyz_m": [46.592692953074454, -118.48630173066726, -4.0], "click_index": 10}, {"id": "clicked_011", "kind": "route_turn", "floor": "B1", "image_xy": [431, 1118], "local_xy_m": [31.13403203531022, -109.02690151019424], "z_m": -4.0, "local_xyz_m": [31.13403203531022, -109.02690151019424, -4.0], "click_index": 11}, {"id": "clicked_012", "kind": "stairs_start", "floor": "B1", "image_xy": [904, 1209], "local_xy_m": [65.30200686756483, -117.90118419125656], "z_m": -4.0, "local_xyz_m": [65.30200686756483, -117.90118419125656, -4.0], "click_index": 12}, {"id": "clicked_013", "kind": "route_turn", "floor": "B1", "image_xy": [1115, 1080], "local_xy_m": [80.54395758554732, -105.32115709392646], "z_m": -4.0, "local_xyz_m": [80.54395758554732, -105.32115709392646, -4.0], "click_index": 13}, {"id": "clicked_014", "kind": "route_turn", "floor": "B1", "image_xy": [847, 1042], "local_xy_m": [61.18451307171173, -101.61541267765867], "z_m": -4.0, "local_xyz_m": [61.18451307171173, -101.61541267765867, -4.0], "click_index": 14}, {"id": "clicked_015", "kind": "route_turn", "floor": "B1", "image_xy": [1020, 1115], "local_xy_m": [73.68146792579216, -108.73434274048888], "z_m": -4.0, "local_xyz_m": [73.68146792579216, -108.73434274048888, -4.0], "click_index": 15}, {"id": "clicked_016", "kind": "stairs_landing", "floor": "B1-B2", "image_xy": [1247, 1222], "local_xy_m": [90.07920637594395, -119.16893885997975], "z_m": -6.0, "local_xyz_m": [90.07920637594395, -119.16893885997975, -6.0], "click_index": 16}, {"id": "clicked_017", "kind": "hall", "floor": "B2", "image_xy": [1543, 1193], "local_xy_m": [111.4612794210758, -116.34087075282802], "z_m": -8.0, "local_xyz_m": [111.4612794210758, -116.34087075282802, -8.0], "click_index": 17}, {"id": "clicked_018", "kind": "information", "floor": "B2", "image_xy": [1452, 1099], "local_xy_m": [104.88773669436297, -107.17402930206035], "z_m": -8.0, "local_xyz_m": [104.88773669436297, -107.17402930206035, -8.0], "click_index": 18}, {"id": "clicked_019", "kind": "route_turn", "floor": "B2", "image_xy": [1524, 1329], "local_xy_m": [110.08878148912477, -129.6035349794706], "z_m": -8.0, "local_xyz_m": [110.08878148912477, -129.6035349794706, -8.0], "click_index": 19}, {"id": "clicked_020", "kind": "route_turn", "floor": "B2", "image_xy": [1445, 1357], "local_xy_m": [104.3820795615389, -132.33408349672055], "z_m": -8.0, "local_xyz_m": [104.3820795615389, -132.33408349672055, -8.0], "click_index": 20}, {"id": "clicked_021", "kind": "route_turn", "floor": "B2", "image_xy": [1323, 1165], "local_xy_m": [95.56919810374808, -113.61032223557807], "z_m": -8.0, "local_xyz_m": [95.56919810374808, -113.61032223557807, -8.0], "click_index": 21}, {"id": "clicked_022", "kind": "hall", "floor": "B2", "image_xy": [1697, 1174], "local_xy_m": [122.5857363432052, -114.48799854469414], "z_m": -8.0, "local_xyz_m": [122.5857363432052, -114.48799854469414, -8.0], "click_index": 22}, {"id": "clicked_023", "kind": "route_turn", "floor": "B2", "image_xy": [1880, 1156], "local_xy_m": [135.80505852989145, -112.73264592646203], "z_m": -8.0, "local_xyz_m": [135.80505852989145, -112.73264592646203, -8.0], "click_index": 23}, {"id": "clicked_024", "kind": "stairs_start", "floor": "B2", "image_xy": [1908, 1206], "local_xy_m": [137.8276870611877, -117.60862542155121], "z_m": -8.0, "local_xyz_m": [137.8276870611877, -117.60862542155121, -8.0], "click_index": 24}, {"id": "clicked_045", "kind": "route_turn", "floor": "B2", "image_xy": [1817, 1096], "local_xy_m": [131.25414433447486, -106.881470532355], "z_m": -8.0, "local_xyz_m": [131.25414433447486, -106.881470532355, -8.0], "click_index": 45}, {"id": "clicked_046", "kind": "route_turn", "floor": "B2", "image_xy": [1370, 1228], "local_xy_m": [98.96432456699536, -119.75405639939045], "z_m": -8.0, "local_xyz_m": [98.96432456699536, -119.75405639939045, -8.0], "click_index": 46}, {"id": "clicked_025", "kind": "stairs_landing", "floor": "B3", "image_xy": [1619, 1801], "local_xy_m": [116.95127114887991, -175.63278141311255], "z_m": -12.0, "local_xyz_m": [116.95127114887991, -175.63278141311255, -12.0], "click_index": 25}, {"id": "clicked_026", "kind": "stairs_landing", "floor": "B3", "image_xy": [1530, 1798], "local_xy_m": [110.52220188868824, -175.3402226434072], "z_m": -12.0, "local_xyz_m": [110.52220188868824, -175.3402226434072, -12.0], "click_index": 26}, {"id": "clicked_027", "kind": "stairs_landing", "floor": "B3", "image_xy": [1527, 1754], "local_xy_m": [110.3054916889065, -171.0493606877287], "z_m": -12.0, "local_xyz_m": [110.3054916889065, -171.0493606877287, -12.0], "click_index": 27}, {"id": "clicked_028", "kind": "elevator_landing", "floor": "B4", "image_xy": [1748, 1713], "local_xy_m": [126.2698097394948, -167.05105750175557], "z_m": -16.0, "local_xyz_m": [126.2698097394948, -167.05105750175557, -16.0], "click_index": 28}, {"id": "clicked_029", "kind": "stairs_landing", "floor": "B4", "image_xy": [1827, 1628], "local_xy_m": [131.97651166708067, -158.76189236010396], "z_m": -16.0, "local_xyz_m": [131.97651166708067, -158.76189236010396, -16.0], "click_index": 29}, {"id": "clicked_031", "kind": "stairs_landing", "floor": "B4", "image_xy": [1779, 1782], "local_xy_m": [128.5091484705728, -173.77990920497865], "z_m": -16.0, "local_xyz_m": [128.5091484705728, -173.77990920497865, -16.0], "click_index": 31}, {"id": "clicked_032", "kind": "stairs_landing", "floor": "B4", "image_xy": [1930, 1767], "local_xy_m": [139.41689519292046, -172.3171153564519], "z_m": -16.0, "local_xyz_m": [139.41689519292046, -172.3171153564519, -16.0], "click_index": 32}, {"id": "clicked_043", "kind": "stairs_landing", "floor": "B3-B4", "image_xy": [1515, 1688], "local_xy_m": [109.43865088977954, -164.613067754211], "z_m": -14.0, "local_xyz_m": [109.43865088977954, -164.613067754211, -14.0], "click_index": 43}, {"id": "clicked_044", "kind": "stairs_landing", "floor": "B3-B4", "image_xy": [1678, 1641], "local_xy_m": [121.21323841125417, -160.02964702882713], "z_m": -14.0, "local_xyz_m": [121.21323841125417, -160.02964702882713, -14.0], "click_index": 44}, {"id": "clicked_033", "kind": "elevator", "floor": "B5", "image_xy": [2119, 2094], "local_xy_m": [153.0696377791702, -204.20602125433518], "z_m": -20.0, "local_xyz_m": [153.0696377791702, -204.20602125433518, -20.0], "click_index": 33}, {"id": "clicked_034", "kind": "route_turn", "floor": "B5", "image_xy": [2009, 1965], "local_xy_m": [145.12359712050633, -191.62599415700507], "z_m": -20.0, "local_xyz_m": [145.12359712050633, -191.62599415700507, -20.0], "click_index": 34}, {"id": "clicked_035", "kind": "stairs_end", "floor": "B5", "image_xy": [1524, 2000], "local_xy_m": [110.08878148912477, -195.0391798035675], "z_m": -20.0, "local_xyz_m": [110.08878148912477, -195.0391798035675, -20.0], "click_index": 35}, {"id": "clicked_036", "kind": "route_turn", "floor": "B5", "image_xy": [1609, 2151], "local_xy_m": [116.22890381627411, -209.76463787873686], "z_m": -20.0, "local_xyz_m": [116.22890381627411, -209.76463787873686, -20.0], "click_index": 36}, {"id": "clicked_037", "kind": "platform", "floor": "B6", "image_xy": [853, 2227], "local_xy_m": [61.617933471275215, -217.17612671127242], "z_m": -24.0, "local_xyz_m": [61.617933471275215, -217.17612671127242, -24.0], "click_index": 37}, {"id": "clicked_038", "kind": "platform_turn", "floor": "B6", "image_xy": [768, 2135], "local_xy_m": [55.477811144125866, -208.20432444030834], "z_m": -24.0, "local_xyz_m": [55.477811144125866, -208.20432444030834, -24.0], "click_index": 38}, {"id": "clicked_039", "kind": "route_turn", "floor": "B5", "image_xy": [2113, 1937], "local_xy_m": [152.6362173796067, -188.89544563975514], "z_m": -20.0, "local_xyz_m": [152.6362173796067, -188.89544563975514, -20.0], "click_index": 39}, {"id": "clicked_040", "kind": "route_turn", "floor": "B5", "image_xy": [2214, 2107], "local_xy_m": [159.93212743892533, -205.47377592305835], "z_m": -20.0, "local_xyz_m": [159.93212743892533, -205.47377592305835, -20.0], "click_index": 40}, {"id": "clicked_041", "kind": "platform", "floor": "B6", "image_xy": [2737, 1993], "local_xy_m": [197.71193893420897, -194.35654267425505], "z_m": -24.0, "local_xyz_m": [197.71193893420897, -194.35654267425505, -24.0], "click_index": 41}, {"id": "clicked_042", "kind": "platform_turn", "floor": "B6", "image_xy": [2649, 1899], "local_xy_m": [191.3551064072779, -185.18970122348736], "z_m": -24.0, "local_xyz_m": [191.3551064072779, -185.18970122348736, -24.0], "click_index": 42}], "edges": [{"from": "clicked_001", "to": "clicked_002", "kind": "walk", "distance_px": 216.47401691658055, "distance_2d_m": 16.806277691577233, "distance_3d_m": 16.806277691577233, "cost_m": 16.806277691577233}, {"from": "clicked_002", "to": "clicked_003", "kind": "walk", "distance_px": 193.62076334938874, "distance_2d_m": 14.082099083342957, "distance_3d_m": 14.082099083342957, "cost_m": 14.082099083342957}, {"from": "clicked_003", "to": "clicked_004", "kind": "walk", "distance_px": 139.0323703315167, "distance_2d_m": 10.045167116215639, "distance_3d_m": 10.045167116215639, "cost_m": 10.045167116215639}, {"from": "clicked_004", "to": "clicked_005", "kind": "walk", "distance_px": 96.04686356149273, "distance_2d_m": 7.974228656961446, "distance_3d_m": 7.974228656961446, "cost_m": 7.974228656961446}, {"from": "clicked_005", "to": "clicked_006", "kind": "walk", "distance_px": 105.80170130957252, "distance_2d_m": 8.685998599352482, "distance_3d_m": 8.685998599352482, "cost_m": 8.685998599352482}, {"from": "clicked_006", "to": "clicked_007", "kind": "walk", "distance_px": 96.82974749528164, "distance_2d_m": 8.023481953862744, "distance_3d_m": 8.023481953862744, "cost_m": 8.023481953862744}, {"from": "clicked_011", "to": "clicked_010", "kind": "walk", "distance_px": 234.95744295510198, "distance_2d_m": 18.123201977065104, "distance_3d_m": 18.123201977065104, "cost_m": 18.123201977065104}, {"from": "clicked_010", "to": "clicked_009", "kind": "walk", "distance_px": 167.0269439342048, "distance_2d_m": 12.067081427132626, "distance_3d_m": 12.067081427132626, "cost_m": 12.067081427132626}, {"from": "clicked_009", "to": "clicked_012", "kind": "walk", "distance_px": 92.04890004774636, "distance_2d_m": 6.652215816127442, "distance_3d_m": 6.652215816127442, "cost_m": 6.652215816127442}, {"from": "clicked_003", "to": "clicked_008", "kind": "walk", "distance_px": 144.183910336764, "distance_2d_m": 13.965042100199272, "distance_3d_m": 13.965042100199272, "cost_m": 13.965042100199272}, {"from": "clicked_008", "to": "clicked_009", "kind": "walk", "distance_px": 217.89217516927954, "distance_2d_m": 21.078303715319148, "distance_3d_m": 21.078303715319148, "cost_m": 21.078303715319148}, {"from": "clicked_008", "to": "clicked_014", "kind": "walk", "distance_px": 87.8179936004006, "distance_2d_m": 6.9678910363213, "distance_3d_m": 6.9678910363213, "cost_m": 6.9678910363213}, {"from": "clicked_009", "to": "clicked_014", "kind": "walk", "distance_px": 173.5655495770978, "distance_2d_m": 16.77001083427455, "distance_3d_m": 16.77001083427455, "cost_m": 16.77001083427455}, {"from": "clicked_014", "to": "clicked_015", "kind": "walk", "distance_px": 187.77113729218343, "distance_2d_m": 14.382386653973407, "distance_3d_m": 14.382386653973407, "cost_m": 14.382386653973407}, {"from": "clicked_015", "to": "clicked_016", "kind": "stairs", "distance_px": 250.95417908454922, "distance_2d_m": 19.436219345759614, "distance_3d_m": 19.53884905659697, "cost_m": 19.53884905659697}, {"from": "clicked_012", "to": "clicked_013", "kind": "walk", "distance_px": 247.3095226634025, "distance_2d_m": 19.762948754145132, "distance_3d_m": 19.762948754145132, "cost_m": 19.762948754145132}, {"from": "clicked_016", "to": "clicked_046", "kind": "stairs", "distance_px": 123.14625451064275, "distance_2d_m": 8.90436341373591, "distance_3d_m": 9.126208840689468, "cost_m": 9.126208840689468}, {"from": "clicked_046", "to": "clicked_021", "kind": "walk", "distance_px": 78.60025445251433, "distance_2d_m": 7.019426841063123, "distance_3d_m": 7.019426841063123, "cost_m": 7.019426841063123}, {"from": "clicked_046", "to": "clicked_020", "kind": "walk", "distance_px": 149.21796138535066, "distance_2d_m": 13.697048986933687, "distance_3d_m": 13.697048986933687, "cost_m": 13.697048986933687}, {"from": "clicked_046", "to": "clicked_019", "kind": "walk", "distance_px": 184.16568627190028, "distance_2d_m": 14.858188655141332, "distance_3d_m": 14.858188655141332, "cost_m": 14.858188655141332}, {"from": "clicked_021", "to": "clicked_017", "kind": "walk", "distance_px": 221.7746604100658, "distance_2d_m": 16.12495407130243, "distance_3d_m": 16.12495407130243, "cost_m": 16.12495407130243}, {"from": "clicked_017", "to": "clicked_022", "kind": "walk", "distance_px": 155.16765126791086, "distance_2d_m": 11.277707091070756, "distance_3d_m": 11.277707091070756, "cost_m": 11.277707091070756}, {"from": "clicked_017", "to": "clicked_018", "kind": "walk", "distance_px": 130.83195328359201, "distance_2d_m": 11.280179349790126, "distance_3d_m": 11.280179349790126, "cost_m": 11.280179349790126}, {"from": "clicked_017", "to": "clicked_019", "kind": "walk", "distance_px": 137.32079230764728, "distance_2d_m": 13.333492151791084, "distance_3d_m": 13.333492151791084, "cost_m": 13.333492151791084}, {"from": "clicked_022", "to": "clicked_045", "kind": "walk", "distance_px": 143.12232530251876, "distance_2d_m": 11.532587112422249, "distance_3d_m": 11.532587112422249, "cost_m": 11.532587112422249}, {"from": "clicked_022", "to": "clicked_023", "kind": "walk", "distance_px": 183.88311504866346, "distance_2d_m": 13.335356833986475, "distance_3d_m": 13.335356833986475, "cost_m": 13.335356833986475}, {"from": "clicked_022", "to": "clicked_024", "kind": "walk", "distance_px": 213.41274563624359, "distance_2d_m": 15.558128865450694, "distance_3d_m": 15.558128865450694, "cost_m": 15.558128865450694}, {"from": "clicked_045", "to": "clicked_023", "kind": "walk", "distance_px": 87.0, "distance_2d_m": 7.41262932478401, "distance_3d_m": 7.41262932478401, "cost_m": 7.41262932478401}, {"from": "clicked_023", "to": "clicked_024", "kind": "walk", "distance_px": 57.30619512757761, "distance_2d_m": 5.278844780076772, "distance_3d_m": 5.278844780076772, "cost_m": 5.278844780076772}, {"from": "clicked_024", "to": "clicked_025", "kind": "stairs", "distance_px": 661.4725995836865, "distance_2d_m": 61.66544753649893, "distance_3d_m": 61.79504365138601, "cost_m": 61.79504365138601}, {"from": "clicked_029", "to": "clicked_044", "kind": "stairs", "distance_px": 149.56603892595405, "distance_2d_m": 10.837677476270434, "distance_3d_m": 11.020673894080138, "cost_m": 11.020673894080138}, {"from": "clicked_029", "to": "clicked_034", "kind": "stairs", "distance_px": 383.00522189651673, "distance_2d_m": 35.39625746935339, "distance_3d_m": 35.621553066040725, "cost_m": 35.621553066040725}, {"from": "clicked_043", "to": "clicked_027", "kind": "stairs", "distance_px": 67.08203932499369, "distance_2d_m": 6.494403721442102, "distance_3d_m": 6.79538664809303, "cost_m": 6.79538664809303}, {"from": "clicked_043", "to": "clicked_045", "kind": "walk", "distance_px": 664.5810710515309, "distance_2d_m": 61.715906150863205, "distance_3d_m": 62.00687923143814, "cost_m": 62.00687923143814}, {"from": "clicked_027", "to": "clicked_028", "kind": "walk", "distance_px": 224.770994570029, "distance_2d_m": 16.457395881101675, "distance_3d_m": 16.93652500329694, "cost_m": 16.93652500329694}, {"from": "clicked_028", "to": "clicked_029", "kind": "walk", "distance_px": 116.04309544302927, "distance_2d_m": 10.063632824973514, "distance_3d_m": 10.063632824973514, "cost_m": 10.063632824973514}, {"from": "clicked_028", "to": "clicked_031", "kind": "walk", "distance_px": 75.64390259630977, "distance_2d_m": 7.091691137977896, "distance_3d_m": 7.091691137977896, "cost_m": 7.091691137977896}, {"from": "clicked_028", "to": "clicked_044", "kind": "walk", "distance_px": 100.41912168506553, "distance_2d_m": 8.65269429871034, "distance_3d_m": 8.880828712847379, "cost_m": 8.880828712847379}, {"from": "clicked_027", "to": "clicked_026", "kind": "stairs", "distance_px": 44.10215414239989, "distance_2d_m": 4.2963309501688345, "distance_3d_m": 4.2963309501688345, "cost_m": 4.2963309501688345}, {"from": "clicked_028", "to": "clicked_032", "kind": "walk", "distance_px": 189.84203960134857, "distance_2d_m": 14.162528773092943, "distance_3d_m": 14.162528773092943, "cost_m": 14.162528773092943}, {"from": "clicked_026", "to": "clicked_025", "kind": "stairs", "distance_px": 89.05054744357274, "distance_2d_m": 6.435722351537001, "distance_3d_m": 6.435722351537001, "cost_m": 6.435722351537001}, {"from": "clicked_031", "to": "clicked_032", "kind": "stairs", "distance_px": 151.74320413119, "distance_2d_m": 11.005394331970754, "distance_3d_m": 11.005394331970754, "cost_m": 11.005394331970754}, {"from": "clicked_031", "to": "clicked_036", "kind": "stairs", "distance_px": 406.2769991028289, "distance_2d_m": 38.02242899254896, "distance_3d_m": 38.23225217657767, "cost_m": 38.23225217657767}, {"from": "clicked_032", "to": "clicked_033", "kind": "walk", "distance_px": 377.69034936042516, "distance_2d_m": 34.688610515419214, "distance_3d_m": 34.91847218150377, "cost_m": 34.91847218150377}, {"from": "clicked_034", "to": "clicked_039", "kind": "walk", "distance_px": 107.70329614269008, "distance_2d_m": 7.993457222159955, "distance_3d_m": 7.993457222159955, "cost_m": 7.993457222159955}, {"from": "clicked_034", "to": "clicked_042", "kind": "platform_walk", "distance_px": 643.3941249343205, "distance_2d_m": 46.67738550581958, "distance_3d_m": 46.84846120908237, "cost_m": 46.84846120908237}, {"from": "clicked_040", "to": "clicked_033", "kind": "walk", "distance_px": 95.88534820294495, "distance_2d_m": 6.978607757304864, "distance_3d_m": 6.978607757304864, "cost_m": 6.978607757304864}, {"from": "clicked_034", "to": "clicked_035", "kind": "walk", "distance_px": 486.26124665656835, "distance_2d_m": 35.200683836863135, "distance_3d_m": 35.200683836863135, "cost_m": 35.200683836863135}, {"from": "clicked_036", "to": "clicked_033", "kind": "walk", "distance_px": 513.1754086080119, "distance_2d_m": 37.25772265855711, "distance_3d_m": 37.25772265855711, "cost_m": 37.25772265855711}, {"from": "clicked_035", "to": "clicked_038", "kind": "platform_walk", "distance_px": 767.9589832797061, "distance_2d_m": 56.175431598953075, "distance_3d_m": 56.31766255206848, "cost_m": 56.31766255206848}, {"from": "clicked_035", "to": "clicked_044", "kind": "stairs", "distance_px": 390.636659825982, "distance_2d_m": 36.7344651100017, "distance_3d_m": 37.22124295235091, "cost_m": 37.22124295235091}, {"from": "clicked_036", "to": "clicked_037", "kind": "platform_walk", "distance_px": 759.810502691296, "distance_2d_m": 55.111598132672114, "distance_3d_m": 55.256567471542674, "cost_m": 55.256567471542674}, {"from": "clicked_033", "to": "clicked_042", "kind": "platform_walk", "distance_px": 564.7344508704954, "distance_2d_m": 42.748070548148064, "distance_3d_m": 42.93480564285162, "cost_m": 42.93480564285162}, {"from": "clicked_033", "to": "clicked_041", "kind": "platform_walk", "distance_px": 626.1988502065458, "distance_2d_m": 45.715941210005006, "distance_3d_m": 45.890601224179164, "cost_m": 45.890601224179164}]}</script>
+  <script>
+    const graph = JSON.parse(document.getElementById("graph-data").textContent);
+    const nodes = graph.nodes || [];
+    const edges = graph.edges || [];
+    const byId = new Map(nodes.map(n => [n.id, n]));
+    const warnings = graph.validation?.warnings || [];
+
+    document.getElementById("node-count").textContent = nodes.length;
+    document.getElementById("edge-count").textContent = edges.length;
+    document.getElementById("scale").textContent = `${(graph.scale?.meters_per_pixel || 0).toFixed(6)} m/px`;
+    document.getElementById("projection").textContent = graph.coordinate_policy?.projection_y_scale ?? 1;
+    document.getElementById("warning-count").textContent = warnings.length;
+
+    const warningBox = document.getElementById("warnings");
+    warningBox.innerHTML = warnings.length
+      ? warnings.map(w => `<div class="warning"><strong>${w.type}</strong><br>${w.from || ""} -> ${w.to || ""} ${w.kind ? "(" + w.kind + ")" : ""}<br>${w.message || ""}</div>`).join("")
+      : `<div class="warning">No validation warnings.</div>`;
+
+    const tooltip = document.getElementById("tooltip");
+
+    function nodeColor(n) {
+      const k = (n.kind || "").toLowerCase();
+      if (k.includes("entrance") || k === "exit") return "var(--entrance)";
+      if (k.includes("platform")) return "var(--platform)";
+      if (k.includes("hall") || k.includes("turn")) return "var(--hall)";
+      return "var(--node)";
+    }
+
+    function edgeColor(e) {
+      const k = (e.kind || "").toLowerCase();
+      if (k.includes("stairs") || k.includes("elevator") || k.includes("escalator")) return "var(--vertical)";
+      if (k.includes("platform")) return "var(--platform)";
+      return "var(--walk)";
+    }
+
+    function extent(values) {
+      return [Math.min(...values), Math.max(...values)];
+    }
+
+    function scale(v, d0, d1, r0, r1) {
+      if (Math.abs(d1 - d0) < 1e-9) return (r0 + r1) / 2;
+      return r0 + (v - d0) * (r1 - r0) / (d1 - d0);
+    }
+
+    function showTip(evt, text) {
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = `${evt.clientX + 12}px`;
+      tooltip.style.top = `${evt.clientY + 12}px`;
+    }
+
+    function hideTip() {
+      tooltip.style.display = "none";
+    }
+
+    function draw(svgId, mode) {
+      const svg = document.getElementById(svgId);
+      const rect = svg.getBoundingClientRect();
+      const width = rect.width || 1000;
+      const height = rect.height || 500;
+      const pad = 48;
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg.innerHTML = "";
+
+      const xs = nodes.map(n => n.local_xyz_m[0]);
+      const ys = mode === "xy" ? nodes.map(n => n.local_xyz_m[1]) : nodes.map(n => n.z_m ?? n.local_xyz_m[2] ?? 0);
+      const [minX, maxX] = extent(xs);
+      const [minY, maxY] = extent(ys);
+
+      function px(n) { return scale(n.local_xyz_m[0], minX, maxX, pad, width - pad); }
+      function py(n) {
+        const y = mode === "xy" ? n.local_xyz_m[1] : (n.z_m ?? n.local_xyz_m[2] ?? 0);
+        return scale(y, minY, maxY, height - pad, pad);
+      }
+
+      for (const e of edges) {
+        const a = byId.get(e.from);
+        const b = byId.get(e.to);
+        if (!a || !b) continue;
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", px(a));
+        line.setAttribute("y1", py(a));
+        line.setAttribute("x2", px(b));
+        line.setAttribute("y2", py(b));
+        line.setAttribute("stroke", edgeColor(e));
+        line.setAttribute("stroke-width", mode === "xy" ? 2.4 : 2);
+        line.setAttribute("stroke-linecap", "round");
+        line.setAttribute("opacity", "0.76");
+        line.addEventListener("mousemove", evt => showTip(evt,
+          `${e.from} -> ${e.to}\nkind: ${e.kind || ""}\npx: ${(e.distance_px || 0).toFixed(1)}\n2D: ${(e.distance_2d_m || 0).toFixed(2)}m\n3D/cost: ${(e.cost_m || e.distance_3d_m || 0).toFixed(2)}m`));
+        line.addEventListener("mouseleave", hideTip);
+        svg.appendChild(line);
+      }
+
+      for (const n of nodes) {
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", px(n));
+        circle.setAttribute("cy", py(n));
+        circle.setAttribute("r", 5.5);
+        circle.setAttribute("fill", nodeColor(n));
+        circle.setAttribute("stroke", "white");
+        circle.setAttribute("stroke-width", 1.5);
+        circle.addEventListener("mousemove", evt => showTip(evt,
+          `${n.id}\nkind: ${n.kind || ""}\nfloor: ${n.floor || ""}\nz: ${(n.z_m || 0).toFixed(2)}m\nimage: ${n.image_xy.join(", ")}\nlocal: ${n.local_xy_m.map(v => v.toFixed(2)).join(", ")}`));
+        circle.addEventListener("mouseleave", hideTip);
+        svg.appendChild(circle);
+
+        const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        label.setAttribute("x", px(n) + 7);
+        label.setAttribute("y", py(n) - 7);
+        label.setAttribute("class", "node-label");
+        label.textContent = n.click_index ?? n.id;
+        svg.appendChild(label);
+      }
+
+      const axis = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      axis.setAttribute("x", pad);
+      axis.setAttribute("y", height - 16);
+      axis.setAttribute("class", "axis-label");
+      axis.textContent = mode === "xy" ? "Local metric coordinates, not EPSG" : "Local X axis vs z_m";
+      svg.appendChild(axis);
+    }
+
+    draw("xy", "xy");
+    draw("xz", "xz");
+    window.addEventListener("resize", () => {
+      draw("xy", "xy");
+      draw("xz", "xz");
+    });
+  </script>
+</body>
+</html>

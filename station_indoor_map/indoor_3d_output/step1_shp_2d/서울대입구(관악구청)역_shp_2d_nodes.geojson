@@ -1,0 +1,26 @@
+{
+"type": "FeatureCollection",
+"name": "서울대입구(관악구청)역_shp_2d_nodes",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::5179" } },
+"features": [
+{ "type": "Feature", "properties": { "id": "station_centroid", "kind": "station_centroid", "entrance_no": null }, "geometry": { "type": "Point", "coordinates": [ 951620.464650364592671, 1942581.228347436292097 ] } },
+{ "type": "Feature", "properties": { "id": "axis_start", "kind": "axis_endpoint", "entrance_no": null }, "geometry": { "type": "Point", "coordinates": [ 951691.444667605450377, 1942511.755557663505897 ] } },
+{ "type": "Feature", "properties": { "id": "axis_end", "kind": "axis_endpoint", "entrance_no": null }, "geometry": { "type": "Point", "coordinates": [ 951521.968391729518771, 1942580.88204659265466 ] } },
+{ "type": "Feature", "properties": { "id": "entrance_7", "kind": "entrance", "entrance_no": "7" }, "geometry": { "type": "Point", "coordinates": [ 951647.122182297054678, 1942620.571496250107884 ] } },
+{ "type": "Feature", "properties": { "id": "axis_projection_entrance_7", "kind": "axis_projection", "entrance_no": "7" }, "geometry": { "type": "Point", "coordinates": [ 951615.390956608578563, 1942542.776572162983939 ] } },
+{ "type": "Feature", "properties": { "id": "entrance_1", "kind": "entrance", "entrance_no": "1" }, "geometry": { "type": "Point", "coordinates": [ 951651.618182200007141, 1942552.624796239892021 ] } },
+{ "type": "Feature", "properties": { "id": "axis_projection_entrance_1", "kind": "axis_projection", "entrance_no": "1" }, "geometry": { "type": "Point", "coordinates": [ 951643.0068445665529, 1942531.512521408032626 ] } },
+{ "type": "Feature", "properties": { "id": "entrance_8", "kind": "entrance", "entrance_no": "8" }, "geometry": { "type": "Point", "coordinates": [ 951656.758382278028876, 1942595.759496259968728 ] } },
+{ "type": "Feature", "properties": { "id": "axis_projection_entrance_8", "kind": "axis_projection", "entrance_no": "8" }, "geometry": { "type": "Point", "coordinates": [ 951632.329507399699651, 1942535.867625540820882 ] } },
+{ "type": "Feature", "properties": { "id": "entrance_6", "kind": "entrance", "entrance_no": "6" }, "geometry": { "type": "Point", "coordinates": [ 951607.905182237969711, 1942633.071396189974621 ] } },
+{ "type": "Feature", "properties": { "id": "axis_projection_entrance_6", "kind": "axis_projection", "entrance_no": "6" }, "geometry": { "type": "Point", "coordinates": [ 951577.396535909501836, 1942558.273849809775129 ] } },
+{ "type": "Feature", "properties": { "id": "entrance_5", "kind": "entrance", "entrance_no": "5" }, "geometry": { "type": "Point", "coordinates": [ 951585.726382168009877, 1942617.753996150102466 ] } },
+{ "type": "Feature", "properties": { "id": "axis_projection_entrance_5", "kind": "axis_projection", "entrance_no": "5" }, "geometry": { "type": "Point", "coordinates": [ 951563.737822669674642, 1942563.845006508287042 ] } },
+{ "type": "Feature", "properties": { "id": "entrance_4", "kind": "entrance", "entrance_no": "4" }, "geometry": { "type": "Point", "coordinates": [ 951572.609997194027528, 1942577.141002269927412 ] } },
+{ "type": "Feature", "properties": { "id": "axis_projection_entrance_4", "kind": "axis_projection", "entrance_no": "4" }, "geometry": { "type": "Point", "coordinates": [ 951566.694833280751482, 1942562.638892199844122 ] } },
+{ "type": "Feature", "properties": { "id": "entrance_3", "kind": "entrance", "entrance_no": "3" }, "geometry": { "type": "Point", "coordinates": [ 951587.729482074966654, 1942556.169396149925888 ] } },
+{ "type": "Feature", "properties": { "id": "axis_projection_entrance_3", "kind": "axis_projection", "entrance_no": "3" }, "geometry": { "type": "Point", "coordinates": [ 951586.991545321769081, 1942554.360208750236779 ] } },
+{ "type": "Feature", "properties": { "id": "entrance_2", "kind": "entrance", "entrance_no": "2" }, "geometry": { "type": "Point", "coordinates": [ 951624.567782126949169, 1942540.509496199898422 ] } },
+{ "type": "Feature", "properties": { "id": "axis_projection_entrance_2", "kind": "axis_projection", "entrance_no": "2" }, "geometry": { "type": "Point", "coordinates": [ 951624.051621728111058, 1942539.244034240255132 ] } }
+]
+}

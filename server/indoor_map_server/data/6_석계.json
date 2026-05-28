@@ -1,0 +1,1721 @@
+{
+  "station_name": "석계",
+  "line_no": "6",
+  "source_image": "6/석계.jpg",
+  "image_width": 3402,
+  "image_height": 3402,
+  "annotation_status": "clicked_draft",
+  "created_at": "2026-05-28T14:28:24",
+  "note": "Created from clicked image coordinates using station_image/image_check.py. Review node labels, floors, and edges before routing.",
+  "nodes": [
+    {
+      "id": "node_001",
+      "kind": "entrance_connection",
+      "click_index": 1,
+      "image_xy": [
+        263,
+        1329
+      ],
+      "floor": "ground",
+      "entrance_no": "5"
+    },
+    {
+      "id": "node_002",
+      "kind": "entrance_connection",
+      "click_index": 2,
+      "image_xy": [
+        1194,
+        1078
+      ],
+      "floor": "ground",
+      "entrance_no": "7"
+    },
+    {
+      "id": "node_003",
+      "kind": "entrance_connection",
+      "click_index": 3,
+      "image_xy": [
+        1591,
+        1141
+      ],
+      "floor": "ground",
+      "entrance_no": "6"
+    },
+    {
+      "id": "node_004",
+      "kind": "entrance_connection",
+      "click_index": 4,
+      "image_xy": [
+        1863,
+        890
+      ],
+      "floor": "ground",
+      "entrance_no": "1"
+    },
+    {
+      "id": "node_005",
+      "kind": "entrance_connection",
+      "click_index": 5,
+      "image_xy": [
+        2267,
+        1350
+      ],
+      "floor": "ground",
+      "entrance_no": "4"
+    },
+    {
+      "id": "node_006",
+      "kind": "entrance_connection",
+      "click_index": 6,
+      "image_xy": [
+        2423,
+        1275
+      ],
+      "floor": "ground",
+      "entrance_no": "2"
+    },
+    {
+      "id": "node_007",
+      "kind": "entrance_connection",
+      "click_index": 7,
+      "image_xy": [
+        2846,
+        1442
+      ],
+      "floor": "ground",
+      "entrance_no": "3"
+    },
+    {
+      "id": "node_008",
+      "kind": "stairs_start",
+      "click_index": 8,
+      "image_xy": [
+        270,
+        1332
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_009",
+      "kind": "stairs_start",
+      "click_index": 9,
+      "image_xy": [
+        1054,
+        1276
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_010",
+      "kind": "stairs_start",
+      "click_index": 10,
+      "image_xy": [
+        1202,
+        1081
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_011",
+      "kind": "stairs_start",
+      "click_index": 11,
+      "image_xy": [
+        1486,
+        1025
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_012",
+      "kind": "stairs_start",
+      "click_index": 12,
+      "image_xy": [
+        1855,
+        890
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_013",
+      "kind": "stairs_start",
+      "click_index": 13,
+      "image_xy": [
+        1604,
+        1141
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_014",
+      "kind": "stairs_start",
+      "click_index": 14,
+      "image_xy": [
+        2028,
+        677
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_015",
+      "kind": "stairs_start",
+      "click_index": 15,
+      "image_xy": [
+        2284,
+        1357
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_016",
+      "kind": "stairs_start",
+      "click_index": 16,
+      "image_xy": [
+        2427,
+        1278
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_017",
+      "kind": "stairs_start",
+      "click_index": 17,
+      "image_xy": [
+        2833,
+        1444
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_018",
+      "kind": "stairs_start",
+      "click_index": 18,
+      "image_xy": [
+        1150,
+        1863
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_019",
+      "kind": "stairs_start",
+      "click_index": 19,
+      "image_xy": [
+        1318,
+        1373
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_020",
+      "kind": "stairs_start",
+      "click_index": 20,
+      "image_xy": [
+        2556,
+        1483
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_021",
+      "kind": "stairs_start",
+      "click_index": 21,
+      "image_xy": [
+        2415,
+        1564
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_022",
+      "kind": "stairs_end",
+      "click_index": 22,
+      "image_xy": [
+        1293,
+        1301
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_023",
+      "kind": "stairs_end",
+      "click_index": 23,
+      "image_xy": [
+        1765,
+        1222
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_024",
+      "kind": "stairs_end",
+      "click_index": 24,
+      "image_xy": [
+        1869,
+        1127
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_025",
+      "kind": "stairs_end",
+      "click_index": 25,
+      "image_xy": [
+        1786,
+        1083
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_026",
+      "kind": "stairs_end",
+      "click_index": 26,
+      "image_xy": [
+        1665,
+        1181
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_027",
+      "kind": "stairs_start",
+      "click_index": 27,
+      "image_xy": [
+        1646,
+        1156
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_028",
+      "kind": "stairs_end",
+      "click_index": 28,
+      "image_xy": [
+        2382,
+        1554
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_029",
+      "kind": "stairs_end",
+      "click_index": 29,
+      "image_xy": [
+        2514,
+        1454
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_030",
+      "kind": "stairs_end",
+      "click_index": 30,
+      "image_xy": [
+        2729,
+        1529
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_031",
+      "kind": "elevator",
+      "click_index": 31,
+      "image_xy": [
+        2365,
+        1560
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_032",
+      "kind": "stairs_end",
+      "click_index": 32,
+      "image_xy": [
+        367,
+        1556
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_033",
+      "kind": "stairs_end",
+      "click_index": 33,
+      "image_xy": [
+        911,
+        1765
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_034",
+      "kind": "stairs_end",
+      "click_index": 34,
+      "image_xy": [
+        1477,
+        2121
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_035",
+      "kind": "stairs_end",
+      "click_index": 35,
+      "image_xy": [
+        2574,
+        1796
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_036",
+      "kind": "stairs_end",
+      "click_index": 36,
+      "image_xy": [
+        2466,
+        1663
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_037",
+      "kind": "stairs_end",
+      "click_index": 37,
+      "image_xy": [
+        2498,
+        1639
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_038",
+      "kind": "stairs_end",
+      "click_index": 38,
+      "image_xy": [
+        1546,
+        1297
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_039",
+      "kind": "platform",
+      "click_index": 39,
+      "image_xy": [
+        1114,
+        1257
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_040",
+      "kind": "platform",
+      "click_index": 40,
+      "image_xy": [
+        1295,
+        1148
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_041",
+      "kind": "platform",
+      "click_index": 41,
+      "image_xy": [
+        1535,
+        1021
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_042",
+      "kind": "platform",
+      "click_index": 42,
+      "image_xy": [
+        1902,
+        790
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_043",
+      "kind": "platform",
+      "click_index": 43,
+      "image_xy": [
+        2080,
+        690
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_044",
+      "kind": "stairs_start",
+      "click_index": 44,
+      "image_xy": [
+        2238,
+        1863
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_045",
+      "kind": "stairs_start",
+      "click_index": 45,
+      "image_xy": [
+        2186,
+        1849
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_046",
+      "kind": "stairs_start",
+      "click_index": 46,
+      "image_xy": [
+        2320,
+        1791
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_047",
+      "kind": "stairs_start",
+      "click_index": 47,
+      "image_xy": [
+        2377,
+        1802
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_048",
+      "kind": "stairs_end",
+      "click_index": 48,
+      "image_xy": [
+        1423,
+        1559
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_049",
+      "kind": "stairs_start",
+      "click_index": 49,
+      "image_xy": [
+        1278,
+        1520
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_050",
+      "kind": "stairs_start",
+      "click_index": 50,
+      "image_xy": [
+        1415,
+        1450
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_051",
+      "kind": "elevator",
+      "click_index": 51,
+      "image_xy": [
+        2131,
+        1703
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_052",
+      "kind": "elevator",
+      "click_index": 52,
+      "image_xy": [
+        1982,
+        1783
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_053",
+      "kind": "elevator",
+      "click_index": 53,
+      "image_xy": [
+        2362,
+        1911
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_054",
+      "kind": "information",
+      "click_index": 54,
+      "image_xy": [
+        2446,
+        1826
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_055",
+      "kind": "information",
+      "click_index": 55,
+      "image_xy": [
+        2568,
+        1884
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_056",
+      "kind": "stairs_end",
+      "click_index": 56,
+      "image_xy": [
+        2022,
+        2007
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_057",
+      "kind": "stairs_end",
+      "click_index": 57,
+      "image_xy": [
+        2150,
+        1935
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_058",
+      "kind": "stairs_end",
+      "click_index": 58,
+      "image_xy": [
+        2321,
+        2114
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_059",
+      "kind": "stairs_end",
+      "click_index": 59,
+      "image_xy": [
+        2451,
+        2038
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_060",
+      "kind": "stairs_end",
+      "click_index": 60,
+      "image_xy": [
+        1370,
+        1759
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_061",
+      "kind": "stairs_end",
+      "click_index": 61,
+      "image_xy": [
+        1490,
+        1699
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_062",
+      "kind": "elevator",
+      "click_index": 62,
+      "image_xy": [
+        1984,
+        1999
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_063",
+      "kind": "elevator",
+      "click_index": 63,
+      "image_xy": [
+        2136,
+        1931
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_064",
+      "kind": "platform",
+      "click_index": 64,
+      "image_xy": [
+        2813,
+        2267
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_065",
+      "kind": "platform",
+      "click_index": 65,
+      "image_xy": [
+        2476,
+        2144
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_066",
+      "kind": "platform",
+      "click_index": 66,
+      "image_xy": [
+        2195,
+        2042
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_067",
+      "kind": "platform",
+      "click_index": 67,
+      "image_xy": [
+        1947,
+        1947
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_068",
+      "kind": "platform",
+      "click_index": 68,
+      "image_xy": [
+        1600,
+        1827
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_069",
+      "kind": "platform",
+      "click_index": 69,
+      "image_xy": [
+        1438,
+        1760
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_070",
+      "kind": "platform",
+      "click_index": 70,
+      "image_xy": [
+        2850,
+        2212
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_071",
+      "kind": "platform",
+      "click_index": 71,
+      "image_xy": [
+        2509,
+        2096
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_072",
+      "kind": "platform",
+      "click_index": 72,
+      "image_xy": [
+        2235,
+        1991
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_073",
+      "kind": "platform",
+      "click_index": 73,
+      "image_xy": [
+        1669,
+        1790
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_074",
+      "kind": "platform",
+      "click_index": 74,
+      "image_xy": [
+        1526,
+        1723
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_075",
+      "kind": "platform",
+      "click_index": 75,
+      "image_xy": [
+        1361,
+        1668
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_076",
+      "kind": "platform",
+      "click_index": 76,
+      "image_xy": [
+        1281,
+        1712
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_077",
+      "kind": "elevator",
+      "click_index": 77,
+      "image_xy": [
+        1814,
+        1366
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_078",
+      "kind": "hall",
+      "click_index": 78,
+      "image_xy": [
+        1720,
+        1113
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_079",
+      "kind": "hall",
+      "click_index": 79,
+      "image_xy": [
+        1838,
+        1174
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_080",
+      "kind": "hall",
+      "click_index": 80,
+      "image_xy": [
+        2629,
+        1495
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_081",
+      "kind": "hall",
+      "click_index": 81,
+      "image_xy": [
+        2543,
+        1528
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_082",
+      "kind": "hall",
+      "click_index": 82,
+      "image_xy": [
+        2440,
+        1588
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_083",
+      "kind": "hall",
+      "click_index": 83,
+      "image_xy": [
+        2399,
+        1572
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_084",
+      "kind": "hall",
+      "click_index": 84,
+      "image_xy": [
+        415,
+        1597
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_085",
+      "kind": "hall",
+      "click_index": 85,
+      "image_xy": [
+        472,
+        1629
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_086",
+      "kind": "hall",
+      "click_index": 86,
+      "image_xy": [
+        655,
+        1699
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_087",
+      "kind": "hall",
+      "click_index": 87,
+      "image_xy": [
+        864,
+        1784
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_088",
+      "kind": "hall",
+      "click_index": 88,
+      "image_xy": [
+        1116,
+        1878
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_089",
+      "kind": "hall",
+      "click_index": 89,
+      "image_xy": [
+        1559,
+        2096
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_090",
+      "kind": "hall",
+      "click_index": 90,
+      "image_xy": [
+        1974,
+        1870
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_091",
+      "kind": "hall",
+      "click_index": 91,
+      "image_xy": [
+        1942,
+        1855
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_092",
+      "kind": "hall",
+      "click_index": 92,
+      "image_xy": [
+        1514,
+        2078
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_093",
+      "kind": "hall",
+      "click_index": 93,
+      "image_xy": [
+        2126,
+        1765
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_094",
+      "kind": "hall",
+      "click_index": 94,
+      "image_xy": [
+        2308,
+        1827
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_095",
+      "kind": "hall",
+      "click_index": 95,
+      "image_xy": [
+        2046,
+        1816
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_096",
+      "kind": "hall",
+      "click_index": 96,
+      "image_xy": [
+        2216,
+        1800
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_097",
+      "kind": "hall",
+      "click_index": 97,
+      "image_xy": [
+        2385,
+        1852
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_098",
+      "kind": "hall",
+      "click_index": 98,
+      "image_xy": [
+        2483,
+        1879
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_099",
+      "kind": "hall",
+      "click_index": 99,
+      "image_xy": [
+        2585,
+        1825
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_100",
+      "kind": "hall",
+      "click_index": 100,
+      "image_xy": [
+        1322,
+        1482
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_101",
+      "kind": "hall",
+      "click_index": 101,
+      "image_xy": [
+        1350,
+        1504
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_102",
+      "kind": "hall",
+      "click_index": 102,
+      "image_xy": [
+        1472,
+        1519
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_103",
+      "kind": "hall",
+      "click_index": 103,
+      "image_xy": [
+        1692,
+        1419
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_104",
+      "kind": "hall",
+      "click_index": 104,
+      "image_xy": [
+        1361,
+        1310
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_105",
+      "kind": "hall",
+      "click_index": 105,
+      "image_xy": [
+        1436,
+        1281
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_106",
+      "kind": "elevator",
+      "click_index": 106,
+      "image_xy": [
+        1814,
+        1105
+      ],
+      "floor": "ground"
+    }
+  ],
+  "edges": [
+    {
+      "from": "node_001",
+      "to": "node_008",
+      "kind": "walk"
+    },
+    {
+      "from": "node_008",
+      "to": "node_032",
+      "kind": "walk"
+    },
+    {
+      "from": "node_084",
+      "to": "node_032",
+      "kind": "walk"
+    },
+    {
+      "from": "node_084",
+      "to": "node_085",
+      "kind": "walk"
+    },
+    {
+      "from": "node_085",
+      "to": "node_086",
+      "kind": "walk"
+    },
+    {
+      "from": "node_086",
+      "to": "node_087",
+      "kind": "walk"
+    },
+    {
+      "from": "node_087",
+      "to": "node_033",
+      "kind": "walk"
+    },
+    {
+      "from": "node_087",
+      "to": "node_088",
+      "kind": "walk"
+    },
+    {
+      "from": "node_088",
+      "to": "node_018",
+      "kind": "walk"
+    },
+    {
+      "from": "node_033",
+      "to": "node_009",
+      "kind": "walk"
+    },
+    {
+      "from": "node_039",
+      "to": "node_009",
+      "kind": "walk"
+    },
+    {
+      "from": "node_002",
+      "to": "node_010",
+      "kind": "walk"
+    },
+    {
+      "from": "node_010",
+      "to": "node_022",
+      "kind": "walk"
+    },
+    {
+      "from": "node_022",
+      "to": "node_104",
+      "kind": "walk"
+    },
+    {
+      "from": "node_104",
+      "to": "node_105",
+      "kind": "walk"
+    },
+    {
+      "from": "node_104",
+      "to": "node_019",
+      "kind": "walk"
+    },
+    {
+      "from": "node_039",
+      "to": "node_040",
+      "kind": "walk"
+    },
+    {
+      "from": "node_011",
+      "to": "node_040",
+      "kind": "walk"
+    },
+    {
+      "from": "node_040",
+      "to": "node_041",
+      "kind": "walk"
+    },
+    {
+      "from": "node_042",
+      "to": "node_041",
+      "kind": "walk"
+    },
+    {
+      "from": "node_042",
+      "to": "node_043",
+      "kind": "walk"
+    },
+    {
+      "from": "node_014",
+      "to": "node_043",
+      "kind": "walk"
+    },
+    {
+      "from": "node_014",
+      "to": "node_024",
+      "kind": "walk"
+    },
+    {
+      "from": "node_024",
+      "to": "node_079",
+      "kind": "walk"
+    },
+    {
+      "from": "node_079",
+      "to": "node_023",
+      "kind": "walk"
+    },
+    {
+      "from": "node_079",
+      "to": "node_078",
+      "kind": "walk"
+    },
+    {
+      "from": "node_078",
+      "to": "node_106",
+      "kind": "walk"
+    },
+    {
+      "from": "node_025",
+      "to": "node_106",
+      "kind": "walk"
+    },
+    {
+      "from": "node_078",
+      "to": "node_025",
+      "kind": "walk"
+    },
+    {
+      "from": "node_004",
+      "to": "node_012",
+      "kind": "walk"
+    },
+    {
+      "from": "node_012",
+      "to": "node_025",
+      "kind": "walk"
+    },
+    {
+      "from": "node_011",
+      "to": "node_023",
+      "kind": "walk"
+    },
+    {
+      "from": "node_026",
+      "to": "node_013",
+      "kind": "walk"
+    },
+    {
+      "from": "node_013",
+      "to": "node_003",
+      "kind": "walk"
+    },
+    {
+      "from": "node_026",
+      "to": "node_079",
+      "kind": "walk"
+    },
+    {
+      "from": "node_078",
+      "to": "node_027",
+      "kind": "walk"
+    },
+    {
+      "from": "node_027",
+      "to": "node_038",
+      "kind": "walk"
+    },
+    {
+      "from": "node_105",
+      "to": "node_038",
+      "kind": "walk"
+    },
+    {
+      "from": "node_077",
+      "to": "node_103",
+      "kind": "walk"
+    },
+    {
+      "from": "node_106",
+      "to": "node_077",
+      "kind": "walk"
+    },
+    {
+      "from": "node_022",
+      "to": "node_019",
+      "kind": "walk"
+    },
+    {
+      "from": "node_019",
+      "to": "node_048",
+      "kind": "walk"
+    },
+    {
+      "from": "node_048",
+      "to": "node_102",
+      "kind": "walk"
+    },
+    {
+      "from": "node_103",
+      "to": "node_102",
+      "kind": "walk"
+    },
+    {
+      "from": "node_102",
+      "to": "node_101",
+      "kind": "walk"
+    },
+    {
+      "from": "node_101",
+      "to": "node_100",
+      "kind": "walk"
+    },
+    {
+      "from": "node_049",
+      "to": "node_100",
+      "kind": "walk"
+    },
+    {
+      "from": "node_100",
+      "to": "node_050",
+      "kind": "walk"
+    },
+    {
+      "from": "node_049",
+      "to": "node_060",
+      "kind": "walk"
+    },
+    {
+      "from": "node_060",
+      "to": "node_069",
+      "kind": "walk"
+    },
+    {
+      "from": "node_069",
+      "to": "node_076",
+      "kind": "walk"
+    },
+    {
+      "from": "node_075",
+      "to": "node_074",
+      "kind": "walk"
+    },
+    {
+      "from": "node_061",
+      "to": "node_074",
+      "kind": "walk"
+    },
+    {
+      "from": "node_018",
+      "to": "node_034",
+      "kind": "walk"
+    },
+    {
+      "from": "node_034",
+      "to": "node_092",
+      "kind": "walk"
+    },
+    {
+      "from": "node_034",
+      "to": "node_089",
+      "kind": "walk"
+    },
+    {
+      "from": "node_092",
+      "to": "node_089",
+      "kind": "walk"
+    },
+    {
+      "from": "node_089",
+      "to": "node_090",
+      "kind": "walk"
+    },
+    {
+      "from": "node_091",
+      "to": "node_092",
+      "kind": "walk"
+    },
+    {
+      "from": "node_091",
+      "to": "node_090",
+      "kind": "walk"
+    },
+    {
+      "from": "node_090",
+      "to": "node_095",
+      "kind": "walk"
+    },
+    {
+      "from": "node_091",
+      "to": "node_095",
+      "kind": "walk"
+    },
+    {
+      "from": "node_095",
+      "to": "node_052",
+      "kind": "walk"
+    },
+    {
+      "from": "node_095",
+      "to": "node_093",
+      "kind": "walk"
+    },
+    {
+      "from": "node_093",
+      "to": "node_051",
+      "kind": "walk"
+    },
+    {
+      "from": "node_093",
+      "to": "node_096",
+      "kind": "walk"
+    },
+    {
+      "from": "node_095",
+      "to": "node_096",
+      "kind": "walk"
+    },
+    {
+      "from": "node_005",
+      "to": "node_015",
+      "kind": "walk"
+    },
+    {
+      "from": "node_006",
+      "to": "node_016",
+      "kind": "walk"
+    },
+    {
+      "from": "node_016",
+      "to": "node_029",
+      "kind": "walk"
+    },
+    {
+      "from": "node_029",
+      "to": "node_020",
+      "kind": "walk"
+    },
+    {
+      "from": "node_020",
+      "to": "node_080",
+      "kind": "walk"
+    },
+    {
+      "from": "node_015",
+      "to": "node_028",
+      "kind": "walk"
+    },
+    {
+      "from": "node_028",
+      "to": "node_031",
+      "kind": "walk"
+    },
+    {
+      "from": "node_028",
+      "to": "node_083",
+      "kind": "walk"
+    },
+    {
+      "from": "node_083",
+      "to": "node_021",
+      "kind": "walk"
+    },
+    {
+      "from": "node_083",
+      "to": "node_082",
+      "kind": "walk"
+    },
+    {
+      "from": "node_021",
+      "to": "node_082",
+      "kind": "walk"
+    },
+    {
+      "from": "node_082",
+      "to": "node_081",
+      "kind": "walk"
+    },
+    {
+      "from": "node_081",
+      "to": "node_080",
+      "kind": "walk"
+    },
+    {
+      "from": "node_080",
+      "to": "node_030",
+      "kind": "walk"
+    },
+    {
+      "from": "node_007",
+      "to": "node_017",
+      "kind": "walk"
+    },
+    {
+      "from": "node_017",
+      "to": "node_030",
+      "kind": "walk"
+    },
+    {
+      "from": "node_037",
+      "to": "node_036",
+      "kind": "walk"
+    },
+    {
+      "from": "node_036",
+      "to": "node_035",
+      "kind": "walk"
+    },
+    {
+      "from": "node_037",
+      "to": "node_035",
+      "kind": "walk"
+    },
+    {
+      "from": "node_021",
+      "to": "node_036",
+      "kind": "walk"
+    },
+    {
+      "from": "node_037",
+      "to": "node_020",
+      "kind": "walk"
+    },
+    {
+      "from": "node_031",
+      "to": "node_053",
+      "kind": "walk"
+    },
+    {
+      "from": "node_035",
+      "to": "node_099",
+      "kind": "walk"
+    },
+    {
+      "from": "node_099",
+      "to": "node_098",
+      "kind": "walk"
+    },
+    {
+      "from": "node_098",
+      "to": "node_097",
+      "kind": "walk"
+    },
+    {
+      "from": "node_054",
+      "to": "node_098",
+      "kind": "walk"
+    },
+    {
+      "from": "node_097",
+      "to": "node_054",
+      "kind": "walk"
+    },
+    {
+      "from": "node_098",
+      "to": "node_055",
+      "kind": "walk"
+    },
+    {
+      "from": "node_099",
+      "to": "node_055",
+      "kind": "walk"
+    },
+    {
+      "from": "node_098",
+      "to": "node_053",
+      "kind": "walk"
+    },
+    {
+      "from": "node_097",
+      "to": "node_053",
+      "kind": "walk"
+    },
+    {
+      "from": "node_097",
+      "to": "node_094",
+      "kind": "walk"
+    },
+    {
+      "from": "node_094",
+      "to": "node_046",
+      "kind": "walk"
+    },
+    {
+      "from": "node_094",
+      "to": "node_047",
+      "kind": "walk"
+    },
+    {
+      "from": "node_094",
+      "to": "node_044",
+      "kind": "walk"
+    },
+    {
+      "from": "node_094",
+      "to": "node_096",
+      "kind": "walk"
+    },
+    {
+      "from": "node_094",
+      "to": "node_045",
+      "kind": "walk"
+    },
+    {
+      "from": "node_096",
+      "to": "node_045",
+      "kind": "walk"
+    },
+    {
+      "from": "node_096",
+      "to": "node_046",
+      "kind": "walk"
+    },
+    {
+      "from": "node_063",
+      "to": "node_051",
+      "kind": "walk"
+    },
+    {
+      "from": "node_052",
+      "to": "node_062",
+      "kind": "walk"
+    },
+    {
+      "from": "node_062",
+      "to": "node_056",
+      "kind": "walk"
+    },
+    {
+      "from": "node_056",
+      "to": "node_045",
+      "kind": "walk"
+    },
+    {
+      "from": "node_044",
+      "to": "node_058",
+      "kind": "walk"
+    },
+    {
+      "from": "node_072",
+      "to": "node_059",
+      "kind": "walk"
+    },
+    {
+      "from": "node_072",
+      "to": "node_057",
+      "kind": "walk"
+    },
+    {
+      "from": "node_063",
+      "to": "node_057",
+      "kind": "walk"
+    },
+    {
+      "from": "node_059",
+      "to": "node_071",
+      "kind": "walk"
+    },
+    {
+      "from": "node_071",
+      "to": "node_072",
+      "kind": "walk"
+    },
+    {
+      "from": "node_071",
+      "to": "node_070",
+      "kind": "walk"
+    },
+    {
+      "from": "node_064",
+      "to": "node_065",
+      "kind": "walk"
+    },
+    {
+      "from": "node_065",
+      "to": "node_058",
+      "kind": "walk"
+    },
+    {
+      "from": "node_065",
+      "to": "node_066",
+      "kind": "walk"
+    },
+    {
+      "from": "node_066",
+      "to": "node_067",
+      "kind": "walk"
+    },
+    {
+      "from": "node_056",
+      "to": "node_066",
+      "kind": "walk"
+    },
+    {
+      "from": "node_062",
+      "to": "node_067",
+      "kind": "walk"
+    },
+    {
+      "from": "node_067",
+      "to": "node_068",
+      "kind": "walk"
+    },
+    {
+      "from": "node_068",
+      "to": "node_069",
+      "kind": "walk"
+    },
+    {
+      "from": "node_060",
+      "to": "node_068",
+      "kind": "walk"
+    },
+    {
+      "from": "node_074",
+      "to": "node_073",
+      "kind": "walk"
+    },
+    {
+      "from": "node_057",
+      "to": "node_073",
+      "kind": "walk"
+    }
+  ]
+}

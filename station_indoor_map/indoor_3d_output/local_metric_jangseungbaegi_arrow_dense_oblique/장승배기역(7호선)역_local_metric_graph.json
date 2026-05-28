@@ -1,0 +1,1933 @@
+{
+  "station_name": "장승배기역(7호선)역",
+  "graph_type": "local_metric_from_image_annotation",
+  "crs": "LOCAL_IMAGE_METRIC",
+  "coordinate_policy": {
+    "uses_epsg_for_node_coordinates": false,
+    "scale_calibrated_from_epsg_entrance_distances": true,
+    "origin_mode": "image_origin",
+    "origin_image_xy": [
+      0.0,
+      0.0
+    ],
+    "y_axis": "positive_up_from_image",
+    "projection_y_scale": 1.25,
+    "projection_note": "Use projection_y_scale > 1 for oblique 3D guide maps where image depth is visually compressed."
+  },
+  "scale": {
+    "method": "median_pairwise_entrance_distance_scale",
+    "meters_per_pixel": 0.05719558893609524,
+    "pair_count": 15,
+    "rmse_m": 35.938761860447144,
+    "pair_scales": [
+      {
+        "from_entrance_no": "1",
+        "to_entrance_no": "2",
+        "image_dist_px": 640.6637183421581,
+        "map_dist_m": 29.628136813473567,
+        "meters_per_pixel": 0.04624600389443331,
+        "estimated_m": 36.64313868056838,
+        "error_m": 7.01500186709481,
+        "abs_error_m": 7.01500186709481
+      },
+      {
+        "from_entrance_no": "1",
+        "to_entrance_no": "3",
+        "image_dist_px": 1711.1075360713014,
+        "map_dist_m": 145.6215327798075,
+        "meters_per_pixel": 0.08510367099086838,
+        "estimated_m": 97.86780325858892,
+        "error_m": -47.753729521218574,
+        "abs_error_m": 47.753729521218574
+      },
+      {
+        "from_entrance_no": "1",
+        "to_entrance_no": "4",
+        "image_dist_px": 1851.5690643343553,
+        "map_dist_m": 147.79786405186832,
+        "meters_per_pixel": 0.07982303598542899,
+        "estimated_m": 105.90158309045827,
+        "error_m": -41.89628096141004,
+        "abs_error_m": 41.89628096141004
+      },
+      {
+        "from_entrance_no": "1",
+        "to_entrance_no": "5",
+        "image_dist_px": 455.2900174613979,
+        "map_dist_m": 16.7260880245355,
+        "meters_per_pixel": 0.03673721668179038,
+        "estimated_m": 26.040580685429738,
+        "error_m": 9.314492660894238,
+        "abs_error_m": 9.314492660894238
+      },
+      {
+        "from_entrance_no": "1",
+        "to_entrance_no": "6",
+        "image_dist_px": 1106.5645033164583,
+        "map_dist_m": 20.830486448007314,
+        "meters_per_pixel": 0.01882446652280708,
+        "estimated_m": 63.290608462962545,
+        "error_m": 42.46012201495523,
+        "abs_error_m": 42.46012201495523
+      },
+      {
+        "from_entrance_no": "2",
+        "to_entrance_no": "3",
+        "image_dist_px": 1070.5834857683917,
+        "map_dist_m": 115.99471794796267,
+        "meters_per_pixel": 0.10834719523504473,
+        "estimated_m": 61.2326529737809,
+        "error_m": -54.76206497418177,
+        "abs_error_m": 54.76206497418177
+      },
+      {
+        "from_entrance_no": "2",
+        "to_entrance_no": "4",
+        "image_dist_px": 1211.386808579324,
+        "map_dist_m": 118.24913189417832,
+        "meters_per_pixel": 0.0976146768783599,
+        "estimated_m": 69.2859819461113,
+        "error_m": -48.96314994806701,
+        "abs_error_m": 48.96314994806701
+      },
+      {
+        "from_entrance_no": "2",
+        "to_entrance_no": "5",
+        "image_dist_px": 917.1308521688712,
+        "map_dist_m": 42.714365522188054,
+        "meters_per_pixel": 0.046573905371491156,
+        "estimated_m": 52.45583922126149,
+        "error_m": 9.741473699073438,
+        "abs_error_m": 9.741473699073438
+      },
+      {
+        "from_entrance_no": "2",
+        "to_entrance_no": "6",
+        "image_dist_px": 1740.9207334051714,
+        "map_dist_m": 50.38061819532461,
+        "meters_per_pixel": 0.028939064960632716,
+        "estimated_m": 99.57298663816763,
+        "error_m": 49.192368442843026,
+        "abs_error_m": 49.192368442843026
+      },
+      {
+        "from_entrance_no": "3",
+        "to_entrance_no": "4",
+        "image_dist_px": 164.28329190760695,
+        "map_dist_m": 8.647637182689689,
+        "meters_per_pixel": 0.05263856769776154,
+        "estimated_m": 9.396279633016029,
+        "error_m": 0.74864245032634,
+        "abs_error_m": 0.74864245032634
+      },
+      {
+        "from_entrance_no": "3",
+        "to_entrance_no": "5",
+        "image_dist_px": 1937.9127947356146,
+        "map_dist_m": 157.2667538437844,
+        "meters_per_pixel": 0.08115264746226104,
+        "estimated_m": 110.84006360169774,
+        "error_m": -46.42669024208665,
+        "abs_error_m": 46.42669024208665
+      },
+      {
+        "from_entrance_no": "3",
+        "to_entrance_no": "6",
+        "image_dist_px": 2809.088820240471,
+        "map_dist_m": 166.3178710442688,
+        "meters_per_pixel": 0.059207053136194975,
+        "estimated_m": 160.6674894474547,
+        "error_m": -5.6503815968141,
+        "abs_error_m": 5.6503815968141
+      },
+      {
+        "from_entrance_no": "4",
+        "to_entrance_no": "5",
+        "image_dist_px": 2057.1983375455075,
+        "map_dist_m": 158.75902005055062,
+        "meters_per_pixel": 0.07717244232268329,
+        "estimated_m": 117.66267047427135,
+        "error_m": -41.096349576279266,
+        "abs_error_m": 41.096349576279266
+      },
+      {
+        "from_entrance_no": "4",
+        "to_entrance_no": "6",
+        "image_dist_px": 2943.202507473789,
+        "map_dist_m": 168.33820077315562,
+        "meters_per_pixel": 0.05719558893609524,
+        "estimated_m": 168.33820077315562,
+        "error_m": 0.0,
+        "abs_error_m": 0.0
+      },
+      {
+        "from_entrance_no": "5",
+        "to_entrance_no": "6",
+        "image_dist_px": 942.6441534322482,
+        "map_dist_m": 13.77189376661414,
+        "meters_per_pixel": 0.014609854329939345,
+        "estimated_m": 53.91508751272436,
+        "error_m": 40.14319374611022,
+        "abs_error_m": 40.14319374611022
+      }
+    ]
+  },
+  "floor_depths_m": {
+    "ground": 0.0,
+    "G": 0.0,
+    "1F": 0.0,
+    "B1": -4.0,
+    "B2": -8.0,
+    "B3": -12.0,
+    "B4": -16.0,
+    "B5": -20.0,
+    "B6": -24.0
+  },
+  "validation": {
+    "long_edge_threshold_m": 25.0,
+    "warnings": [
+      {
+        "type": "long_edge_review",
+        "from": "b1_east_stairs_to_b2",
+        "to": "b2_east_stairs_from_b1",
+        "kind": "stairs",
+        "distance_2d_m": 28.587157685085092,
+        "message": "Review whether this edge should be split by bend/landing nodes."
+      },
+      {
+        "type": "long_edge_review",
+        "from": "b1_exit4_branch",
+        "to": "b1_east_bend",
+        "kind": "walk",
+        "distance_2d_m": 25.630150075849425,
+        "message": "Review whether this edge should be split by bend/landing nodes."
+      },
+      {
+        "type": "long_edge_review",
+        "from": "b2_elevator",
+        "to": "b3_elevator",
+        "kind": "elevator",
+        "distance_2d_m": 26.0475519130509,
+        "message": "Review whether this edge should be split by bend/landing nodes."
+      },
+      {
+        "type": "long_edge_review",
+        "from": "platform_center_west",
+        "to": "platform_center",
+        "kind": "platform_walk",
+        "distance_2d_m": 30.724001590154955,
+        "message": "Review whether this edge should be split by bend/landing nodes."
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "id": "exit_1_connection",
+      "kind": "entrance_connection",
+      "floor": "B1",
+      "image_xy": [
+        1325,
+        895
+      ],
+      "local_xy_m": [
+        75.7841553403262,
+        -63.987565122256555
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        75.7841553403262,
+        -63.987565122256555,
+        -4.0
+      ],
+      "entrance_no": "1"
+    },
+    {
+      "id": "exit_2_connection",
+      "kind": "entrance_connection",
+      "floor": "B1",
+      "image_xy": [
+        1960,
+        810
+      ],
+      "local_xy_m": [
+        112.10335431474667,
+        -57.91053379779643
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        112.10335431474667,
+        -57.91053379779643,
+        -4.0
+      ],
+      "entrance_no": "2"
+    },
+    {
+      "id": "exit_3_connection",
+      "kind": "entrance_connection",
+      "floor": "B1",
+      "image_xy": [
+        3017,
+        640
+      ],
+      "local_xy_m": [
+        172.55909182019934,
+        -45.756471148876194
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        172.55909182019934,
+        -45.756471148876194,
+        -4.0
+      ],
+      "entrance_no": "3"
+    },
+    {
+      "id": "exit_4_connection",
+      "kind": "entrance_connection",
+      "floor": "B1",
+      "image_xy": [
+        3167,
+        707
+      ],
+      "local_xy_m": [
+        181.13843016061364,
+        -50.546601722274175
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        181.13843016061364,
+        -50.546601722274175,
+        -4.0
+      ],
+      "entrance_no": "4"
+    },
+    {
+      "id": "exit_5_connection",
+      "kind": "entrance_connection",
+      "floor": "B2",
+      "image_xy": [
+        1208,
+        1335
+      ],
+      "local_xy_m": [
+        69.09227143480305,
+        -95.44513903710893
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        69.09227143480305,
+        -95.44513903710893,
+        -8.0
+      ],
+      "entrance_no": "5"
+    },
+    {
+      "id": "exit_6_connection",
+      "kind": "entrance_connection",
+      "floor": "B1",
+      "image_xy": [
+        271,
+        1232
+      ],
+      "local_xy_m": [
+        15.50000460168181,
+        -88.08120696158667
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        15.50000460168181,
+        -88.08120696158667,
+        -4.0
+      ],
+      "entrance_no": "6"
+    },
+    {
+      "id": "b1_west_entry_turn",
+      "kind": "route_turn",
+      "floor": "B1",
+      "image_xy": [
+        620,
+        1265
+      ],
+      "local_xy_m": [
+        35.46126514037905,
+        -90.4405250052006
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        35.46126514037905,
+        -90.4405250052006,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_west_loop_1",
+      "kind": "route_turn",
+      "floor": "B1",
+      "image_xy": [
+        725,
+        1200
+      ],
+      "local_xy_m": [
+        41.466801978669054,
+        -85.79338340414287
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        41.466801978669054,
+        -85.79338340414287,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_west_loop_2",
+      "kind": "route_turn",
+      "floor": "B1",
+      "image_xy": [
+        805,
+        1275
+      ],
+      "local_xy_m": [
+        46.04244909355667,
+        -91.15546986690178
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        46.04244909355667,
+        -91.15546986690178,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_west_hall",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [
+        905,
+        1210
+      ],
+      "local_xy_m": [
+        51.76200798716619,
+        -86.50832826584406
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        51.76200798716619,
+        -86.50832826584406,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_mid_1",
+      "kind": "route_turn",
+      "floor": "B1",
+      "image_xy": [
+        1130,
+        1205
+      ],
+      "local_xy_m": [
+        64.63101549778763,
+        -86.15085583499345
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        64.63101549778763,
+        -86.15085583499345,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_mid_2",
+      "kind": "route_turn",
+      "floor": "B1",
+      "image_xy": [
+        1390,
+        1175
+      ],
+      "local_xy_m": [
+        79.50186862117239,
+        -84.0060212498899
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        79.50186862117239,
+        -84.0060212498899,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_center_hall",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [
+        1605,
+        1090
+      ],
+      "local_xy_m": [
+        91.79892024243286,
+        -77.92898992542976
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        91.79892024243286,
+        -77.92898992542976,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_center_split",
+      "kind": "route_turn",
+      "floor": "B1",
+      "image_xy": [
+        1760,
+        1065
+      ],
+      "local_xy_m": [
+        100.66423652752762,
+        -76.14162777117679
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        100.66423652752762,
+        -76.14162777117679,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_east_1",
+      "kind": "route_turn",
+      "floor": "B1",
+      "image_xy": [
+        1990,
+        1025
+      ],
+      "local_xy_m": [
+        113.81922198282953,
+        -73.28184832437204
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        113.81922198282953,
+        -73.28184832437204,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_east_2",
+      "kind": "route_turn",
+      "floor": "B1",
+      "image_xy": [
+        2235,
+        985
+      ],
+      "local_xy_m": [
+        127.83214127217286,
+        -70.42206887756727
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        127.83214127217286,
+        -70.42206887756727,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_east_hall",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [
+        2445,
+        990
+      ],
+      "local_xy_m": [
+        139.84321494875286,
+        -70.77954130841786
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        139.84321494875286,
+        -70.77954130841786,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_east_bend",
+      "kind": "route_turn",
+      "floor": "B1",
+      "image_xy": [
+        2665,
+        1065
+      ],
+      "local_xy_m": [
+        152.42624451469382,
+        -76.14162777117679
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        152.42624451469382,
+        -76.14162777117679,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_east_stairs_to_b2",
+      "kind": "stairs_start",
+      "floor": "B1",
+      "image_xy": [
+        2825,
+        1015
+      ],
+      "local_xy_m": [
+        161.57753874446905,
+        -72.56690346267084
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        161.57753874446905,
+        -72.56690346267084,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_exit1_branch",
+      "kind": "route_turn",
+      "floor": "B1",
+      "image_xy": [
+        1375,
+        990
+      ],
+      "local_xy_m": [
+        78.64393478713096,
+        -70.77954130841786
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        78.64393478713096,
+        -70.77954130841786,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_exit2_branch",
+      "kind": "route_turn",
+      "floor": "B1",
+      "image_xy": [
+        1965,
+        950
+      ],
+      "local_xy_m": [
+        112.38933225942715,
+        -67.9197618616131
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        112.38933225942715,
+        -67.9197618616131,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_exit3_branch",
+      "kind": "route_turn",
+      "floor": "B1",
+      "image_xy": [
+        2860,
+        850
+      ],
+      "local_xy_m": [
+        163.57938435723239,
+        -60.77031324460119
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        163.57938435723239,
+        -60.77031324460119,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_exit4_branch",
+      "kind": "route_turn",
+      "floor": "B1",
+      "image_xy": [
+        3045,
+        875
+      ],
+      "local_xy_m": [
+        174.16056831041,
+        -62.55767539885417
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        174.16056831041,
+        -62.55767539885417,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_west_stairs_to_b2",
+      "kind": "stairs_start",
+      "floor": "B1",
+      "image_xy": [
+        875,
+        1275
+      ],
+      "local_xy_m": [
+        50.046140319083335,
+        -91.15546986690178
+      ],
+      "z_m": -4.0,
+      "local_xyz_m": [
+        50.046140319083335,
+        -91.15546986690178,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_b2_west_stair_landing_1",
+      "kind": "stairs_landing",
+      "floor": "B1-B2",
+      "image_xy": [
+        910,
+        1360
+      ],
+      "local_xy_m": [
+        52.04798593184667,
+        -97.2325011913619
+      ],
+      "z_m": -6.0,
+      "local_xyz_m": [
+        52.04798593184667,
+        -97.2325011913619,
+        -6.0
+      ]
+    },
+    {
+      "id": "b1_b2_west_stair_landing_2",
+      "kind": "stairs_landing",
+      "floor": "B1-B2",
+      "image_xy": [
+        960,
+        1450
+      ],
+      "local_xy_m": [
+        54.90776537865143,
+        -103.66700494667263
+      ],
+      "z_m": -6.0,
+      "local_xyz_m": [
+        54.90776537865143,
+        -103.66700494667263,
+        -6.0
+      ]
+    },
+    {
+      "id": "b2_west_stairs_from_b1",
+      "kind": "stairs_end",
+      "floor": "B2",
+      "image_xy": [
+        1035,
+        1515
+      ],
+      "local_xy_m": [
+        59.197434548858574,
+        -108.31414654773036
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        59.197434548858574,
+        -108.31414654773036,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_west_hall",
+      "kind": "hall",
+      "floor": "B2",
+      "image_xy": [
+        1045,
+        1555
+      ],
+      "local_xy_m": [
+        59.769390438219524,
+        -111.17392599453513
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        59.769390438219524,
+        -111.17392599453513,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_exit5_stair_top",
+      "kind": "stairs_start",
+      "floor": "B2",
+      "image_xy": [
+        1195,
+        1390
+      ],
+      "local_xy_m": [
+        68.34872877863381,
+        -99.37733577646549
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        68.34872877863381,
+        -99.37733577646549,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_exit5_stair_landing",
+      "kind": "stairs_landing",
+      "floor": "B2",
+      "image_xy": [
+        1160,
+        1445
+      ],
+      "local_xy_m": [
+        66.34688316587048,
+        -103.30953251582203
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        66.34688316587048,
+        -103.30953251582203,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_exit5_stair_bottom",
+      "kind": "stairs_end",
+      "floor": "B2",
+      "image_xy": [
+        1110,
+        1505
+      ],
+      "local_xy_m": [
+        63.487103719065715,
+        -107.59920168602918
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        63.487103719065715,
+        -107.59920168602918,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_exit5_corridor_join",
+      "kind": "route_turn",
+      "floor": "B2",
+      "image_xy": [
+        1065,
+        1565
+      ],
+      "local_xy_m": [
+        60.91330221694143,
+        -111.88887085623632
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        60.91330221694143,
+        -111.88887085623632,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_west_path_0",
+      "kind": "route_turn",
+      "floor": "B2",
+      "image_xy": [
+        980,
+        1665
+      ],
+      "local_xy_m": [
+        56.051677157373334,
+        -119.03831947324821
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        56.051677157373334,
+        -119.03831947324821,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_west_path_1",
+      "kind": "route_turn",
+      "floor": "B2",
+      "image_xy": [
+        910,
+        1775
+      ],
+      "local_xy_m": [
+        52.04798593184667,
+        -126.90271295196132
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        52.04798593184667,
+        -126.90271295196132,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_west_path_2",
+      "kind": "route_turn",
+      "floor": "B2",
+      "image_xy": [
+        980,
+        1900
+      ],
+      "local_xy_m": [
+        56.051677157373334,
+        -135.8395237232262
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        56.051677157373334,
+        -135.8395237232262,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_center_path_0",
+      "kind": "route_turn",
+      "floor": "B2",
+      "image_xy": [
+        1135,
+        1905
+      ],
+      "local_xy_m": [
+        64.9169934424681,
+        -136.1969961540768
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        64.9169934424681,
+        -136.1969961540768,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_center_path_1",
+      "kind": "route_turn",
+      "floor": "B2",
+      "image_xy": [
+        1265,
+        1905
+      ],
+      "local_xy_m": [
+        72.35242000416048,
+        -136.1969961540768
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        72.35242000416048,
+        -136.1969961540768,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_center_path_2",
+      "kind": "route_turn",
+      "floor": "B2",
+      "image_xy": [
+        1460,
+        1875
+      ],
+      "local_xy_m": [
+        83.50555984669906,
+        -134.05216156897322
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        83.50555984669906,
+        -134.05216156897322,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_center_hall",
+      "kind": "hall",
+      "floor": "B2",
+      "image_xy": [
+        1665,
+        1845
+      ],
+      "local_xy_m": [
+        95.23065557859857,
+        -131.90732698386964
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        95.23065557859857,
+        -131.90732698386964,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_information",
+      "kind": "information",
+      "floor": "B2",
+      "image_xy": [
+        1715,
+        1965
+      ],
+      "local_xy_m": [
+        98.09043502540334,
+        -140.48666532428393
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        98.09043502540334,
+        -140.48666532428393,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_elevator",
+      "kind": "elevator",
+      "floor": "B2",
+      "image_xy": [
+        1695,
+        1615
+      ],
+      "local_xy_m": [
+        96.94652324668144,
+        -115.46359516474227
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        96.94652324668144,
+        -115.46359516474227,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_center_stairs_to_b3",
+      "kind": "stairs_start",
+      "floor": "B2",
+      "image_xy": [
+        1640,
+        1805
+      ],
+      "local_xy_m": [
+        93.80076585519619,
+        -129.0475475370649
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        93.80076585519619,
+        -129.0475475370649,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_east_path_1",
+      "kind": "route_turn",
+      "floor": "B2",
+      "image_xy": [
+        1905,
+        1800
+      ],
+      "local_xy_m": [
+        108.95759692326143,
+        -128.6900751062143
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        108.95759692326143,
+        -128.6900751062143,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_east_hall",
+      "kind": "hall",
+      "floor": "B2",
+      "image_xy": [
+        2285,
+        1725
+      ],
+      "local_xy_m": [
+        130.69192071897763,
+        -123.32798864345536
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        130.69192071897763,
+        -123.32798864345536,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_east_path_2",
+      "kind": "route_turn",
+      "floor": "B2",
+      "image_xy": [
+        2525,
+        1645
+      ],
+      "local_xy_m": [
+        144.4188620636405,
+        -117.60842974984584
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        144.4188620636405,
+        -117.60842974984584,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_east_stairs_to_b3",
+      "kind": "stairs_start",
+      "floor": "B2",
+      "image_xy": [
+        2405,
+        1625
+      ],
+      "local_xy_m": [
+        137.55539139130906,
+        -116.17854002644347
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        137.55539139130906,
+        -116.17854002644347,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_east_stairs_from_b1",
+      "kind": "stairs_end",
+      "floor": "B2",
+      "image_xy": [
+        2595,
+        1370
+      ],
+      "local_xy_m": [
+        148.42255328916715,
+        -97.94744605306309
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        148.42255328916715,
+        -97.94744605306309,
+        -8.0
+      ]
+    },
+    {
+      "id": "b2_east_from_b1_turn",
+      "kind": "route_turn",
+      "floor": "B2",
+      "image_xy": [
+        2505,
+        1450
+      ],
+      "local_xy_m": [
+        143.2749502849186,
+        -103.66700494667263
+      ],
+      "z_m": -8.0,
+      "local_xyz_m": [
+        143.2749502849186,
+        -103.66700494667263,
+        -8.0
+      ]
+    },
+    {
+      "id": "b3_center_stairs_from_b2",
+      "kind": "stairs_end",
+      "floor": "B3",
+      "image_xy": [
+        1525,
+        2040
+      ],
+      "local_xy_m": [
+        87.22327312754524,
+        -145.8487517870429
+      ],
+      "z_m": -12.0,
+      "local_xyz_m": [
+        87.22327312754524,
+        -145.8487517870429,
+        -12.0
+      ]
+    },
+    {
+      "id": "b3_east_stairs_from_b2",
+      "kind": "stairs_end",
+      "floor": "B3",
+      "image_xy": [
+        2250,
+        1890
+      ],
+      "local_xy_m": [
+        128.6900751062143,
+        -135.124578861525
+      ],
+      "z_m": -12.0,
+      "local_xyz_m": [
+        128.6900751062143,
+        -135.124578861525,
+        -12.0
+      ]
+    },
+    {
+      "id": "b3_elevator",
+      "kind": "elevator",
+      "floor": "B3",
+      "image_xy": [
+        1765,
+        1975
+      ],
+      "local_xy_m": [
+        100.9502144722081,
+        -141.20161018598512
+      ],
+      "z_m": -12.0,
+      "local_xyz_m": [
+        100.9502144722081,
+        -141.20161018598512,
+        -12.0
+      ]
+    },
+    {
+      "id": "platform_west",
+      "kind": "platform",
+      "floor": "B3",
+      "image_xy": [
+        500,
+        2135
+      ],
+      "local_xy_m": [
+        28.59779446804762,
+        -152.64072797320418
+      ],
+      "z_m": -12.0,
+      "local_xyz_m": [
+        28.59779446804762,
+        -152.64072797320418,
+        -12.0
+      ],
+      "direction": "to_sangdo"
+    },
+    {
+      "id": "platform_west_1",
+      "kind": "platform_turn",
+      "floor": "B3",
+      "image_xy": [
+        760,
+        2075
+      ],
+      "local_xy_m": [
+        43.468647591432386,
+        -148.35105880299704
+      ],
+      "z_m": -12.0,
+      "local_xyz_m": [
+        43.468647591432386,
+        -148.35105880299704,
+        -12.0
+      ]
+    },
+    {
+      "id": "platform_center_west",
+      "kind": "platform_turn",
+      "floor": "B3",
+      "image_xy": [
+        1160,
+        1995
+      ],
+      "local_xy_m": [
+        66.34688316587048,
+        -142.63149990938751
+      ],
+      "z_m": -12.0,
+      "local_xyz_m": [
+        66.34688316587048,
+        -142.63149990938751,
+        -12.0
+      ]
+    },
+    {
+      "id": "platform_center",
+      "kind": "platform",
+      "floor": "B3",
+      "image_xy": [
+        1690,
+        1925
+      ],
+      "local_xy_m": [
+        96.66054530200095,
+        -137.62688587747917
+      ],
+      "z_m": -12.0,
+      "local_xyz_m": [
+        96.66054530200095,
+        -137.62688587747917,
+        -12.0
+      ]
+    },
+    {
+      "id": "platform_center_east",
+      "kind": "platform_turn",
+      "floor": "B3",
+      "image_xy": [
+        2100,
+        1835
+      ],
+      "local_xy_m": [
+        120.11073676580001,
+        -131.19238212216845
+      ],
+      "z_m": -12.0,
+      "local_xyz_m": [
+        120.11073676580001,
+        -131.19238212216845,
+        -12.0
+      ]
+    },
+    {
+      "id": "platform_east_1",
+      "kind": "platform_turn",
+      "floor": "B3",
+      "image_xy": [
+        2500,
+        1745
+      ],
+      "local_xy_m": [
+        142.9889723402381,
+        -124.75787836685775
+      ],
+      "z_m": -12.0,
+      "local_xyz_m": [
+        142.9889723402381,
+        -124.75787836685775,
+        -12.0
+      ]
+    },
+    {
+      "id": "platform_east",
+      "kind": "platform",
+      "floor": "B3",
+      "image_xy": [
+        2860,
+        1685
+      ],
+      "local_xy_m": [
+        163.57938435723239,
+        -120.4682091966506
+      ],
+      "z_m": -12.0,
+      "local_xyz_m": [
+        163.57938435723239,
+        -120.4682091966506,
+        -12.0
+      ],
+      "direction": "to_sindaebangsamgeori"
+    },
+    {
+      "id": "platform_red_west_exit",
+      "kind": "tunnel_evacuation",
+      "floor": "B3",
+      "image_xy": [
+        325,
+        2295
+      ],
+      "local_xy_m": [
+        18.588566404230953,
+        -164.07984576042324
+      ],
+      "z_m": -12.0,
+      "local_xyz_m": [
+        18.588566404230953,
+        -164.07984576042324,
+        -12.0
+      ]
+    },
+    {
+      "id": "platform_red_east_exit",
+      "kind": "tunnel_evacuation",
+      "floor": "B3",
+      "image_xy": [
+        3180,
+        1740
+      ],
+      "local_xy_m": [
+        181.88197281678288,
+        -124.40040593600715
+      ],
+      "z_m": -12.0,
+      "local_xyz_m": [
+        181.88197281678288,
+        -124.40040593600715,
+        -12.0
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "exit_6_connection",
+      "to": "b1_west_entry_turn",
+      "kind": "walk",
+      "distance_px": 350.5567001213926,
+      "distance_2d_m": 20.10020656422898,
+      "distance_3d_m": 20.10020656422898,
+      "cost_m": 20.10020656422898
+    },
+    {
+      "from": "b1_west_entry_turn",
+      "to": "b1_west_loop_1",
+      "kind": "walk",
+      "distance_px": 123.4908903522847,
+      "distance_2d_m": 7.593576086162545,
+      "distance_3d_m": 7.593576086162545,
+      "cost_m": 7.593576086162545
+    },
+    {
+      "from": "b1_west_loop_1",
+      "to": "b1_west_loop_2",
+      "kind": "walk",
+      "distance_px": 109.65856099730654,
+      "distance_2d_m": 7.049008281601159,
+      "distance_3d_m": 7.049008281601159,
+      "cost_m": 7.049008281601159
+    },
+    {
+      "from": "b1_west_loop_2",
+      "to": "b1_west_hall",
+      "kind": "walk",
+      "distance_px": 119.26860441876563,
+      "distance_2d_m": 7.369482953216539,
+      "distance_3d_m": 7.369482953216539,
+      "cost_m": 7.369482953216539
+    },
+    {
+      "from": "b1_west_hall",
+      "to": "b1_mid_1",
+      "kind": "walk",
+      "distance_px": 225.055548698538,
+      "distance_2d_m": 12.87397144812933,
+      "distance_3d_m": 12.87397144812933,
+      "cost_m": 12.87397144812933
+    },
+    {
+      "from": "b1_mid_1",
+      "to": "b1_mid_2",
+      "kind": "walk",
+      "distance_px": 261.72504656604804,
+      "distance_2d_m": 15.024732543867085,
+      "distance_3d_m": 15.024732543867085,
+      "cost_m": 15.024732543867085
+    },
+    {
+      "from": "b1_mid_2",
+      "to": "b1_center_hall",
+      "kind": "walk",
+      "distance_px": 231.19256043393784,
+      "distance_2d_m": 13.716697426655381,
+      "distance_3d_m": 13.716697426655381,
+      "cost_m": 13.716697426655381
+    },
+    {
+      "from": "b1_center_hall",
+      "to": "b1_center_split",
+      "kind": "walk",
+      "distance_px": 157.00318468107582,
+      "distance_2d_m": 9.043699259994344,
+      "distance_3d_m": 9.043699259994344,
+      "cost_m": 9.043699259994344
+    },
+    {
+      "from": "b1_center_split",
+      "to": "b1_east_1",
+      "kind": "walk",
+      "distance_px": 233.45235059857504,
+      "distance_2d_m": 13.462242785419216,
+      "distance_3d_m": 13.462242785419216,
+      "cost_m": 13.462242785419216
+    },
+    {
+      "from": "b1_east_1",
+      "to": "b1_east_2",
+      "kind": "walk",
+      "distance_px": 248.2438317461282,
+      "distance_2d_m": 14.301756727549849,
+      "distance_3d_m": 14.301756727549849,
+      "cost_m": 14.301756727549849
+    },
+    {
+      "from": "b1_east_2",
+      "to": "b1_east_hall",
+      "kind": "walk",
+      "distance_px": 210.05951537600004,
+      "distance_2d_m": 12.016392029351039,
+      "distance_3d_m": 12.016392029351039,
+      "cost_m": 12.016392029351039
+    },
+    {
+      "from": "b1_east_hall",
+      "to": "b1_east_bend",
+      "kind": "walk",
+      "distance_px": 232.43278598338918,
+      "distance_2d_m": 13.677887420630677,
+      "distance_3d_m": 13.677887420630677,
+      "cost_m": 13.677887420630677
+    },
+    {
+      "from": "b1_east_bend",
+      "to": "b1_east_stairs_to_b2",
+      "kind": "walk",
+      "distance_px": 167.6305461424021,
+      "distance_2d_m": 9.824705591606335,
+      "distance_3d_m": 9.824705591606335,
+      "cost_m": 9.824705591606335
+    },
+    {
+      "from": "b1_west_hall",
+      "to": "b1_west_stairs_to_b2",
+      "kind": "walk",
+      "distance_px": 71.58910531638176,
+      "distance_2d_m": 4.95379924044702,
+      "distance_3d_m": 4.95379924044702,
+      "cost_m": 4.95379924044702
+    },
+    {
+      "from": "b1_west_stairs_to_b2",
+      "to": "b1_b2_west_stair_landing_1",
+      "kind": "stairs",
+      "distance_px": 91.92388155425118,
+      "distance_2d_m": 6.398257229575047,
+      "distance_3d_m": 6.703558426373962,
+      "cost_m": 6.703558426373962
+    },
+    {
+      "from": "b1_b2_west_stair_landing_1",
+      "to": "b1_b2_west_stair_landing_2",
+      "kind": "stairs",
+      "distance_px": 102.95630140987001,
+      "distance_2d_m": 7.041390279019821,
+      "distance_3d_m": 7.041390279019821,
+      "cost_m": 7.041390279019821
+    },
+    {
+      "from": "b1_b2_west_stair_landing_2",
+      "to": "b2_west_stairs_from_b1",
+      "kind": "stairs",
+      "distance_px": 99.24716620639605,
+      "distance_2d_m": 6.324332901587881,
+      "distance_3d_m": 6.633037513093604,
+      "cost_m": 6.633037513093604
+    },
+    {
+      "from": "b1_east_stairs_to_b2",
+      "to": "b2_east_stairs_from_b1",
+      "kind": "stairs",
+      "distance_px": 422.9952718411874,
+      "distance_2d_m": 28.587157685085092,
+      "distance_3d_m": 28.86564713481961,
+      "cost_m": 28.86564713481961
+    },
+    {
+      "from": "exit_1_connection",
+      "to": "b1_exit1_branch",
+      "kind": "walk",
+      "distance_px": 107.35455276791944,
+      "distance_2d_m": 7.369482953216545,
+      "distance_3d_m": 7.369482953216545,
+      "cost_m": 7.369482953216545
+    },
+    {
+      "from": "b1_exit1_branch",
+      "to": "b1_center_hall",
+      "kind": "walk",
+      "distance_px": 250.79872407968904,
+      "distance_2d_m": 14.972249592379157,
+      "distance_3d_m": 14.972249592379157,
+      "cost_m": 14.972249592379157
+    },
+    {
+      "from": "exit_2_connection",
+      "to": "b1_exit2_branch",
+      "kind": "walk",
+      "distance_px": 140.089257261219,
+      "distance_2d_m": 10.01331262961158,
+      "distance_3d_m": 10.01331262961158,
+      "cost_m": 10.01331262961158
+    },
+    {
+      "from": "b1_exit2_branch",
+      "to": "b1_east_1",
+      "kind": "walk",
+      "distance_px": 79.05694150420949,
+      "distance_2d_m": 5.549464465621382,
+      "distance_3d_m": 5.549464465621382,
+      "cost_m": 5.549464465621382
+    },
+    {
+      "from": "exit_3_connection",
+      "to": "b1_exit3_branch",
+      "kind": "walk",
+      "distance_px": 262.20030511042506,
+      "distance_2d_m": 17.49430194651471,
+      "distance_3d_m": 17.49430194651471,
+      "cost_m": 17.49430194651471
+    },
+    {
+      "from": "b1_exit3_branch",
+      "to": "b1_east_bend",
+      "kind": "walk",
+      "distance_px": 290.25850547399983,
+      "distance_2d_m": 18.991309555218542,
+      "distance_3d_m": 18.991309555218542,
+      "cost_m": 18.991309555218542
+    },
+    {
+      "from": "exit_4_connection",
+      "to": "b1_exit4_branch",
+      "kind": "walk",
+      "distance_px": 207.62466134830902,
+      "distance_2d_m": 13.890876389370113,
+      "distance_3d_m": 13.890876389370113,
+      "cost_m": 13.890876389370113
+    },
+    {
+      "from": "b1_exit4_branch",
+      "to": "b1_east_bend",
+      "kind": "walk",
+      "distance_px": 424.85291572496004,
+      "distance_2d_m": 25.630150075849425,
+      "distance_3d_m": 25.630150075849425,
+      "cost_m": 25.630150075849425
+    },
+    {
+      "from": "b2_west_stairs_from_b1",
+      "to": "b2_west_hall",
+      "kind": "walk",
+      "distance_px": 41.23105625617661,
+      "distance_2d_m": 2.916414240765815,
+      "distance_3d_m": 2.916414240765815,
+      "cost_m": 2.916414240765815
+    },
+    {
+      "from": "exit_5_connection",
+      "to": "b2_exit5_stair_top",
+      "kind": "walk",
+      "distance_px": 56.515484603779164,
+      "distance_2d_m": 4.001877918996223,
+      "distance_3d_m": 4.001877918996223,
+      "cost_m": 4.001877918996223
+    },
+    {
+      "from": "b2_exit5_stair_top",
+      "to": "b2_exit5_stair_landing",
+      "kind": "stairs",
+      "distance_px": 65.19202405202648,
+      "distance_2d_m": 4.4124321019530734,
+      "distance_3d_m": 4.4124321019530734,
+      "cost_m": 4.4124321019530734
+    },
+    {
+      "from": "b2_exit5_stair_landing",
+      "to": "b2_exit5_stair_bottom",
+      "kind": "stairs",
+      "distance_px": 78.10249675906654,
+      "distance_2d_m": 5.155540715986311,
+      "distance_3d_m": 5.155540715986311,
+      "cost_m": 5.155540715986311
+    },
+    {
+      "from": "b2_exit5_stair_bottom",
+      "to": "b2_exit5_corridor_join",
+      "kind": "walk",
+      "distance_px": 75.0,
+      "distance_2d_m": 5.002570915255764,
+      "distance_3d_m": 5.002570915255764,
+      "cost_m": 5.002570915255764
+    },
+    {
+      "from": "b2_exit5_corridor_join",
+      "to": "b2_west_hall",
+      "kind": "walk",
+      "distance_px": 22.360679774997898,
+      "distance_2d_m": 1.3489552671499763,
+      "distance_3d_m": 1.3489552671499763,
+      "cost_m": 1.3489552671499763
+    },
+    {
+      "from": "b2_west_hall",
+      "to": "b2_west_path_0",
+      "kind": "walk",
+      "distance_px": 127.76932339180638,
+      "distance_2d_m": 8.698854914677277,
+      "distance_3d_m": 8.698854914677277,
+      "cost_m": 8.698854914677277
+    },
+    {
+      "from": "b2_west_path_0",
+      "to": "b2_west_path_1",
+      "kind": "walk",
+      "distance_px": 130.38404810405297,
+      "distance_2d_m": 8.824864203906174,
+      "distance_3d_m": 8.824864203906174,
+      "cost_m": 8.824864203906174
+    },
+    {
+      "from": "b2_west_path_1",
+      "to": "b2_west_path_2",
+      "kind": "walk",
+      "distance_px": 143.26548781894402,
+      "distance_2d_m": 9.792656952571916,
+      "distance_3d_m": 9.792656952571916,
+      "cost_m": 9.792656952571916
+    },
+    {
+      "from": "b2_west_path_2",
+      "to": "b2_center_path_0",
+      "kind": "walk",
+      "distance_px": 155.08062419270823,
+      "distance_2d_m": 8.87252046340749,
+      "distance_3d_m": 8.87252046340749,
+      "cost_m": 8.87252046340749
+    },
+    {
+      "from": "b2_center_path_0",
+      "to": "b2_center_path_1",
+      "kind": "walk",
+      "distance_px": 130.0,
+      "distance_2d_m": 7.435426561692381,
+      "distance_3d_m": 7.435426561692381,
+      "cost_m": 7.435426561692381
+    },
+    {
+      "from": "b2_center_path_1",
+      "to": "b2_center_path_2",
+      "kind": "walk",
+      "distance_px": 197.29419656948858,
+      "distance_2d_m": 11.357501650657063,
+      "distance_3d_m": 11.357501650657063,
+      "cost_m": 11.357501650657063
+    },
+    {
+      "from": "b2_center_path_2",
+      "to": "b2_center_hall",
+      "kind": "walk",
+      "distance_px": 207.18349355100662,
+      "distance_2d_m": 11.919655419502053,
+      "distance_3d_m": 11.919655419502053,
+      "cost_m": 11.919655419502053
+    },
+    {
+      "from": "b2_center_hall",
+      "to": "b2_information",
+      "kind": "walk",
+      "distance_px": 130.0,
+      "distance_2d_m": 9.043416657639396,
+      "distance_3d_m": 9.043416657639396,
+      "cost_m": 9.043416657639396
+    },
+    {
+      "from": "b2_center_hall",
+      "to": "b2_elevator",
+      "kind": "walk",
+      "distance_px": 231.94827009486403,
+      "distance_2d_m": 16.533012973857907,
+      "distance_3d_m": 16.533012973857907,
+      "cost_m": 16.533012973857907
+    },
+    {
+      "from": "b2_center_hall",
+      "to": "b2_center_stairs_to_b3",
+      "kind": "walk",
+      "distance_px": 47.16990566028302,
+      "distance_2d_m": 3.197330621856074,
+      "distance_3d_m": 3.197330621856074,
+      "cost_m": 3.197330621856074
+    },
+    {
+      "from": "b2_center_hall",
+      "to": "b2_east_path_1",
+      "kind": "walk",
+      "distance_px": 244.1823089414956,
+      "distance_2d_m": 14.098922949079887,
+      "distance_3d_m": 14.098922949079887,
+      "cost_m": 14.098922949079887
+    },
+    {
+      "from": "b2_east_path_1",
+      "to": "b2_east_hall",
+      "kind": "walk",
+      "distance_px": 387.3306081372863,
+      "distance_2d_m": 22.38599566896987,
+      "distance_3d_m": 22.38599566896987,
+      "cost_m": 22.38599566896987
+    },
+    {
+      "from": "b2_east_hall",
+      "to": "b2_east_path_2",
+      "kind": "walk",
+      "distance_px": 252.98221281347034,
+      "distance_2d_m": 14.870853123384764,
+      "distance_3d_m": 14.870853123384764,
+      "cost_m": 14.870853123384764
+    },
+    {
+      "from": "b2_east_path_2",
+      "to": "b2_east_stairs_to_b3",
+      "kind": "walk",
+      "distance_px": 121.6552506059644,
+      "distance_2d_m": 7.010835491654712,
+      "distance_3d_m": 7.010835491654712,
+      "cost_m": 7.010835491654712
+    },
+    {
+      "from": "b2_east_stairs_from_b1",
+      "to": "b2_east_from_b1_turn",
+      "kind": "walk",
+      "distance_px": 120.41594578792295,
+      "distance_2d_m": 7.694879506971952,
+      "distance_3d_m": 7.694879506971952,
+      "cost_m": 7.694879506971952
+    },
+    {
+      "from": "b2_east_from_b1_turn",
+      "to": "b2_east_hall",
+      "kind": "walk",
+      "distance_px": 352.17183305880667,
+      "distance_2d_m": 23.342812876397318,
+      "distance_3d_m": 23.342812876397318,
+      "cost_m": 23.342812876397318
+    },
+    {
+      "from": "b2_elevator",
+      "to": "b3_elevator",
+      "kind": "elevator",
+      "distance_px": 366.742416417845,
+      "distance_2d_m": 26.0475519130509,
+      "distance_3d_m": 26.3528928329146,
+      "cost_m": 26.3528928329146
+    },
+    {
+      "from": "b2_center_stairs_to_b3",
+      "to": "b3_center_stairs_from_b2",
+      "kind": "stairs",
+      "distance_px": 261.6295090390226,
+      "distance_2d_m": 18.04283444561246,
+      "distance_3d_m": 18.48090568212985,
+      "cost_m": 18.48090568212985
+    },
+    {
+      "from": "b2_east_stairs_to_b3",
+      "to": "b3_east_stairs_from_b2",
+      "kind": "stairs",
+      "distance_px": 307.001628660175,
+      "distance_2d_m": 20.917605512466867,
+      "distance_3d_m": 21.296624623991104,
+      "cost_m": 21.296624623991104
+    },
+    {
+      "from": "b3_center_stairs_from_b2",
+      "to": "platform_center",
+      "kind": "walk",
+      "distance_px": 201.12185361118767,
+      "distance_2d_m": 12.516436598712994,
+      "distance_3d_m": 12.516436598712994,
+      "cost_m": 12.516436598712994
+    },
+    {
+      "from": "b3_east_stairs_from_b2",
+      "to": "platform_east_1",
+      "kind": "walk",
+      "distance_px": 289.0069203323685,
+      "distance_2d_m": 17.66145354310646,
+      "distance_3d_m": 17.66145354310646,
+      "cost_m": 17.66145354310646
+    },
+    {
+      "from": "b3_elevator",
+      "to": "platform_center",
+      "kind": "walk",
+      "distance_px": 90.13878188659973,
+      "distance_2d_m": 5.583897874392853,
+      "distance_3d_m": 5.583897874392853,
+      "cost_m": 5.583897874392853
+    },
+    {
+      "from": "platform_west",
+      "to": "platform_west_1",
+      "kind": "platform_walk",
+      "distance_px": 266.8332812825267,
+      "distance_2d_m": 15.477194003019669,
+      "distance_3d_m": 15.477194003019669,
+      "cost_m": 15.477194003019669
+    },
+    {
+      "from": "platform_west_1",
+      "to": "platform_center_west",
+      "kind": "platform_walk",
+      "distance_px": 407.9215610874228,
+      "distance_2d_m": 23.58234545029295,
+      "distance_3d_m": 23.58234545029295,
+      "cost_m": 23.58234545029295
+    },
+    {
+      "from": "platform_center_west",
+      "to": "platform_center",
+      "kind": "platform_walk",
+      "distance_px": 534.6026561849463,
+      "distance_2d_m": 30.724001590154955,
+      "distance_3d_m": 30.724001590154955,
+      "cost_m": 30.724001590154955
+    },
+    {
+      "from": "platform_center",
+      "to": "platform_center_east",
+      "kind": "platform_walk",
+      "distance_px": 419.76183723630714,
+      "distance_2d_m": 24.31695536587469,
+      "distance_3d_m": 24.31695536587469,
+      "cost_m": 24.31695536587469
+    },
+    {
+      "from": "platform_center_east",
+      "to": "platform_east_1",
+      "kind": "platform_walk",
+      "distance_px": 410.0,
+      "distance_2d_m": 23.765868416209653,
+      "distance_3d_m": 23.765868416209653,
+      "cost_m": 23.765868416209653
+    },
+    {
+      "from": "platform_east_1",
+      "to": "platform_east",
+      "kind": "platform_walk",
+      "distance_px": 364.9657518178932,
+      "distance_2d_m": 21.032506474964144,
+      "distance_3d_m": 21.032506474964144,
+      "cost_m": 21.032506474964144
+    },
+    {
+      "from": "platform_west",
+      "to": "platform_red_west_exit",
+      "kind": "tunnel_evacuation",
+      "distance_px": 237.11811402758752,
+      "distance_2d_m": 15.199936255898137,
+      "distance_3d_m": 15.199936255898137,
+      "cost_m": 15.199936255898137
+    },
+    {
+      "from": "platform_east",
+      "to": "platform_red_east_exit",
+      "kind": "tunnel_evacuation",
+      "distance_px": 324.6921619010844,
+      "distance_2d_m": 18.720227442974004,
+      "distance_3d_m": 18.720227442974004,
+      "cost_m": 18.720227442974004
+    }
+  ]
+}

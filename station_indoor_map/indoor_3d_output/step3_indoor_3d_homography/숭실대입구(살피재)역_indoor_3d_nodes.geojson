@@ -1,0 +1,26 @@
+{
+"type": "FeatureCollection",
+"name": "숭실대입구(살피재)역_indoor_3d_nodes",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::5179" } },
+"features": [
+{ "type": "Feature", "properties": { "id": "exit_1_connection", "kind": "entrance_connection", "floor": "B1", "z_m": -4.0 }, "geometry": { "type": "Point", "coordinates": [ 951749.0625, 1944183.375000000232831, -4.0 ] } },
+{ "type": "Feature", "properties": { "id": "exit_2_connection", "kind": "entrance_connection", "floor": "B1", "z_m": -4.0 }, "geometry": { "type": "Point", "coordinates": [ 951709.124999999883585, 1944239.875000000232831, -4.0 ] } },
+{ "type": "Feature", "properties": { "id": "exit_3_connection", "kind": "entrance_connection", "floor": "B2", "z_m": -8.0 }, "geometry": { "type": "Point", "coordinates": [ 951720.437499999883585, 1944242.375000000232831, -8.0 ] } },
+{ "type": "Feature", "properties": { "id": "exit_4_connection", "kind": "entrance_connection", "floor": "B1", "z_m": -4.0 }, "geometry": { "type": "Point", "coordinates": [ 951757.687499999883585, 1944188.125000000232831, -4.0 ] } },
+{ "type": "Feature", "properties": { "id": "b1_left_hall", "kind": "hall", "floor": "B1", "z_m": -4.0 }, "geometry": { "type": "Point", "coordinates": [ 951743.542517473222688, 1944201.236770062474534, -4.0 ] } },
+{ "type": "Feature", "properties": { "id": "b1_center_hall", "kind": "hall", "floor": "B1", "z_m": -4.0 }, "geometry": { "type": "Point", "coordinates": [ 951731.429190268157981, 1944220.748124976176769, -4.0 ] } },
+{ "type": "Feature", "properties": { "id": "b1_stairs_to_b2", "kind": "stairs_start", "floor": "B1", "z_m": -4.0 }, "geometry": { "type": "Point", "coordinates": [ 951732.135711005772464, 1944226.027535688132048, -4.0 ] } },
+{ "type": "Feature", "properties": { "id": "b2_stairs_from_b1", "kind": "stairs_end", "floor": "B2", "z_m": -8.0 }, "geometry": { "type": "Point", "coordinates": [ 951720.327962277107872, 1944250.859448256669566, -8.0 ] } },
+{ "type": "Feature", "properties": { "id": "b2_hall", "kind": "hall", "floor": "B2", "z_m": -8.0 }, "geometry": { "type": "Point", "coordinates": [ 951696.751635656110011, 1944288.046383977867663, -8.0 ] } },
+{ "type": "Feature", "properties": { "id": "b2_information", "kind": "information", "floor": "B2", "z_m": -8.0 }, "geometry": { "type": "Point", "coordinates": [ 951707.118166257045232, 1944267.757241251179948, -8.0 ] } },
+{ "type": "Feature", "properties": { "id": "b2_elevator", "kind": "elevator", "floor": "B2", "z_m": -8.0 }, "geometry": { "type": "Point", "coordinates": [ 951696.989062479580753, 1944278.982312842272222, -8.0 ] } },
+{ "type": "Feature", "properties": { "id": "b2_stairs_to_b5", "kind": "stairs_start", "floor": "B2", "z_m": -8.0 }, "geometry": { "type": "Point", "coordinates": [ 951679.246955629670992, 1944319.035693587269634, -8.0 ] } },
+{ "type": "Feature", "properties": { "id": "b5_stairs_from_b2", "kind": "stairs_end", "floor": "B5", "z_m": -20.0 }, "geometry": { "type": "Point", "coordinates": [ 951720.719098657136783, 1944281.171468305168673, -20.0 ] } },
+{ "type": "Feature", "properties": { "id": "b5_hall", "kind": "hall", "floor": "B5", "z_m": -20.0 }, "geometry": { "type": "Point", "coordinates": [ 951717.12081695930101, 1944292.17073996248655, -20.0 ] } },
+{ "type": "Feature", "properties": { "id": "b5_elevator", "kind": "elevator", "floor": "B5", "z_m": -20.0 }, "geometry": { "type": "Point", "coordinates": [ 951695.445678424905054, 1944325.577752729412168, -20.0 ] } },
+{ "type": "Feature", "properties": { "id": "b5_stairs_to_platform", "kind": "stairs_start", "floor": "B5", "z_m": -20.0 }, "geometry": { "type": "Point", "coordinates": [ 951708.142487669596449, 1944314.221019865013659, -20.0 ] } },
+{ "type": "Feature", "properties": { "id": "platform_west", "kind": "platform", "floor": "B6", "z_m": -24.0 }, "geometry": { "type": "Point", "coordinates": [ 951755.727214898215607, 1944237.368892383063212, -24.0 ] } },
+{ "type": "Feature", "properties": { "id": "platform_center", "kind": "platform", "floor": "B6", "z_m": -24.0 }, "geometry": { "type": "Point", "coordinates": [ 951728.777664430090226, 1944285.507206861162558, -24.0 ] } },
+{ "type": "Feature", "properties": { "id": "platform_east", "kind": "platform", "floor": "B6", "z_m": -24.0 }, "geometry": { "type": "Point", "coordinates": [ 951679.556421060697176, 1944371.203852797392756, -24.0 ] } }
+]
+}

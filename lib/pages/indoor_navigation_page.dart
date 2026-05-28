@@ -1,16 +1,21 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:vector_math/vector_math.dart' as vm;
 
 import '../services/dead_reckoning_calculator.dart';
+import '../services/indoor_qr_position_service.dart';
+import '../services/naver_map_config.dart';
 import '../services/self_supervised_step_model.dart';
 import '../theme/route_in_palette.dart';
 
@@ -31,13 +36,23 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   static const double _flatPhoneExitHorizontalGravityThreshold = 8.4;
   static const int _flatPhoneEnterSampleCount = 4;
   static const int _flatPhoneExitSampleCount = 6;
+  static const Duration _qrScanInterval = Duration(milliseconds: 900);
+  static const Duration _qrCorrectionCooldown = Duration(seconds: 3);
+  static const Duration _mapSyncInterval = Duration(milliseconds: 700);
+  static const NLatLng _seokgyeStationPosition = NLatLng(37.614805, 127.065707);
 
   final DeadReckoningCalculator _deadReckoningCalculator =
       DeadReckoningCalculator();
+  final IndoorQrPositionService _qrPositionService = IndoorQrPositionService();
+  final BarcodeScanner _qrScanner = BarcodeScanner(
+    formats: [BarcodeFormat.qrCode],
+  );
   final List<String> _pendingLogLines = <String>[];
 
   CameraController? _cameraController;
   Future<void>? _cameraReady;
+  NaverMapController? _indoorMapController;
+  NMarker? _currentIndoorPositionMarker;
 
   StreamSubscription<AccelerometerEvent>? _accelerometerSubscription;
   StreamSubscription<UserAccelerometerEvent>? _userAccelerometerSubscription;
@@ -62,8 +77,22 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   bool _isFlatPhoneDialogVisible = false;
   bool _isFlushingLog = false;
   bool _isPhoneFlat = false;
+  bool _isProcessingQrFrame = false;
+  bool _isResolvingQrPosition = false;
+  bool _isCameraPreviewActive = false;
+  bool _hasStartedIndoorMapTracking = false;
+  bool _canShowIndoorMap = false;
+  bool _hasStartedPdr = false;
   int _flatPhoneEnterStreak = 0;
   int _flatPhoneExitStreak = 0;
+  DateTime? _lastQrScanStartedAt;
+  DateTime? _lastQrCorrectionAt;
+  DateTime? _lastMapSyncAt;
+  String? _lastCorrectedQrValue;
+  String _cameraStatusMessage = 'Camera: preparing';
+  String _qrStatusMessage = 'QR: waiting';
+  String _mapStatusMessage = 'Map: waiting';
+  String _pdrStatusMessage = 'PDR: waiting';
 
   @override
   void initState() {
@@ -74,10 +103,24 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   Future<void> _initializePage() async {
     await _loadSelfSupervisedStepModel();
     await _requestPermissions();
-    _cameraReady = _initializeCamera();
-    _startSensorStreams();
-    _startRotationVectorStream();
-    await _initializeLogging();
+    if (!mounted) {
+      return;
+    }
+
+    final cameraReady = _initializeCamera();
+    setState(() {
+      _cameraReady = cameraReady;
+    });
+
+    await cameraReady;
+    if (!mounted || _cameraController == null || _cameraError != null) {
+      return;
+    }
+
+    setState(() {
+      _canShowIndoorMap = true;
+      _mapStatusMessage = 'Map: preparing';
+    });
   }
 
   Future<void> _loadSelfSupervisedStepModel() async {
@@ -92,7 +135,13 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   }
 
   Future<void> _requestPermissions() async {
+    _updateDebugStatus(camera: 'Camera: requesting permission');
     final cameraStatus = await Permission.camera.request();
+
+    _updateDebugStatus(map: 'Map: requesting location permission');
+    final locationStatus = await Permission.locationWhenInUse.request();
+
+    _updateDebugStatus(pdr: 'PDR: requesting activity permission');
     final activityRecognitionStatus = await Permission.activityRecognition
         .request();
 
@@ -103,6 +152,15 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     setState(() {
       _cameraPermissionGranted = cameraStatus.isGranted;
       _activityRecognitionGranted = activityRecognitionStatus.isGranted;
+      _cameraStatusMessage = cameraStatus.isGranted
+          ? 'Camera: permission granted'
+          : 'Camera: permission denied';
+      _mapStatusMessage = locationStatus.isGranted
+          ? 'Map: location permission granted'
+          : 'Map: location permission denied';
+      _pdrStatusMessage = activityRecognitionStatus.isGranted
+          ? 'PDR: activity permission granted'
+          : 'PDR: activity permission denied';
     });
   }
 
@@ -113,16 +171,23 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     }
 
     try {
+      _updateDebugStatus(camera: 'Camera: finding cameras');
       final cameras = await availableCameras();
       if (cameras.isEmpty) {
         _setCameraError('No camera available on this device.');
         return;
       }
 
+      _updateDebugStatus(camera: 'Camera: initializing preview');
       final controller = CameraController(
         cameras.first,
         ResolutionPreset.medium,
         enableAudio: false,
+        imageFormatGroup: Platform.isAndroid
+            ? ImageFormatGroup.nv21
+            : Platform.isIOS
+            ? ImageFormatGroup.bgra8888
+            : null,
       );
 
       await controller.initialize();
@@ -135,8 +200,11 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
       setState(() {
         _cameraController = controller;
         _cameraError = null;
+        _cameraStatusMessage = 'Camera: preview active';
+        _isCameraPreviewActive = true;
         _hasShownCameraErrorDialog = false;
       });
+      unawaited(_startQrImageStream(controller));
     } catch (error) {
       if (!mounted) {
         return;
@@ -146,6 +214,181 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     }
   }
 
+  Future<void> _startQrImageStream(CameraController controller) async {
+    if (!Platform.isAndroid && !Platform.isIOS) {
+      _updateDebugStatus(qr: 'QR: stream unsupported on this platform');
+      return;
+    }
+
+    if (!controller.value.isInitialized || controller.value.isStreamingImages) {
+      return;
+    }
+
+    try {
+      await controller.startImageStream(_handleCameraImage);
+      _updateDebugStatus(qr: 'QR: scanning');
+    } catch (error) {
+      _reportDebugIssue('QR image stream unavailable: $error', qr: true);
+    }
+  }
+
+  void _handleCameraImage(CameraImage image) {
+    if (_isProcessingQrFrame) {
+      return;
+    }
+
+    final now = DateTime.now();
+    final lastScan = _lastQrScanStartedAt;
+    if (lastScan != null && now.difference(lastScan) < _qrScanInterval) {
+      return;
+    }
+
+    _lastQrScanStartedAt = now;
+    _isProcessingQrFrame = true;
+    unawaited(_processQrFrame(image));
+  }
+
+  Future<void> _processQrFrame(CameraImage image) async {
+    try {
+      final inputImage = _inputImageFromCameraImage(image);
+      if (inputImage == null) {
+        return;
+      }
+
+      final barcodes = await _qrScanner.processImage(inputImage);
+      for (final barcode in barcodes) {
+        final qrValue = barcode.rawValue;
+        if (qrValue == null || qrValue.isEmpty) {
+          continue;
+        }
+
+        await _resolveQrPosition(qrValue);
+        break;
+      }
+    } catch (error) {
+      _reportDebugIssue('QR scan failed: $error', qr: true);
+    } finally {
+      _isProcessingQrFrame = false;
+    }
+  }
+
+  InputImage? _inputImageFromCameraImage(CameraImage image) {
+    final controller = _cameraController;
+    if (controller == null || image.planes.isEmpty) {
+      return null;
+    }
+
+    final inputFormat = _inputImageFormatFor(image.format.group);
+    final rotation = InputImageRotationValue.fromRawValue(
+      controller.description.sensorOrientation,
+    );
+
+    if (inputFormat == null || rotation == null) {
+      return null;
+    }
+
+    final bytes = _cameraImageBytes(image);
+    final metadata = InputImageMetadata(
+      size: Size(image.width.toDouble(), image.height.toDouble()),
+      rotation: rotation,
+      format: inputFormat,
+      bytesPerRow: image.planes.first.bytesPerRow,
+    );
+
+    return InputImage.fromBytes(bytes: bytes, metadata: metadata);
+  }
+
+  InputImageFormat? _inputImageFormatFor(ImageFormatGroup formatGroup) {
+    switch (formatGroup) {
+      case ImageFormatGroup.nv21:
+        return InputImageFormat.nv21;
+      case ImageFormatGroup.yuv420:
+        return Platform.isIOS ? InputImageFormat.yuv420 : null;
+      case ImageFormatGroup.bgra8888:
+        return InputImageFormat.bgra8888;
+      case ImageFormatGroup.jpeg:
+      case ImageFormatGroup.unknown:
+        return null;
+    }
+  }
+
+  Uint8List _cameraImageBytes(CameraImage image) {
+    if (image.planes.length == 1) {
+      return image.planes.first.bytes;
+    }
+
+    final buffer = WriteBuffer();
+    for (final plane in image.planes) {
+      buffer.putUint8List(plane.bytes);
+    }
+    return buffer.done().buffer.asUint8List();
+  }
+
+  Future<void> _resolveQrPosition(String qrValue) async {
+    final now = DateTime.now();
+    final isSameRecentQr =
+        _lastCorrectedQrValue == qrValue &&
+        _lastQrCorrectionAt != null &&
+        now.difference(_lastQrCorrectionAt!) < _qrCorrectionCooldown;
+
+    if (_isResolvingQrPosition || isSameRecentQr) {
+      return;
+    }
+
+    _isResolvingQrPosition = true;
+
+    try {
+      final correction = await _qrPositionService.resolveQrPosition(qrValue);
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _deadReckoningState = _deadReckoningState.copyWith(
+          position: vm.Vector2(correction.x, correction.y),
+        );
+        _lastCorrectedQrValue = qrValue;
+        _lastQrCorrectionAt = correction.resolvedAt;
+        _qrStatusMessage =
+            'QR: corrected (${correction.x.toStringAsFixed(1)}, ${correction.y.toStringAsFixed(1)})';
+      });
+      _syncIndoorMapLocation(forceCamera: true);
+      _showQrVerificationDialog(correction);
+    } catch (error) {
+      _reportDebugIssue('QR position request failed: $error', qr: true);
+    } finally {
+      _isResolvingQrPosition = false;
+    }
+  }
+
+  void _showQrVerificationDialog(IndoorQrPosition correction) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+
+      showDialog<void>(
+        context: context,
+        builder: (dialogContext) {
+          return AlertDialog(
+            title: const Text('QR verification'),
+            content: SingleChildScrollView(
+              child: SelectableText(
+                const JsonEncoder.withIndent('  ').convert(correction.payload),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    });
+  }
+
   void _setCameraError(String message) {
     if (!mounted) {
       return;
@@ -153,8 +396,51 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
 
     setState(() {
       _cameraError = message;
+      _cameraStatusMessage = message;
     });
     _showCameraUnavailableDialog();
+  }
+
+  void _reportDebugIssue(String message, {bool qr = false, bool map = false}) {
+    debugPrint(message);
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      if (qr) {
+        _qrStatusMessage = message;
+      }
+      if (map) {
+        _mapStatusMessage = message;
+      }
+    });
+  }
+
+  void _updateDebugStatus({
+    String? camera,
+    String? qr,
+    String? map,
+    String? pdr,
+  }) {
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      if (camera != null) {
+        _cameraStatusMessage = camera;
+      }
+      if (qr != null) {
+        _qrStatusMessage = qr;
+      }
+      if (map != null) {
+        _mapStatusMessage = map;
+      }
+      if (pdr != null) {
+        _pdrStatusMessage = pdr;
+      }
+    });
   }
 
   void _showCameraUnavailableDialog() {
@@ -393,6 +679,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
       sample,
       _deadReckoningState,
     );
+    _scheduleIndoorMapSync();
     _enqueueLogLine(
       sample,
       _deadReckoningState,
@@ -588,6 +875,101 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     return labels[index];
   }
 
+  void _rememberIndoorMapController(NaverMapController controller) {
+    _indoorMapController = controller;
+    _updateDebugStatus(map: 'Map: ready');
+    _syncIndoorMapLocation();
+    _startIndoorMapLocationTracking();
+    _startPdr();
+  }
+
+  void _startIndoorMapLocationTracking() {
+    final controller = _indoorMapController;
+    if (controller == null ||
+        !_isCameraPreviewActive ||
+        _hasStartedIndoorMapTracking) {
+      return;
+    }
+
+    _hasStartedIndoorMapTracking = true;
+    controller.setLocationTrackingMode(NLocationTrackingMode.face);
+    _updateDebugStatus(map: 'Map: location tracking enabled');
+  }
+
+  void _startPdr() {
+    if (_hasStartedPdr) {
+      return;
+    }
+
+    _hasStartedPdr = true;
+    _startSensorStreams();
+    _startRotationVectorStream();
+    unawaited(_initializeLogging());
+    _updateDebugStatus(pdr: 'PDR: active');
+  }
+
+  void _scheduleIndoorMapSync() {
+    final now = DateTime.now();
+    final lastSync = _lastMapSyncAt;
+    if (lastSync != null && now.difference(lastSync) < _mapSyncInterval) {
+      return;
+    }
+
+    _lastMapSyncAt = now;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _syncIndoorMapLocation();
+      }
+    });
+  }
+
+  void _syncIndoorMapLocation({bool forceCamera = false}) {
+    final controller = _indoorMapController;
+    if (controller == null || !NaverMapConfig.isReady) {
+      return;
+    }
+
+    final mapPosition = _indoorMetersToLatLng(_deadReckoningState.position);
+    final marker = _currentIndoorPositionMarker;
+    if (marker == null) {
+      final nextMarker = NMarker(
+        id: 'current_indoor_position',
+        position: mapPosition,
+        iconTintColor: RouteInPalette.coral,
+        caption: const NOverlayCaption(text: 'Current position'),
+      );
+      _currentIndoorPositionMarker = nextMarker;
+      unawaited(controller.addOverlay(nextMarker));
+    } else {
+      marker.setPosition(mapPosition);
+    }
+
+    final locationOverlay = controller.getLocationOverlay();
+    locationOverlay.setBearing(_headingDegrees);
+
+    if (forceCamera) {
+      unawaited(
+        controller.updateCamera(
+          NCameraUpdate.scrollAndZoomTo(target: mapPosition, zoom: 17),
+        ),
+      );
+    }
+  }
+
+  NLatLng _indoorMetersToLatLng(vm.Vector2 position) {
+    const metersPerLatitudeDegree = 111320.0;
+    final latitude =
+        _seokgyeStationPosition.latitude +
+        (position.y / metersPerLatitudeDegree);
+    final longitudeMetersPerDegree =
+        metersPerLatitudeDegree *
+        math.cos(_seokgyeStationPosition.latitude * math.pi / 180);
+    final longitude =
+        _seokgyeStationPosition.longitude +
+        (position.x / longitudeMetersPerDegree);
+    return NLatLng(latitude, longitude);
+  }
+
   @override
   void dispose() {
     _logFlushTimer?.cancel();
@@ -598,33 +980,73 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     _magnetometerSubscription?.cancel();
     _rotationVectorSubscription?.cancel();
     _dismissFlatPhoneDialog();
-    _cameraController?.dispose();
+    final cameraController = _cameraController;
+    if (cameraController != null) {
+      if (cameraController.value.isStreamingImages) {
+        unawaited(
+          cameraController
+              .stopImageStream()
+              .catchError((Object error) {
+                debugPrint('Camera image stream stop failed: $error');
+              })
+              .whenComplete(cameraController.dispose),
+        );
+      } else {
+        unawaited(cameraController.dispose());
+      }
+    }
+    unawaited(_qrScanner.close());
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: const Text('Indoor Navigation'),
         backgroundColor: RouteInPalette.navy,
         elevation: 0,
       ),
-      body: Stack(
-        fit: StackFit.expand,
+      backgroundColor: RouteInPalette.ink,
+      body: Column(
         children: [
-          _buildCameraView(),
-          _buildTopGradient(),
-          _buildBottomGradient(),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [const Spacer(), _buildSensorOverlayCard(context)],
-              ),
+          Expanded(
+            flex: 2,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                _buildCameraView(),
+                _buildTopGradient(),
+                SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: _buildNavigationSummary(context),
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                    child: _DebugStatusLine(
+                      messages: [
+                        _cameraStatusMessage,
+                        _qrStatusMessage,
+                        _mapStatusMessage,
+                        _pdrStatusMessage,
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
+          ),
+          SizedBox(
+            height: MediaQuery.sizeOf(context).height / 3,
+            width: double.infinity,
+            child: _buildIndoorMapPanel(context),
           ),
         ],
       ),
@@ -706,75 +1128,99 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     );
   }
 
-  Widget _buildBottomGradient() {
-    return IgnorePointer(
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          height: 320,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [RouteInPalette.denim, RouteInPalette.navy],
+  Widget _buildIndoorMapPanel(BuildContext context) {
+    if (!_canShowIndoorMap) {
+      return const _IndoorMapUnavailableState(
+        icon: Icons.map_outlined,
+        title: 'Map waiting',
+        description: 'Camera preview starts before indoor map loading.',
+      );
+    }
+
+    return DecoratedBox(
+      decoration: const BoxDecoration(color: RouteInPalette.mist),
+      child: !NaverMapConfig.supportsMobileMap
+          ? const _IndoorMapUnavailableState(
+              icon: Icons.phone_android_rounded,
+              title: 'Mobile map only',
+              description: 'Indoor position map is available on Android/iOS.',
+            )
+          : !NaverMapConfig.hasClientId
+          ? const _IndoorMapUnavailableState(
+              icon: Icons.key_rounded,
+              title: 'Map key required',
+              description: 'Add a Naver Map client ID to show your position.',
+            )
+          : !NaverMapConfig.isReady
+          ? const _IndoorMapUnavailableState(
+              icon: Icons.map_outlined,
+              title: 'Preparing map',
+              description: 'Naver Map is still initializing.',
+            )
+          : NaverMap(
+              options: const NaverMapViewOptions(
+                mapType: NMapType.basic,
+                locationButtonEnable: true,
+                initialCameraPosition: NCameraPosition(
+                  target: _seokgyeStationPosition,
+                  zoom: 17,
+                ),
+              ),
+              onMapReady: _rememberIndoorMapController,
             ),
-          ),
-        ),
-      ),
     );
   }
 
-  Widget _buildSensorOverlayCard(BuildContext context) {
-    final theme = Theme.of(context);
-
+  Widget _buildNavigationSummary(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: RouteInPalette.navy,
-        borderRadius: BorderRadius.circular(24),
+        color: RouteInPalette.navy.withValues(alpha: 0.9),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(color: RouteInPalette.sky),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.all(12),
+        child: Row(
           children: [
-            Row(
-              children: [
-                const Icon(
-                  Icons.sensors_outlined,
+            Expanded(
+              child: _SummaryMetric(
+                icon: Transform.rotate(
+                  angle: (_headingDegrees - 90) * math.pi / 180,
+                  child: const Icon(
+                    Icons.navigation_rounded,
+                    color: RouteInPalette.white,
+                    size: 20,
+                  ),
+                ),
+                label: 'Direction',
+                value: '$_headingLabel ${_headingDegrees.toStringAsFixed(0)}°',
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: _SummaryMetric(
+                icon: const Icon(
+                  Icons.directions_walk_rounded,
                   color: RouteInPalette.white,
                   size: 20,
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  'Live Sensor Feed',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: RouteInPalette.white,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
+                label: 'Steps',
+                value: _deadReckoningState.stepCount.toString(),
+              ),
             ),
-            const SizedBox(height: 14),
-            _DeadReckoningStatus(
-              positionX: _deadReckoningState.position.x,
-              positionY: _deadReckoningState.position.y,
-              stepCount: _deadReckoningState.stepCount,
-              lastStepLengthMeters: _deadReckoningState.lastStepLengthMeters,
-              recentStepIntervals: _deadReckoningState.recentStepIntervals,
-              thresholdCrossings: _deadReckoningState.thresholdCrossings,
-              totalDistanceMeters: _deadReckoningState.totalDistanceMeters,
-              headingDegrees: _headingDegrees,
-              headingLabel: _headingLabel,
-              motionMagnitude: _currentMotionMagnitude,
-              filteredAccelerationMagnitude:
-                  _deadReckoningState.filteredAccelerationMagnitude,
-              activeStepThreshold: _deadReckoningState.activeStepThreshold,
-              stepDecisionSource: _deadReckoningState.lastStepDecisionSource,
-              stepDecisionConfidence:
-                  _deadReckoningState.lastStepDecisionConfidence,
-              isPhoneFlat: _isPhoneFlat,
+            const SizedBox(width: 10),
+            Expanded(
+              child: _SummaryMetric(
+                icon: const Icon(
+                  Icons.my_location_rounded,
+                  color: RouteInPalette.white,
+                  size: 20,
+                ),
+                label: 'Position',
+                value:
+                    '${_deadReckoningState.position.x.toStringAsFixed(1)}, '
+                    '${_deadReckoningState.position.y.toStringAsFixed(1)} m',
+              ),
             ),
           ],
         ),
@@ -786,151 +1232,128 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
 const String _csvHeader =
     'timestamp,position_x,position_y,heading_radians,heading_degrees,heading_label,steps,last_step_length_m,crossings,distance_m,filtered_accel,active_threshold,motion_magnitude,accel_x,accel_y,accel_z,user_accel_x,user_accel_y,user_accel_z,user_accel_magnitude,gyro_x,gyro_y,gyro_z,gyro_magnitude,tilt_gyro_magnitude,mag_x,mag_y,mag_z,geomagnetic_rotation_azimuth,game_rotation_azimuth,activity_recognition_granted,step_source,step_confidence,seconds_since_prev_step,heading_change_since_prev_step,heading_change_rate_since_prev_step,recent_step_interval_mean,recent_step_interval_std,filtered_to_user_accel_ratio,accel_to_gyro_ratio,phone_flat,imu_step_detected\n';
 
-class _DeadReckoningStatus extends StatelessWidget {
-  const _DeadReckoningStatus({
-    required this.positionX,
-    required this.positionY,
-    required this.stepCount,
-    required this.lastStepLengthMeters,
-    required this.recentStepIntervals,
-    required this.thresholdCrossings,
-    required this.totalDistanceMeters,
-    required this.headingDegrees,
-    required this.headingLabel,
-    required this.motionMagnitude,
-    required this.filteredAccelerationMagnitude,
-    required this.activeStepThreshold,
-    required this.stepDecisionSource,
-    required this.stepDecisionConfidence,
-    required this.isPhoneFlat,
+class _SummaryMetric extends StatelessWidget {
+  const _SummaryMetric({
+    required this.icon,
+    required this.label,
+    required this.value,
   });
 
-  final double positionX;
-  final double positionY;
-  final int stepCount;
-  final double lastStepLengthMeters;
-  final List<double> recentStepIntervals;
-  final int thresholdCrossings;
-  final double totalDistanceMeters;
-  final double headingDegrees;
-  final String headingLabel;
-  final double motionMagnitude;
-  final double filteredAccelerationMagnitude;
-  final double activeStepThreshold;
-  final String stepDecisionSource;
-  final double stepDecisionConfidence;
-  final bool isPhoneFlat;
+  final Widget icon;
+  final String label;
+  final String value;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final recentFiveDuration = recentStepIntervals.fold<double>(
-      0,
-      (sum, interval) => sum + interval,
-    );
-    final recentFiveDurationText = recentStepIntervals.isEmpty
-        ? 'Recent 5-step time: waiting for more steps'
-        : 'Recent 5-step time: ${recentFiveDuration.toStringAsFixed(1)} s';
 
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: RouteInPalette.denim,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: RouteInPalette.sky),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Transform.rotate(
-                angle: (headingDegrees - 90) * math.pi / 180,
-                child: const Icon(
-                  Icons.navigation_rounded,
-                  color: RouteInPalette.white,
-                  size: 18,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                'Estimated Movement',
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            icon,
+            const SizedBox(width: 6),
+            Flexible(
+              child: Text(
+                label,
+                overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.titleSmall?.copyWith(
-                  color: RouteInPalette.white,
+                  color: RouteInPalette.sky,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            'Current position: (${positionX.toStringAsFixed(2)}, ${positionY.toStringAsFixed(2)}) m',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: RouteInPalette.white,
-              fontWeight: FontWeight.w600,
             ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: RouteInPalette.white,
+            fontWeight: FontWeight.w800,
           ),
-          const SizedBox(height: 6),
-          Text(
-            'Direction: $headingLabel  ${headingDegrees.toStringAsFixed(0)} deg',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: RouteInPalette.white,
-              fontWeight: FontWeight.w600,
+        ),
+      ],
+    );
+  }
+}
+
+class _DebugStatusLine extends StatelessWidget {
+  const _DebugStatusLine({required this.messages});
+
+  final List<String> messages;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: RouteInPalette.ink.withValues(alpha: 0.82),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: RouteInPalette.sky.withValues(alpha: 0.55)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        child: Text(
+          messages.join('\n'),
+          maxLines: 4,
+          overflow: TextOverflow.ellipsis,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: RouteInPalette.white,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _IndoorMapUnavailableState extends StatelessWidget {
+  const _IndoorMapUnavailableState({
+    required this.icon,
+    required this.title,
+    required this.description,
+  });
+
+  final IconData icon;
+  final String title;
+  final String description;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: RouteInPalette.navy, size: 32),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.titleSmall?.copyWith(
+                color: RouteInPalette.navy,
+                fontWeight: FontWeight.w800,
+              ),
             ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            isPhoneFlat ? 'Phone posture: flat' : 'Phone posture: upright',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: isPhoneFlat ? RouteInPalette.coral : RouteInPalette.white,
-              fontWeight: FontWeight.w600,
+            const SizedBox(height: 4),
+            Text(
+              description,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: RouteInPalette.navy,
+              ),
             ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            'Estimated distance: ${totalDistanceMeters.toStringAsFixed(2)} m',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: RouteInPalette.white,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            'Current step length: ${lastStepLengthMeters.toStringAsFixed(2)} m',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: RouteInPalette.white,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            'Axis: +x East, +y North   Steps: $stepCount   Crossings: $thresholdCrossings',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: RouteInPalette.white,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            'Motion: ${motionMagnitude.toStringAsFixed(2)}   Filtered: ${filteredAccelerationMagnitude.toStringAsFixed(2)}   Threshold: ${activeStepThreshold.toStringAsFixed(2)}',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: RouteInPalette.white,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            'Step judge: $stepDecisionSource ${(stepDecisionConfidence * 100).toStringAsFixed(0)}%',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: RouteInPalette.white,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            recentFiveDurationText,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: RouteInPalette.white,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

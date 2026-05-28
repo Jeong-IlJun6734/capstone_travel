@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>서울대입구(관악구청)역 3D Graph Viewer</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --ink: #1f2933;
+      --muted: #697386;
+      --line: #d7dee8;
+      --edge: #4b6bfb;
+      --edge-stairs: #d14b2f;
+      --node: #111827;
+      --entrance: #1f9d55;
+      --platform: #1677a7;
+      --stairs: #c45116;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, "Malgun Gothic", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    header {
+      padding: 20px 24px 12px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel);
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
+      padding: 16px;
+    }
+    .viewer {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .viewer h2 {
+      margin: 0;
+      padding: 12px 14px;
+      font-size: 15px;
+      border-bottom: 1px solid var(--line);
+    }
+    svg {
+      display: block;
+      width: 100%;
+      height: 560px;
+      background: #fff;
+    }
+    .profile svg { height: 320px; }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 10px 14px 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .key {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--node);
+      display: inline-block;
+    }
+    .swatch.entrance { background: var(--entrance); }
+    .swatch.platform { background: var(--platform); }
+    .swatch.stairs { background: var(--stairs); }
+    .swatch.edge {
+      width: 18px;
+      height: 3px;
+      border-radius: 0;
+      background: var(--edge);
+    }
+    .swatch.stair-edge {
+      width: 18px;
+      height: 3px;
+      border-radius: 0;
+      background: var(--edge-stairs);
+    }
+    .node-label {
+      font-size: 11px;
+      paint-order: stroke;
+      stroke: white;
+      stroke-width: 4px;
+      stroke-linejoin: round;
+      fill: #111827;
+    }
+    .axis-label {
+      font-size: 11px;
+      fill: #697386;
+    }
+    .tooltip {
+      position: fixed;
+      pointer-events: none;
+      display: none;
+      max-width: 360px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(31, 41, 51, 0.16);
+      font-size: 12px;
+      color: var(--ink);
+      white-space: pre-line;
+      z-index: 5;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>서울대입구(관악구청)역 3D Graph Viewer</h1>
+    <div class="meta">
+      <span>nodes: <strong id="node-count"></strong></span>
+      <span>edges: <strong id="edge-count"></strong></span>
+      <span>CRS: <strong id="crs"></strong></span>
+      <span>z range: <strong id="z-range"></strong></span>
+    </div>
+  </header>
+  <main>
+    <section class="viewer">
+      <h2>XY Plan Graph</h2>
+      <svg id="xy"></svg>
+      <div class="legend">
+        <span class="key"><span class="swatch entrance"></span>entrance</span>
+        <span class="key"><span class="swatch platform"></span>platform</span>
+        <span class="key"><span class="swatch stairs"></span>stairs</span>
+        <span class="key"><span class="swatch"></span>other</span>
+        <span class="key"><span class="swatch edge"></span>walk</span>
+        <span class="key"><span class="swatch stair-edge"></span>stairs/elevator</span>
+      </div>
+    </section>
+    <section class="viewer profile">
+      <h2>XZ Elevation Graph</h2>
+      <svg id="xz"></svg>
+    </section>
+  </main>
+  <div id="tooltip" class="tooltip"></div>
+  <script id="graph-data" type="application/json">{"station_name": "서울대입구(관악구청)역", "crs": "EPSG:5179", "registration": {"station_name": "서울대입구(관악구청)역", "crs": "EPSG:5179", "image": ".\\station_image\\2\\서울대입구.jpg", "image_size": [3376, 3375], "transform_type": "homography", "image_to_map_transform": [[-160.6135838867998, -272.9812382227953, 951681.4827523308], [-327.8209503974674, -557.1699988976227, 1942509.1122705704], [-0.00016876005387523243, -0.00028683756464396854, 1.0]], "map_to_image_transform": [[-118.57185703285866, -26.33684489488555, 164002201.91050047], [-24.45523062598452, 63.135592745804296, -99367874.07414159], [-0.027024871776515573, 0.01366505230219538, -824.4185732025069]], "image_to_map_affine": [[-160.6135838867998, -272.9812382227953, 951681.4827523308], [-327.8209503974674, -557.1699988976227, 1942509.1122705704], [-0.00016876005387523243, -0.00028683756464396854, 1.0]], "map_to_image_affine": [[-118.57185703285866, -26.33684489488555, 164002201.91050047], [-24.45523062598452, 63.135592745804296, -99367874.07414159], [-0.027024871776515573, 0.01366505230219538, -824.4185732025069]], "meters_per_pixel_estimate": 492.75081179398416, "control_point_count": 4, "rmse_m": 0.017460889542094685, "residuals": [{"entrance_no": "1", "status": "used", "image_xy": [997, 1448], "expected_map_xy": [951651.6181822, 1942552.62479624], "predicted_map_xy": [951651.6250000005, 1942552.6250000002], "error_m": 0.006820844622822846}, {"entrance_no": "2", "status": "used", "image_xy": [1996, 1137], "expected_map_xy": [951624.567782127, 1942540.5094962], "predicted_map_xy": [951624.5625000002, 1942540.5000000002], "error_m": 0.010866401001998113}, {"entrance_no": "4", "status": "used", "image_xy": [2282, 1428], "expected_map_xy": [951572.609997194, 1942577.14100227], "predicted_map_xy": [951572.6250000005, 1942577.1249999998], "error_m": 0.021935287809862203}, {"entrance_no": "5", "status": "used", "image_xy": [1674, 1814], "expected_map_xy": [951585.726382168, 1942617.75399615], "predicted_map_xy": [951585.75, 1942617.749999999], "error_m": 0.02395352189133197}]}, "floor_depths_m": {"ground": 0.0, "G": 0.0, "1F": 0.0, "B1": -4.0, "B2": -8.0, "B3": -12.0, "B4": -16.0}, "nodes": [{"id": "exit_1_connection", "kind": "entrance_connection", "floor": "B1", "image_xy": [997, 1448], "map_xy": [951651.6250000005, 1942552.6250000002], "z_m": -4.0, "map_xyz": [951651.6250000005, 1942552.6250000002, -4.0], "entrance_no": "1"}, {"id": "exit_2_connection", "kind": "entrance_connection", "floor": "B1", "image_xy": [1996, 1137], "map_xy": [951624.5625000002, 1942540.5000000002], "z_m": -4.0, "map_xyz": [951624.5625000002, 1942540.5000000002, -4.0], "entrance_no": "2"}, {"id": "exit_3_connection", "kind": "entrance_connection", "floor": "B1", "image_xy": [1740, 2365], "map_xy": [950924.9337559617, 1943554.5281018205], "z_m": -4.0, "map_xyz": [950924.9337559617, 1943554.5281018205, -4.0], "entrance_no": "3"}, {"id": "exit_4_connection", "kind": "entrance_connection", "floor": "B1", "image_xy": [2282, 1428], "map_xy": [951572.6250000005, 1942577.1249999998], "z_m": -4.0, "map_xyz": [951572.6250000005, 1942577.1249999998, -4.0], "entrance_no": "4"}, {"id": "exit_5_connection", "kind": "entrance_connection", "floor": "B1", "image_xy": [1674, 1814], "map_xy": [951585.75, 1942617.749999999], "z_m": -4.0, "map_xyz": [951585.75, 1942617.749999999, -4.0], "entrance_no": "5"}, {"id": "exit_6_connection", "kind": "entrance_connection", "floor": "B1", "image_xy": [1820, 2280], "map_xy": [951127.8214928359, 1943223.7898625047], "z_m": -4.0, "map_xyz": [951127.8214928359, 1943223.7898625047, -4.0], "entrance_no": "6"}, {"id": "exit_7_connection", "kind": "entrance_connection", "floor": "B1", "image_xy": [1590, 2585], "map_xy": [953795.107672982, 1939151.4226322917], "z_m": -4.0, "map_xyz": [953795.107672982, 1939151.4226322917, -4.0], "entrance_no": "7"}, {"id": "exit_8_connection", "kind": "entrance_connection", "floor": "B1", "image_xy": [1305, 2685], "map_xy": [949721.7227625885, 1946175.6866183586], "z_m": -4.0, "map_xyz": [949721.7227625885, 1946175.6866183586, -4.0], "entrance_no": "8"}, {"id": "b1_west_hall", "kind": "hall", "floor": "B1", "image_xy": [1175, 2350], "map_xy": [951550.3536937475, 1942749.936149233], "z_m": -4.0, "map_xyz": [951550.3536937475, 1942749.936149233, -4.0]}, {"id": "b1_center_hall", "kind": "hall", "floor": "B1", "image_xy": [1545, 2355], "map_xy": [951373.6784879991, 1942974.8729195471], "z_m": -4.0, "map_xyz": [951373.6784879991, 1942974.8729195471, -4.0]}, {"id": "b1_east_hall", "kind": "hall", "floor": "B1", "image_xy": [1980, 2230], "map_xy": [950819.1396059032, 1943522.8339056533], "z_m": -4.0, "map_xyz": [950819.1396059032, 1943522.8339056533, -4.0]}, {"id": "b1_information", "kind": "information", "floor": "B1", "image_xy": [1885, 2420], "map_xy": [953514.939459664, 1940092.7479950772], "z_m": -4.0, "map_xyz": [953514.939459664, 1940092.7479950772, -4.0]}, {"id": "b1_west_stairs_to_b2", "kind": "stairs_start", "floor": "B1", "image_xy": [1280, 2800], "map_xy": [952673.7680222474, 1940578.5673666329], "z_m": -4.0, "map_xyz": [952673.7680222474, 1940578.5673666329, -4.0]}, {"id": "b2_west_stairs_from_b1", "kind": "stairs_end", "floor": "B2", "image_xy": [1040, 3290], "map_xy": [951838.637645081, 1942132.8425371873], "z_m": -8.0, "map_xyz": [951838.637645081, 1942132.8425371873, -8.0]}, {"id": "b1_center_stairs_to_b2", "kind": "stairs_start", "floor": "B1", "image_xy": [1540, 2760], "map_xy": [952086.813458061, 1941818.2948336545], "z_m": -4.0, "map_xyz": [952086.813458061, 1941818.2948336545, -4.0]}, {"id": "b2_center_stairs_from_b1", "kind": "stairs_end", "floor": "B2", "image_xy": [1585, 3025], "map_xy": [951845.0389621228, 1942217.9975611328], "z_m": -8.0, "map_xyz": [951845.0389621228, 1942217.9975611328, -8.0]}, {"id": "b1_east_stairs_to_b2", "kind": "stairs_start", "floor": "B1", "image_xy": [2030, 2485], "map_xy": [952111.5387392764, 1941964.8973770705], "z_m": -4.0, "map_xyz": [952111.5387392764, 1941964.8973770705, -4.0]}, {"id": "b2_east_stairs_from_b1", "kind": "stairs_end", "floor": "B2", "image_xy": [2220, 2920], "map_xy": [951807.2932693942, 1942339.9044747115], "z_m": -8.0, "map_xyz": [951807.2932693942, 1942339.9044747115, -8.0]}, {"id": "b1_elevator", "kind": "elevator", "floor": "B1", "image_xy": [1850, 2530], "map_xy": [952276.7054409436, 1941682.4904219236], "z_m": -4.0, "map_xyz": [952276.7054409436, 1941682.4904219236, -4.0]}, {"id": "b2_elevator", "kind": "elevator", "floor": "B2", "image_xy": [1880, 3135], "map_xy": [951795.8211600564, 1942324.0520727762], "z_m": -8.0, "map_xyz": [951795.8211600564, 1942324.0520727762, -8.0]}, {"id": "platform_west", "kind": "platform", "floor": "B2", "image_xy": [545, 3330], "map_xy": [952000.0734681953, 1941513.7234808665], "z_m": -8.0, "map_xyz": [952000.0734681953, 1941513.7234808665, -8.0], "direction": "to_nakseongdae"}, {"id": "platform_center", "kind": "platform", "floor": "B2", "image_xy": [1680, 3185], "map_xy": [951800.0230839195, 1942299.0750091288], "z_m": -8.0, "map_xyz": [951800.0230839195, 1942299.0750091288, -8.0]}, {"id": "platform_east", "kind": "platform", "floor": "B2", "image_xy": [2870, 2840], "map_xy": [951786.8048802504, 1942399.4448046444], "z_m": -8.0, "map_xyz": [951786.8048802504, 1942399.4448046444, -8.0], "direction": "to_bongcheon"}], "edges": [{"from": "exit_1_connection", "to": "b1_west_hall", "kind": "walk", "distance_2d_m": 221.78270239524238, "distance_3d_m": 221.78270239524238}, {"from": "exit_2_connection", "to": "b1_center_hall", "kind": "walk", "distance_2d_m": 501.6199963253771, "distance_3d_m": 501.6199963253771}, {"from": "exit_3_connection", "to": "b1_center_hall", "kind": "walk", "distance_2d_m": 733.0565904946886, "distance_3d_m": 733.0565904946886}, {"from": "exit_4_connection", "to": "b1_east_hall", "kind": "walk", "distance_2d_m": 1209.1755758988832, "distance_3d_m": 1209.1755758988832}, {"from": "exit_5_connection", "to": "b1_east_hall", "kind": "walk", "distance_2d_m": 1186.114822692832, "distance_3d_m": 1186.114822692832}, {"from": "exit_6_connection", "to": "b1_east_hall", "kind": "walk", "distance_2d_m": 429.7811618289156, "distance_3d_m": 429.7811618289156}, {"from": "exit_7_connection", "to": "b1_center_hall", "kind": "walk", "distance_2d_m": 4525.714462601547, "distance_3d_m": 4525.714462601547}, {"from": "exit_8_connection", "to": "b1_west_hall", "kind": "walk", "distance_2d_m": 3883.253450279235, "distance_3d_m": 3883.253450279235}, {"from": "b1_west_hall", "to": "b1_center_hall", "kind": "walk", "distance_2d_m": 286.02566137602037, "distance_3d_m": 286.02566137602037}, {"from": "b1_center_hall", "to": "b1_east_hall", "kind": "walk", "distance_2d_m": 779.599008497762, "distance_3d_m": 779.599008497762}, {"from": "b1_center_hall", "to": "b1_information", "kind": "walk", "distance_2d_m": 3590.4933684699135, "distance_3d_m": 3590.4933684699135}, {"from": "b1_center_hall", "to": "b1_elevator", "kind": "walk", "distance_2d_m": 1576.6135220490403, "distance_3d_m": 1576.6135220490403}, {"from": "b1_west_hall", "to": "b1_west_stairs_to_b2", "kind": "walk", "distance_2d_m": 2444.770366216256, "distance_3d_m": 2444.770366216256}, {"from": "b1_center_hall", "to": "b1_center_stairs_to_b2", "kind": "walk", "distance_2d_m": 1358.7620668432278, "distance_3d_m": 1358.7620668432278}, {"from": "b1_east_hall", "to": "b1_east_stairs_to_b2", "kind": "walk", "distance_2d_m": 2024.218799200427, "distance_3d_m": 2024.218799200427}, {"from": "b1_west_stairs_to_b2", "to": "b2_west_stairs_from_b1", "kind": "stairs", "distance_2d_m": 1764.4302345708925, "distance_3d_m": 1764.4347686066194}, {"from": "b1_center_stairs_to_b2", "to": "b2_center_stairs_from_b1", "kind": "stairs", "distance_2d_m": 467.13721457374, "distance_3d_m": 467.1543398489544}, {"from": "b1_east_stairs_to_b2", "to": "b2_east_stairs_from_b1", "kind": "stairs", "distance_2d_m": 482.9033332096012, "distance_3d_m": 482.91989938802806}, {"from": "b1_elevator", "to": "b2_elevator", "kind": "elevator", "distance_2d_m": 801.7799220791238, "distance_3d_m": 801.789899817406}, {"from": "b2_west_stairs_from_b1", "to": "platform_west", "kind": "walk", "distance_2d_m": 639.8202332562382, "distance_3d_m": 639.8202332562382}, {"from": "b2_center_stairs_from_b1", "to": "platform_center", "kind": "walk", "distance_2d_m": 92.73608717188618, "distance_3d_m": 92.73608717188618}, {"from": "b2_east_stairs_from_b1", "to": "platform_east", "kind": "walk", "distance_2d_m": 62.96685618825099, "distance_3d_m": 62.96685618825099}, {"from": "b2_elevator", "to": "platform_center", "kind": "walk", "distance_2d_m": 25.32804517923804, "distance_3d_m": 25.32804517923804}, {"from": "platform_west", "to": "platform_center", "kind": "platform", "distance_2d_m": 810.4302432613961, "distance_3d_m": 810.4302432613961}, {"from": "platform_center", "to": "platform_east", "kind": "platform", "distance_2d_m": 101.23643988256842, "distance_3d_m": 101.23643988256842}]}</script>
+  <script>
+    const graph = JSON.parse(document.getElementById("graph-data").textContent);
+    const nodes = graph.nodes;
+    const edges = graph.edges;
+    const byId = new Map(nodes.map(n => [n.id, n]));
+    document.getElementById("node-count").textContent = nodes.length;
+    document.getElementById("edge-count").textContent = edges.length;
+    document.getElementById("crs").textContent = graph.crs || "";
+    const zVals = nodes.map(n => n.z_m ?? 0);
+    document.getElementById("z-range").textContent =
+      `${Math.min(...zVals).toFixed(2)}m to ${Math.max(...zVals).toFixed(2)}m`;
+
+    const tooltip = document.getElementById("tooltip");
+
+    function nodeColor(n) {
+      const k = (n.kind || "").toLowerCase();
+      if (k.includes("entrance") || k === "exit") return "var(--entrance)";
+      if (k.includes("platform")) return "var(--platform)";
+      if (k.includes("stairs") || k.includes("elevator") || k.includes("escalator")) return "var(--stairs)";
+      return "var(--node)";
+    }
+
+    function edgeColor(e) {
+      const k = (e.kind || "").toLowerCase();
+      if (k.includes("stairs") || k.includes("elevator") || k.includes("escalator")) return "var(--edge-stairs)";
+      return "var(--edge)";
+    }
+
+    function extent(values) {
+      return [Math.min(...values), Math.max(...values)];
+    }
+
+    function scale(v, d0, d1, r0, r1) {
+      if (Math.abs(d1 - d0) < 1e-9) return (r0 + r1) / 2;
+      return r0 + (v - d0) * (r1 - r0) / (d1 - d0);
+    }
+
+    function showTip(evt, text) {
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = `${evt.clientX + 12}px`;
+      tooltip.style.top = `${evt.clientY + 12}px`;
+    }
+
+    function hideTip() {
+      tooltip.style.display = "none";
+    }
+
+    function draw(svgId, mode) {
+      const svg = document.getElementById(svgId);
+      const rect = svg.getBoundingClientRect();
+      const width = rect.width || 1000;
+      const height = rect.height || 500;
+      const pad = 48;
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg.innerHTML = "";
+
+      const xs = nodes.map(n => n.map_xyz[0]);
+      const ys = mode === "xy" ? nodes.map(n => n.map_xyz[1]) : nodes.map(n => n.z_m ?? n.map_xyz[2] ?? 0);
+      const [minX, maxX] = extent(xs);
+      const [minY, maxY] = extent(ys);
+
+      function px(n) {
+        return scale(n.map_xyz[0], minX, maxX, pad, width - pad);
+      }
+      function py(n) {
+        const y = mode === "xy" ? n.map_xyz[1] : (n.z_m ?? n.map_xyz[2] ?? 0);
+        return scale(y, minY, maxY, height - pad, pad);
+      }
+
+      for (const e of edges) {
+        const a = byId.get(e.from);
+        const b = byId.get(e.to);
+        if (!a || !b) continue;
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", px(a));
+        line.setAttribute("y1", py(a));
+        line.setAttribute("x2", px(b));
+        line.setAttribute("y2", py(b));
+        line.setAttribute("stroke", edgeColor(e));
+        line.setAttribute("stroke-width", mode === "xy" ? 2.5 : 2);
+        line.setAttribute("stroke-linecap", "round");
+        line.setAttribute("opacity", "0.78");
+        line.addEventListener("mousemove", evt => showTip(evt,
+          `${e.from} -> ${e.to}\nkind: ${e.kind || ""}\n2D: ${(e.distance_2d_m || 0).toFixed(2)}m\n3D: ${(e.distance_3d_m || 0).toFixed(2)}m`));
+        line.addEventListener("mouseleave", hideTip);
+        svg.appendChild(line);
+      }
+
+      for (const n of nodes) {
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", px(n));
+        circle.setAttribute("cy", py(n));
+        circle.setAttribute("r", 5.5);
+        circle.setAttribute("fill", nodeColor(n));
+        circle.setAttribute("stroke", "white");
+        circle.setAttribute("stroke-width", 1.5);
+        circle.addEventListener("mousemove", evt => showTip(evt,
+          `${n.id}\nkind: ${n.kind || ""}\nfloor: ${n.floor || ""}\nz: ${(n.z_m || 0).toFixed(2)}m\nxy: ${n.map_xy.map(v => v.toFixed(2)).join(", ")}`));
+        circle.addEventListener("mouseleave", hideTip);
+        svg.appendChild(circle);
+
+        const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        label.setAttribute("x", px(n) + 7);
+        label.setAttribute("y", py(n) - 7);
+        label.setAttribute("class", "node-label");
+        label.textContent = n.id;
+        svg.appendChild(label);
+      }
+
+      const axis = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      axis.setAttribute("x", pad);
+      axis.setAttribute("y", height - 16);
+      axis.setAttribute("class", "axis-label");
+      axis.textContent = mode === "xy" ? "Projected map coordinates (EPSG:5179)" : "X axis vs z_m elevation profile";
+      svg.appendChild(axis);
+    }
+
+    draw("xy", "xy");
+    draw("xz", "xz");
+    window.addEventListener("resize", () => {
+      draw("xy", "xy");
+      draw("xz", "xz");
+    });
+  </script>
+</body>
+</html>

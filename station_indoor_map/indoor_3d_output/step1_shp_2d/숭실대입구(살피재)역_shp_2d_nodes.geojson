@@ -1,0 +1,18 @@
+{
+"type": "FeatureCollection",
+"name": "숭실대입구(살피재)역_shp_2d_nodes",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::5179" } },
+"features": [
+{ "type": "Feature", "properties": { "id": "station_centroid", "kind": "station_centroid", "entrance_no": null }, "geometry": { "type": "Point", "coordinates": [ 951704.462491312762722, 1944256.111368785379454 ] } },
+{ "type": "Feature", "properties": { "id": "axis_start", "kind": "axis_endpoint", "entrance_no": null }, "geometry": { "type": "Point", "coordinates": [ 951748.768772344687022, 1944175.875517102656886 ] } },
+{ "type": "Feature", "properties": { "id": "axis_end", "kind": "axis_endpoint", "entrance_no": null }, "geometry": { "type": "Point", "coordinates": [ 951644.687699689646251, 1944325.595653073396534 ] } },
+{ "type": "Feature", "properties": { "id": "entrance_3", "kind": "entrance", "entrance_no": "3" }, "geometry": { "type": "Point", "coordinates": [ 951720.43437501299195, 1944242.4052056199871 ] } },
+{ "type": "Feature", "properties": { "id": "axis_projection_entrance_3", "kind": "axis_projection", "entrance_no": "3" }, "geometry": { "type": "Point", "coordinates": [ 951708.356201292714104, 1944234.008811451727524 ] } },
+{ "type": "Feature", "properties": { "id": "entrance_1", "kind": "entrance", "entrance_no": "1" }, "geometry": { "type": "Point", "coordinates": [ 951749.089622123050503, 1944183.354913719929755 ] } },
+{ "type": "Feature", "properties": { "id": "axis_projection_entrance_1", "kind": "axis_projection", "entrance_no": "1" }, "geometry": { "type": "Point", "coordinates": [ 951745.367888297187164, 1944180.767672890797257 ] } },
+{ "type": "Feature", "properties": { "id": "entrance_2", "kind": "entrance", "entrance_no": "2" }, "geometry": { "type": "Point", "coordinates": [ 951709.125343412044458, 1944239.836582960095257 ] } },
+{ "type": "Feature", "properties": { "id": "axis_projection_entrance_2", "kind": "axis_projection", "entrance_no": "2" }, "geometry": { "type": "Point", "coordinates": [ 951705.87545410101302, 1944237.577354678418487 ] } },
+{ "type": "Feature", "properties": { "id": "entrance_4", "kind": "entrance", "entrance_no": "4" }, "geometry": { "type": "Point", "coordinates": [ 951757.715809253044426, 1944188.172140369890258 ] } },
+{ "type": "Feature", "properties": { "id": "axis_projection_entrance_4", "kind": "axis_projection", "entrance_no": "4" }, "geometry": { "type": "Point", "coordinates": [ 951745.920667885337025, 1944179.972502039978281 ] } }
+]
+}

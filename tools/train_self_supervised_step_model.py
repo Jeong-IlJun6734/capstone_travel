@@ -100,7 +100,7 @@ def main() -> None:
     ]
     step_threshold = clamp(
         mean(step_probabilities) - 0.25 * stddev(step_probabilities),
-        0.45,
+        0.3,
         0.8,
     )
 
@@ -302,15 +302,15 @@ def find_candidate_indices(values: list[float]) -> list[int]:
     last_candidate_index = -1000
     for index in range(2, len(values) - 2):
         window = values[max(0, index - baseline_window) : index]
-        baseline = mean(window) + 0.35 * stddev(window) if window else values[index]
+        baseline = mean(window) + 0.25 * stddev(window) if window else values[index]
         value = values[index]
-        if value < baseline or value < 0.2:
+        if value < baseline or value < 0.12:
             continue
         if not (value >= values[index - 1] and value >= values[index + 1]):
             continue
         if value < max(values[index - 2], values[index + 2]):
             continue
-        if index - last_candidate_index < 3:
+        if index - last_candidate_index < 2:
             continue
         candidates.append(index)
         last_candidate_index = index
@@ -321,7 +321,7 @@ def estimate_active_threshold(values: list[float], index: int) -> float:
     window = values[max(0, index - 20) : index]
     if not window:
         return max(1.1, values[index])
-    return max(1.1, mean(window) + 0.4 * stddev(window))
+    return max(0.8, mean(window) + 0.3 * stddev(window))
 
 
 def estimate_prominence(values: list[float], index: int) -> float:

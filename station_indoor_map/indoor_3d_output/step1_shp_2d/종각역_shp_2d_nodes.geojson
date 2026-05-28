@@ -1,0 +1,22 @@
+{
+"type": "FeatureCollection",
+"name": "종각역_shp_2d_nodes",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::5179" } },
+"features": [
+{ "type": "Feature", "properties": { "id": "station_centroid", "kind": "station_centroid", "entrance_no": null }, "geometry": { "type": "Point", "coordinates": [ 954366.453842125483789, 1952441.496900355443358 ] } },
+{ "type": "Feature", "properties": { "id": "axis_start", "kind": "axis_endpoint", "entrance_no": null }, "geometry": { "type": "Point", "coordinates": [ 954275.37702401203569, 1952451.786441060015932 ] } },
+{ "type": "Feature", "properties": { "id": "axis_end", "kind": "axis_endpoint", "entrance_no": null }, "geometry": { "type": "Point", "coordinates": [ 954457.710685928468592, 1952450.044435949064791 ] } },
+{ "type": "Feature", "properties": { "id": "entrance_6", "kind": "entrance", "entrance_no": "6" }, "geometry": { "type": "Point", "coordinates": [ 954285.728483221959323, 1952436.330551429884508 ] } },
+{ "type": "Feature", "properties": { "id": "axis_projection_entrance_6", "kind": "axis_projection", "entrance_no": "6" }, "geometry": { "type": "Point", "coordinates": [ 954285.875189635436982, 1952451.686142201535404 ] } },
+{ "type": "Feature", "properties": { "id": "entrance_1", "kind": "entrance", "entrance_no": "1" }, "geometry": { "type": "Point", "coordinates": [ 954284.960548416012898, 1952448.693464600015432 ] } },
+{ "type": "Feature", "properties": { "id": "axis_projection_entrance_1", "kind": "axis_projection", "entrance_no": "1" }, "geometry": { "type": "Point", "coordinates": [ 954284.989221151568927, 1952451.694606692297384 ] } },
+{ "type": "Feature", "properties": { "id": "entrance_4", "kind": "entrance", "entrance_no": "4" }, "geometry": { "type": "Point", "coordinates": [ 954388.973912607994862, 1952434.990382760064676 ] } },
+{ "type": "Feature", "properties": { "id": "axis_projection_entrance_4", "kind": "axis_projection", "entrance_no": "4" }, "geometry": { "type": "Point", "coordinates": [ 954389.123998590745032, 1952450.699709136970341 ] } },
+{ "type": "Feature", "properties": { "id": "entrance_3", "kind": "entrance", "entrance_no": "3" }, "geometry": { "type": "Point", "coordinates": [ 954389.368841327028349, 1952447.850223599933088 ] } },
+{ "type": "Feature", "properties": { "id": "axis_projection_entrance_3", "kind": "axis_projection", "entrance_no": "3" }, "geometry": { "type": "Point", "coordinates": [ 954389.396040313295089, 1952450.697110066190362 ] } },
+{ "type": "Feature", "properties": { "id": "entrance_2", "kind": "entrance", "entrance_no": "2" }, "geometry": { "type": "Point", "coordinates": [ 954328.189764345996082, 1952449.231240819906816 ] } },
+{ "type": "Feature", "properties": { "id": "axis_projection_entrance_2", "kind": "axis_projection", "entrance_no": "2" }, "geometry": { "type": "Point", "coordinates": [ 954328.209354160586372, 1952451.281684076646343 ] } },
+{ "type": "Feature", "properties": { "id": "entrance_5", "kind": "entrance", "entrance_no": "5" }, "geometry": { "type": "Point", "coordinates": [ 954327.147824381943792, 1952434.92800603993237 ] } },
+{ "type": "Feature", "properties": { "id": "axis_projection_entrance_5", "kind": "axis_projection", "entrance_no": "5" }, "geometry": { "type": "Point", "coordinates": [ 954327.304149087751284, 1952451.290332352975383 ] } }
+]
+}

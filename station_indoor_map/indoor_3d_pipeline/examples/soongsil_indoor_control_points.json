@@ -1,0 +1,34 @@
+{
+  "station_name": "숭실대입구(살피재)역",
+  "source_image": "station_image/7/숭실대입구.jpg",
+  "control_points": [
+    {
+      "entrance_no": "1",
+      "image_xy": [
+        325,
+        632
+      ]
+    },
+    {
+      "entrance_no": "2",
+      "image_xy": [
+        1117,
+        584
+      ]
+    },
+    {
+      "entrance_no": "3",
+      "image_xy": [
+        1187,
+        1035
+      ]
+    },
+    {
+      "entrance_no": "4",
+      "image_xy": [
+        371,
+        1155
+      ]
+    }
+  ]
+}

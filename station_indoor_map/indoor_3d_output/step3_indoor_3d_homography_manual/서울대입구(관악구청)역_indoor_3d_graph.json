@@ -1,0 +1,858 @@
+{
+  "station_name": "서울대입구(관악구청)역",
+  "crs": "EPSG:5179",
+  "registration": {
+    "station_name": "서울대입구(관악구청)역",
+    "crs": "EPSG:5179",
+    "image": ".\\station_image\\2\\서울대입구.jpg",
+    "image_size": [
+      3376,
+      3375
+    ],
+    "transform_type": "homography",
+    "image_to_map_transform": [
+      [
+        184.17156892221954,
+        296.58116163044417,
+        951530.014570658
+      ],
+      [
+        376.22881479072555,
+        605.2659806267624,
+        1942199.7424820866
+      ],
+      [
+        0.00019362648986859915,
+        0.00031149308988460023,
+        1.0
+      ]
+    ],
+    "map_to_image_transform": [
+      [
+        -5.569271726157147,
+        3.6478393000246836,
+        -1785503.3423857123
+      ],
+      [
+        3.282516117639284,
+        1.368847614890315,
+        -5781988.094382916
+      ],
+      [
+        5.587744738078029e-05,
+        -0.0011327048924118569,
+        2147.770082030103
+      ]
+    ],
+    "image_to_map_affine": [
+      [
+        184.17156892221954,
+        296.58116163044417,
+        951530.014570658
+      ],
+      [
+        376.22881479072555,
+        605.2659806267624,
+        1942199.7424820866
+      ],
+      [
+        0.00019362648986859915,
+        0.00031149308988460023,
+        1.0
+      ]
+    ],
+    "map_to_image_affine": [
+      [
+        -5.569271726157147,
+        3.6478393000246836,
+        -1785503.3423857123
+      ],
+      [
+        3.282516117639284,
+        1.368847614890315,
+        -5781988.094382916
+      ],
+      [
+        5.587744738078029e-05,
+        -0.0011327048924118569,
+        2147.770082030103
+      ]
+    ],
+    "meters_per_pixel_estimate": 546.4556852814108,
+    "control_point_count": 8,
+    "rmse_m": 4.256780451480549,
+    "residuals": [
+      {
+        "entrance_no": "1",
+        "status": "used",
+        "image_xy": [
+          997,
+          1448
+        ],
+        "expected_map_xy": [
+          951651.6181822,
+          1942552.62479624
+        ],
+        "predicted_map_xy": [
+          951651.5947782687,
+          1942551.6024411968
+        ],
+        "error_m": 1.0226228914632873
+      },
+      {
+        "entrance_no": "2",
+        "status": "used",
+        "image_xy": [
+          1167,
+          1260
+        ],
+        "expected_map_xy": [
+          951624.567782127,
+          1942540.5094962
+        ],
+        "predicted_map_xy": [
+          951624.562565054,
+          1942541.7604769734
+        ],
+        "error_m": 1.2509916520320346
+      },
+      {
+        "entrance_no": "3",
+        "status": "used",
+        "image_xy": [
+          1619,
+          1131
+        ],
+        "expected_map_xy": [
+          951587.729482075,
+          1942556.16939615
+        ],
+        "predicted_map_xy": [
+          951588.5082878416,
+          1942555.4830657288
+        ],
+        "error_m": 1.038069298776794
+      },
+      {
+        "entrance_no": "4",
+        "status": "used",
+        "image_xy": [
+          1996,
+          1137
+        ],
+        "expected_map_xy": [
+          951572.609997194,
+          1942577.14100227
+        ],
+        "predicted_map_xy": [
+          951571.5059820923,
+          1942577.4393765682
+        ],
+        "error_m": 1.1436243118251694
+      },
+      {
+        "entrance_no": "5",
+        "status": "used",
+        "image_xy": [
+          2282,
+          1428
+        ],
+        "expected_map_xy": [
+          951585.726382168,
+          1942617.75399615
+        ],
+        "predicted_map_xy": [
+          951586.416307118,
+          1942617.429883233
+        ],
+        "error_m": 0.7622634844054464
+      },
+      {
+        "entrance_no": "6",
+        "status": "used",
+        "image_xy": [
+          2100,
+          1609
+        ],
+        "expected_map_xy": [
+          951607.905182238,
+          1942633.07139619
+        ],
+        "predicted_map_xy": [
+          951610.1140801803,
+          1942623.784085223
+        ],
+        "error_m": 9.546380210172599
+      },
+      {
+        "entrance_no": "7",
+        "status": "used",
+        "image_xy": [
+          1674,
+          1814
+        ],
+        "expected_map_xy": [
+          951647.122182297,
+          1942620.57149625
+        ],
+        "predicted_map_xy": [
+          951646.852502369,
+          1942621.033324379
+        ],
+        "error_m": 0.5348013502731271
+      },
+      {
+        "entrance_no": "8",
+        "status": "used",
+        "image_xy": [
+          1325,
+          1773
+        ],
+        "expected_map_xy": [
+          951656.758382278,
+          1942595.75949626
+        ],
+        "predicted_map_xy": [
+          951661.2998426314,
+          1942600.9882572037
+        ],
+        "error_m": 6.925662650498474
+      }
+    ]
+  },
+  "floor_depths_m": {
+    "ground": 0.0,
+    "G": 0.0,
+    "1F": 0.0,
+    "B1": -4.0,
+    "B2": -8.0,
+    "B3": -12.0,
+    "B4": -16.0
+  },
+  "nodes": [
+    {
+      "id": "exit_1_connection",
+      "kind": "entrance_connection",
+      "floor": "B1",
+      "image_xy": [
+        997,
+        1448
+      ],
+      "map_xy": [
+        951651.5947782687,
+        1942551.6024411968
+      ],
+      "z_m": -4.0,
+      "map_xyz": [
+        951651.5947782687,
+        1942551.6024411968,
+        -4.0
+      ],
+      "entrance_no": "1"
+    },
+    {
+      "id": "exit_2_connection",
+      "kind": "entrance_connection",
+      "floor": "B1",
+      "image_xy": [
+        1167,
+        1260
+      ],
+      "map_xy": [
+        951624.562565054,
+        1942541.7604769734
+      ],
+      "z_m": -4.0,
+      "map_xyz": [
+        951624.562565054,
+        1942541.7604769734,
+        -4.0
+      ],
+      "entrance_no": "2"
+    },
+    {
+      "id": "exit_3_connection",
+      "kind": "entrance_connection",
+      "floor": "B1",
+      "image_xy": [
+        1619,
+        1131
+      ],
+      "map_xy": [
+        951588.5082878416,
+        1942555.4830657288
+      ],
+      "z_m": -4.0,
+      "map_xyz": [
+        951588.5082878416,
+        1942555.4830657288,
+        -4.0
+      ],
+      "entrance_no": "3"
+    },
+    {
+      "id": "exit_4_connection",
+      "kind": "entrance_connection",
+      "floor": "B1",
+      "image_xy": [
+        1996,
+        1137
+      ],
+      "map_xy": [
+        951571.5059820923,
+        1942577.4393765682
+      ],
+      "z_m": -4.0,
+      "map_xyz": [
+        951571.5059820923,
+        1942577.4393765682,
+        -4.0
+      ],
+      "entrance_no": "4"
+    },
+    {
+      "id": "exit_5_connection",
+      "kind": "entrance_connection",
+      "floor": "B1",
+      "image_xy": [
+        2282,
+        1428
+      ],
+      "map_xy": [
+        951586.416307118,
+        1942617.429883233
+      ],
+      "z_m": -4.0,
+      "map_xyz": [
+        951586.416307118,
+        1942617.429883233,
+        -4.0
+      ],
+      "entrance_no": "5"
+    },
+    {
+      "id": "exit_6_connection",
+      "kind": "entrance_connection",
+      "floor": "B1",
+      "image_xy": [
+        2100,
+        1609
+      ],
+      "map_xy": [
+        951610.1140801803,
+        1942623.784085223
+      ],
+      "z_m": -4.0,
+      "map_xyz": [
+        951610.1140801803,
+        1942623.784085223,
+        -4.0
+      ],
+      "entrance_no": "6"
+    },
+    {
+      "id": "exit_7_connection",
+      "kind": "entrance_connection",
+      "floor": "B1",
+      "image_xy": [
+        1674,
+        1814
+      ],
+      "map_xy": [
+        951646.852502369,
+        1942621.033324379
+      ],
+      "z_m": -4.0,
+      "map_xyz": [
+        951646.852502369,
+        1942621.033324379,
+        -4.0
+      ],
+      "entrance_no": "7"
+    },
+    {
+      "id": "exit_8_connection",
+      "kind": "entrance_connection",
+      "floor": "B1",
+      "image_xy": [
+        1325,
+        1773
+      ],
+      "map_xy": [
+        951661.2998426314,
+        1942600.9882572037
+      ],
+      "z_m": -4.0,
+      "map_xyz": [
+        951661.2998426314,
+        1942600.9882572037,
+        -4.0
+      ],
+      "entrance_no": "8"
+    },
+    {
+      "id": "b1_west_hall",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [
+        1245,
+        1875
+      ],
+      "map_xy": [
+        951673.5928883797,
+        1942605.948873798
+      ],
+      "z_m": -4.0,
+      "map_xyz": [
+        951673.5928883797,
+        1942605.948873798,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_center_hall",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [
+        1600,
+        1785
+      ],
+      "map_xy": [
+        951648.1925500879,
+        1942615.2482350206
+      ],
+      "z_m": -4.0,
+      "map_xyz": [
+        951648.1925500879,
+        1942615.2482350206,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_east_hall",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [
+        1975,
+        1630
+      ],
+      "map_xy": [
+        951617.5497871864,
+        1942619.8268331094
+      ],
+      "z_m": -4.0,
+      "map_xyz": [
+        951617.5497871864,
+        1942619.8268331094,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_information",
+      "kind": "information",
+      "floor": "B1",
+      "image_xy": [
+        1885,
+        1550
+      ],
+      "map_xy": [
+        951614.8991066602,
+        1942608.99213634
+      ],
+      "z_m": -4.0,
+      "map_xyz": [
+        951614.8991066602,
+        1942608.99213634,
+        -4.0
+      ]
+    },
+    {
+      "id": "b1_west_stairs_to_b2",
+      "kind": "stairs_start",
+      "floor": "B1",
+      "image_xy": [
+        1190,
+        2145
+      ],
+      "map_xy": [
+        951696.5324581654,
+        1942625.7951007823
+      ],
+      "z_m": -4.0,
+      "map_xyz": [
+        951696.5324581654,
+        1942625.7951007823,
+        -4.0
+      ]
+    },
+    {
+      "id": "b2_west_stairs_from_b1",
+      "kind": "stairs_end",
+      "floor": "B2",
+      "image_xy": [
+        1015,
+        2560
+      ],
+      "map_xy": [
+        951733.4375501628,
+        1942649.8601387166
+      ],
+      "z_m": -8.0,
+      "map_xyz": [
+        951733.4375501628,
+        1942649.8601387166,
+        -8.0
+      ]
+    },
+    {
+      "id": "b1_center_stairs_to_b2",
+      "kind": "stairs_start",
+      "floor": "B1",
+      "image_xy": [
+        1540,
+        2095
+      ],
+      "map_xy": [
+        951674.7743377192,
+        1942637.1634094983
+      ],
+      "z_m": -4.0,
+      "map_xyz": [
+        951674.7743377192,
+        1942637.1634094983,
+        -4.0
+      ]
+    },
+    {
+      "id": "b2_center_stairs_from_b1",
+      "kind": "stairs_end",
+      "floor": "B2",
+      "image_xy": [
+        1570,
+        2385
+      ],
+      "map_xy": [
+        951693.322789818,
+        1942659.3350012486
+      ],
+      "z_m": -8.0,
+      "map_xyz": [
+        951693.322789818,
+        1942659.3350012486,
+        -8.0
+      ]
+    },
+    {
+      "id": "b1_east_stairs_to_b2",
+      "kind": "stairs_start",
+      "floor": "B1",
+      "image_xy": [
+        2080,
+        1885
+      ],
+      "map_xy": [
+        951633.3285799678,
+        1942644.0215022627
+      ],
+      "z_m": -4.0,
+      "map_xyz": [
+        951633.3285799678,
+        1942644.0215022627,
+        -4.0
+      ]
+    },
+    {
+      "id": "b2_east_stairs_from_b1",
+      "kind": "stairs_end",
+      "floor": "B2",
+      "image_xy": [
+        2295,
+        2260
+      ],
+      "map_xy": [
+        951651.2098468271,
+        1942677.623324492
+      ],
+      "z_m": -8.0,
+      "map_xyz": [
+        951651.2098468271,
+        1942677.623324492,
+        -8.0
+      ]
+    },
+    {
+      "id": "b1_elevator",
+      "kind": "elevator",
+      "floor": "B1",
+      "image_xy": [
+        1830,
+        1660
+      ],
+      "map_xy": [
+        951626.8217424046,
+        1942615.609246932
+      ],
+      "z_m": -4.0,
+      "map_xyz": [
+        951626.8217424046,
+        1942615.609246932,
+        -4.0
+      ]
+    },
+    {
+      "id": "b2_elevator",
+      "kind": "elevator",
+      "floor": "B2",
+      "image_xy": [
+        1865,
+        2225
+      ],
+      "map_xy": [
+        951668.2149797883,
+        1942659.625143309
+      ],
+      "z_m": -8.0,
+      "map_xyz": [
+        951668.2149797883,
+        1942659.625143309,
+        -8.0
+      ]
+    },
+    {
+      "id": "platform_west",
+      "kind": "platform",
+      "floor": "B2",
+      "image_xy": [
+        535,
+        2605
+      ],
+      "map_xy": [
+        951763.7023459563,
+        1942633.1058046643
+      ],
+      "z_m": -8.0,
+      "map_xyz": [
+        951763.7023459563,
+        1942633.1058046643,
+        -8.0
+      ],
+      "direction": "to_nakseongdae"
+    },
+    {
+      "id": "platform_center",
+      "kind": "platform",
+      "floor": "B2",
+      "image_xy": [
+        1680,
+        2465
+      ],
+      "map_xy": [
+        951693.1602982961,
+        1942668.850679043
+      ],
+      "z_m": -8.0,
+      "map_xyz": [
+        951693.1602982961,
+        1942668.850679043,
+        -8.0
+      ]
+    },
+    {
+      "id": "platform_east",
+      "kind": "platform",
+      "floor": "B2",
+      "image_xy": [
+        2875,
+        2135
+      ],
+      "map_xy": [
+        951618.5006010211,
+        1942689.580055395
+      ],
+      "z_m": -8.0,
+      "map_xyz": [
+        951618.5006010211,
+        1942689.580055395,
+        -8.0
+      ],
+      "direction": "to_bongcheon"
+    }
+  ],
+  "edges": [
+    {
+      "from": "exit_1_connection",
+      "to": "b1_west_hall",
+      "kind": "walk",
+      "distance_2d_m": 58.62978411116007,
+      "distance_3d_m": 58.62978411116007
+    },
+    {
+      "from": "exit_2_connection",
+      "to": "b1_west_hall",
+      "kind": "walk",
+      "distance_2d_m": 80.77204276431877,
+      "distance_3d_m": 80.77204276431877
+    },
+    {
+      "from": "exit_3_connection",
+      "to": "b1_center_hall",
+      "kind": "walk",
+      "distance_2d_m": 84.46352242456237,
+      "distance_3d_m": 84.46352242456237
+    },
+    {
+      "from": "exit_4_connection",
+      "to": "b1_east_hall",
+      "kind": "walk",
+      "distance_2d_m": 62.58377153522201,
+      "distance_3d_m": 62.58377153522201
+    },
+    {
+      "from": "exit_5_connection",
+      "to": "b1_east_hall",
+      "kind": "walk",
+      "distance_2d_m": 31.225613682999033,
+      "distance_3d_m": 31.225613682999033
+    },
+    {
+      "from": "exit_6_connection",
+      "to": "b1_east_hall",
+      "kind": "walk",
+      "distance_2d_m": 8.423157541672323,
+      "distance_3d_m": 8.423157541672323
+    },
+    {
+      "from": "exit_7_connection",
+      "to": "b1_center_hall",
+      "kind": "walk",
+      "distance_2d_m": 5.938264626503803,
+      "distance_3d_m": 5.938264626503803
+    },
+    {
+      "from": "exit_8_connection",
+      "to": "b1_west_hall",
+      "kind": "walk",
+      "distance_2d_m": 13.256194429896649,
+      "distance_3d_m": 13.256194429896649
+    },
+    {
+      "from": "b1_west_hall",
+      "to": "b1_center_hall",
+      "kind": "walk",
+      "distance_2d_m": 27.0491276104413,
+      "distance_3d_m": 27.0491276104413
+    },
+    {
+      "from": "b1_center_hall",
+      "to": "b1_east_hall",
+      "kind": "walk",
+      "distance_2d_m": 30.98293850970432,
+      "distance_3d_m": 30.98293850970432
+    },
+    {
+      "from": "b1_center_hall",
+      "to": "b1_information",
+      "kind": "walk",
+      "distance_2d_m": 33.876129442135976,
+      "distance_3d_m": 33.876129442135976
+    },
+    {
+      "from": "b1_east_hall",
+      "to": "b1_elevator",
+      "kind": "walk",
+      "distance_2d_m": 10.186127170396208,
+      "distance_3d_m": 10.186127170396208
+    },
+    {
+      "from": "b1_west_hall",
+      "to": "b1_west_stairs_to_b2",
+      "kind": "walk",
+      "distance_2d_m": 30.33309393172043,
+      "distance_3d_m": 30.33309393172043
+    },
+    {
+      "from": "b1_center_hall",
+      "to": "b1_center_stairs_to_b2",
+      "kind": "walk",
+      "distance_2d_m": 34.450926055233644,
+      "distance_3d_m": 34.450926055233644
+    },
+    {
+      "from": "b1_east_hall",
+      "to": "b1_east_stairs_to_b2",
+      "kind": "walk",
+      "distance_2d_m": 28.885157383621962,
+      "distance_3d_m": 28.885157383621962
+    },
+    {
+      "from": "b1_west_stairs_to_b2",
+      "to": "b2_west_stairs_from_b1",
+      "kind": "stairs",
+      "distance_2d_m": 44.058051093011194,
+      "distance_3d_m": 44.23925707009991
+    },
+    {
+      "from": "b1_center_stairs_to_b2",
+      "to": "b2_center_stairs_from_b1",
+      "kind": "stairs",
+      "distance_2d_m": 28.907171359499937,
+      "distance_3d_m": 29.182607080373977
+    },
+    {
+      "from": "b1_east_stairs_to_b2",
+      "to": "b2_east_stairs_from_b1",
+      "kind": "stairs",
+      "distance_2d_m": 38.06339661174922,
+      "distance_3d_m": 38.272995200576105
+    },
+    {
+      "from": "b1_elevator",
+      "to": "b2_elevator",
+      "kind": "elevator",
+      "distance_2d_m": 60.42184402156304,
+      "distance_3d_m": 60.55410171876132
+    },
+    {
+      "from": "b2_west_stairs_from_b1",
+      "to": "platform_west",
+      "kind": "walk",
+      "distance_2d_m": 34.59285437721795,
+      "distance_3d_m": 34.59285437721795
+    },
+    {
+      "from": "b2_center_stairs_from_b1",
+      "to": "platform_center",
+      "kind": "walk",
+      "distance_2d_m": 9.517065061275469,
+      "distance_3d_m": 9.517065061275469
+    },
+    {
+      "from": "b2_east_stairs_from_b1",
+      "to": "platform_east",
+      "kind": "walk",
+      "distance_2d_m": 34.82611340761537,
+      "distance_3d_m": 34.82611340761537
+    },
+    {
+      "from": "b2_elevator",
+      "to": "platform_center",
+      "kind": "walk",
+      "distance_2d_m": 26.596605517224354,
+      "distance_3d_m": 26.596605517224354
+    },
+    {
+      "from": "platform_west",
+      "to": "platform_center",
+      "kind": "platform",
+      "distance_2d_m": 79.08145504758232,
+      "distance_3d_m": 79.08145504758232
+    },
+    {
+      "from": "platform_center",
+      "to": "platform_east",
+      "kind": "platform",
+      "distance_2d_m": 77.48404636529018,
+      "distance_3d_m": 77.48404636529018
+    }
+  ]
+}

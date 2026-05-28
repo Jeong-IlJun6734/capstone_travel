@@ -119,21 +119,21 @@ class DeadReckoningState {
 
 class DeadReckoningConfig {
   const DeadReckoningConfig({
-    this.stepSensitivity = 0.55,
+    this.stepSensitivity = 0.38,
     this.baseStepLengthMeters = 0.917,
     this.minimumStepLengthMeters = 0.832,
     this.maximumStepLengthMeters = 0.95,
-    this.minStepGap = const Duration(milliseconds: 550),
+    this.minStepGap = const Duration(milliseconds: 420),
     this.headingSmoothing = 0.2,
     this.accelerationFilterAlpha = 0.84,
     this.stepBaselineAlpha = 0.96,
     this.stepRearmHysteresis = 0.35,
-    this.minimumStepPeak = 1.1,
-    this.maximumImuStepGyroscopeMagnitude = 2.2,
-    this.maximumRapidTurnDegrees = 70,
+    this.minimumStepPeak = 0.8,
+    this.maximumImuStepGyroscopeMagnitude = 3.2,
+    this.maximumRapidTurnDegrees = 95,
     this.rapidTurnWindow = const Duration(milliseconds: 1200),
-    this.maximumAngularVelocityDegreesPerSecond = 85,
-    this.rapidTurnCooldown = const Duration(milliseconds: 900),
+    this.maximumAngularVelocityDegreesPerSecond = 120,
+    this.rapidTurnCooldown = const Duration(milliseconds: 650),
   });
 
   final double stepSensitivity;
@@ -349,7 +349,8 @@ class DeadReckoningCalculator {
     final stepBlocked =
         _stepBlockedUntil != null &&
         !sample.timestamp.isAfter(_stepBlockedUntil!);
-    final spacingSatisfied = lastStepTimestamp == null ||
+    final spacingSatisfied =
+        lastStepTimestamp == null ||
         sample.timestamp.difference(lastStepTimestamp) >= _config.minStepGap;
     final shouldCountStep =
         modelAccepted &&
@@ -532,7 +533,9 @@ class DeadReckoningCalculator {
     required double recentStepIntervalMean,
     required double recentStepIntervalStd,
   }) {
-    final cadenceTarget = recentStepIntervalMean > 0 ? recentStepIntervalMean : 0.9;
+    final cadenceTarget = recentStepIntervalMean > 0
+        ? recentStepIntervalMean
+        : 0.9;
     final cadenceSpread = math.max(0.25, recentStepIntervalStd + 0.18);
     final cadenceDelta = (secondsSincePrevStep - cadenceTarget).abs();
     final normalizedCadence =
@@ -550,8 +553,11 @@ class DeadReckoningCalculator {
     required double gyroscopeMagnitude,
   }) {
     final thresholdScore = _normalizedProgress(thresholdMarginRatio, -0.1, 0.7);
-    final filteredScore =
-        _normalizedProgress(filteredToUserAccelRatio, 0.75, 1.65);
+    final filteredScore = _normalizedProgress(
+      filteredToUserAccelRatio,
+      0.75,
+      1.65,
+    );
     final accelScore = _normalizedProgress(userAccelerationMagnitude, 1.0, 4.8);
     final gyroPenalty = 1.0 - _normalizedProgress(gyroscopeMagnitude, 0.0, 2.2);
     final accelGyroBalance = _normalizedProgress(accelToGyroRatio, 1.1, 9.0);
@@ -577,22 +583,16 @@ class DeadReckoningCalculator {
     required double recentHeadingChange,
     required double angularVelocityDegreesPerSecond,
   }) {
-    final headingScore = 1.0 - _normalizedProgress(
-      headingChangeSincePrevStep.abs(),
-      0.0,
-      55.0,
-    );
-    final rateScore = 1.0 - _normalizedProgress(
-      headingChangeRateSincePrevStep.abs(),
-      0.0,
-      45.0,
-    );
-    final recentScore = 1.0 - _normalizedProgress(recentHeadingChange, 0.0, 40.0);
-    final angularScore = 1.0 - _normalizedProgress(
-      angularVelocityDegreesPerSecond.abs(),
-      0.0,
-      70.0,
-    );
+    final headingScore =
+        1.0 - _normalizedProgress(headingChangeSincePrevStep.abs(), 0.0, 55.0);
+    final rateScore =
+        1.0 -
+        _normalizedProgress(headingChangeRateSincePrevStep.abs(), 0.0, 45.0);
+    final recentScore =
+        1.0 - _normalizedProgress(recentHeadingChange, 0.0, 40.0);
+    final angularScore =
+        1.0 -
+        _normalizedProgress(angularVelocityDegreesPerSecond.abs(), 0.0, 70.0);
     return _clamp01(
       0.34 * headingScore +
           0.26 * rateScore +

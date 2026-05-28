@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/route_in_palette.dart';
 import 'indoor_navigation_page.dart';
+import 'outdoor_navigation_page.dart';
 import 'schedule_management_page.dart';
 
 const _defaultSchedulePreviews = [
@@ -123,7 +124,11 @@ class OverviewPage extends StatelessWidget {
                     _FeatureTile(
                       label: '실외 길찾기',
                       icon: Icons.map_outlined,
-                      onTap: () => _openComingSoon(context, '실외 길찾기'),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => const OutdoorNavigationPage(),
+                        ),
+                      ),
                     ),
                     _FeatureTile(
                       label: '여행중 문제 해결',

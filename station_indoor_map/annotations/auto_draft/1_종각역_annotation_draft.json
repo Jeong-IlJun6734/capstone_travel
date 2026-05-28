@@ -1,0 +1,377 @@
+{
+  "station_name": "종각역",
+  "line_no": "1",
+  "image_width": 3376,
+  "image_height": 3375,
+  "source_image": "station_image/1/종각.jpg",
+  "annotation_status": "manual_internal_graph_draft_needs_geojson_review",
+  "note": "Draft internal routing graph drawn from the lower 3D station guide. SHP already provides real entrance coordinates; control_points are only anchors for image-to-map alignment. Review generated GeoJSON because the guide image is an isometric diagram, not a survey-accurate floor plan.",
+  "control_points": [
+    {
+      "entrance_no": "1",
+      "image_xy": [
+        592,
+        1680
+      ]
+    },
+    {
+      "entrance_no": "2",
+      "image_xy": [
+        623,
+        1395
+      ]
+    },
+    {
+      "entrance_no": "3",
+      "image_xy": [
+        1952,
+        1152
+      ]
+    },
+    {
+      "entrance_no": "4",
+      "image_xy": [
+        1799,
+        1758
+      ]
+    },
+    {
+      "entrance_no": "5",
+      "image_xy": [
+        2378,
+        1455
+      ]
+    },
+    {
+      "entrance_no": "6",
+      "image_xy": [
+        1365,
+        1892
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "exit_1",
+      "kind": "exit",
+      "floor": "B1",
+      "image_xy": [
+        592,
+        1680
+      ]
+    },
+    {
+      "id": "exit_2",
+      "kind": "exit",
+      "floor": "B1",
+      "image_xy": [
+        623,
+        1395
+      ]
+    },
+    {
+      "id": "exit_3",
+      "kind": "exit",
+      "floor": "B1",
+      "image_xy": [
+        1952,
+        1152
+      ]
+    },
+    {
+      "id": "exit_3_1",
+      "kind": "exit_unmapped",
+      "floor": "B1",
+      "image_xy": [
+        824,
+        1322
+      ]
+    },
+    {
+      "id": "exit_4",
+      "kind": "exit",
+      "floor": "B1",
+      "image_xy": [
+        1799,
+        1758
+      ]
+    },
+    {
+      "id": "exit_5",
+      "kind": "exit",
+      "floor": "B2",
+      "image_xy": [
+        2378,
+        1455
+      ]
+    },
+    {
+      "id": "exit_6",
+      "kind": "exit",
+      "floor": "B2",
+      "image_xy": [
+        1365,
+        1892
+      ]
+    },
+    {
+      "id": "b1_west_hall",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [
+        725,
+        1690
+      ]
+    },
+    {
+      "id": "b1_west_corridor",
+      "kind": "corridor",
+      "floor": "B1",
+      "image_xy": [
+        980,
+        1610
+      ]
+    },
+    {
+      "id": "b1_center_hall",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [
+        1325,
+        1585
+      ]
+    },
+    {
+      "id": "b1_information",
+      "kind": "information",
+      "floor": "B1",
+      "image_xy": [
+        1665,
+        1665
+      ]
+    },
+    {
+      "id": "b1_east_hall",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [
+        2050,
+        1510
+      ]
+    },
+    {
+      "id": "b1_east_corridor",
+      "kind": "corridor",
+      "floor": "B1",
+      "image_xy": [
+        2450,
+        1315
+      ]
+    },
+    {
+      "id": "b1_shopping_passage",
+      "kind": "passage",
+      "floor": "B1",
+      "image_xy": [
+        2875,
+        1215
+      ]
+    },
+    {
+      "id": "toilet_west",
+      "kind": "toilet",
+      "floor": "B1",
+      "image_xy": [
+        550,
+        1805
+      ]
+    },
+    {
+      "id": "toilet_east",
+      "kind": "toilet",
+      "floor": "B1",
+      "image_xy": [
+        2165,
+        1430
+      ]
+    },
+    {
+      "id": "stairs_west_to_platform",
+      "kind": "stairs",
+      "floor": "B1-B2",
+      "image_xy": [
+        1095,
+        2105
+      ]
+    },
+    {
+      "id": "stairs_center_to_platform",
+      "kind": "stairs",
+      "floor": "B1-B2",
+      "image_xy": [
+        1595,
+        1875
+      ]
+    },
+    {
+      "id": "stairs_east_to_platform",
+      "kind": "stairs",
+      "floor": "B1-B2",
+      "image_xy": [
+        2075,
+        1710
+      ]
+    },
+    {
+      "id": "stairs_far_east_to_platform",
+      "kind": "stairs",
+      "floor": "B1-B2",
+      "image_xy": [
+        2835,
+        1370
+      ]
+    },
+    {
+      "id": "platform_west",
+      "kind": "platform",
+      "floor": "B2",
+      "image_xy": [
+        920,
+        2400
+      ]
+    },
+    {
+      "id": "platform_center_west",
+      "kind": "platform",
+      "floor": "B2",
+      "image_xy": [
+        1420,
+        2250
+      ]
+    },
+    {
+      "id": "platform_center_east",
+      "kind": "platform",
+      "floor": "B2",
+      "image_xy": [
+        2050,
+        2050
+      ]
+    },
+    {
+      "id": "platform_east",
+      "kind": "platform",
+      "floor": "B2",
+      "image_xy": [
+        2750,
+        1760
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "exit_1",
+      "to": "b1_west_hall"
+    },
+    {
+      "from": "exit_2",
+      "to": "b1_west_corridor"
+    },
+    {
+      "from": "exit_3_1",
+      "to": "b1_west_corridor"
+    },
+    {
+      "from": "exit_3",
+      "to": "b1_east_hall"
+    },
+    {
+      "from": "exit_4",
+      "to": "b1_east_hall"
+    },
+    {
+      "from": "exit_5",
+      "to": "platform_center_east"
+    },
+    {
+      "from": "exit_6",
+      "to": "platform_center_west"
+    },
+    {
+      "from": "b1_west_hall",
+      "to": "b1_west_corridor"
+    },
+    {
+      "from": "b1_west_corridor",
+      "to": "b1_center_hall"
+    },
+    {
+      "from": "b1_center_hall",
+      "to": "b1_information"
+    },
+    {
+      "from": "b1_information",
+      "to": "b1_east_hall"
+    },
+    {
+      "from": "b1_east_hall",
+      "to": "b1_east_corridor"
+    },
+    {
+      "from": "b1_east_corridor",
+      "to": "b1_shopping_passage"
+    },
+    {
+      "from": "b1_west_hall",
+      "to": "toilet_west"
+    },
+    {
+      "from": "b1_east_hall",
+      "to": "toilet_east"
+    },
+    {
+      "from": "b1_west_corridor",
+      "to": "stairs_west_to_platform"
+    },
+    {
+      "from": "b1_center_hall",
+      "to": "stairs_center_to_platform"
+    },
+    {
+      "from": "b1_east_hall",
+      "to": "stairs_east_to_platform"
+    },
+    {
+      "from": "b1_shopping_passage",
+      "to": "stairs_far_east_to_platform"
+    },
+    {
+      "from": "stairs_west_to_platform",
+      "to": "platform_west"
+    },
+    {
+      "from": "stairs_center_to_platform",
+      "to": "platform_center_west"
+    },
+    {
+      "from": "stairs_east_to_platform",
+      "to": "platform_center_east"
+    },
+    {
+      "from": "stairs_far_east_to_platform",
+      "to": "platform_east"
+    },
+    {
+      "from": "platform_west",
+      "to": "platform_center_west"
+    },
+    {
+      "from": "platform_center_west",
+      "to": "platform_center_east"
+    },
+    {
+      "from": "platform_center_east",
+      "to": "platform_east"
+    }
+  ]
+}

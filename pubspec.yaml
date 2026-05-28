@@ -39,6 +39,10 @@ dependencies:
   permission_handler: ^12.0.1
   sensors_plus: ^7.0.0
   vector_math: ^2.1.4
+  flutter_naver_map: 1.4.4
+  http: ^1.6.0
+  geolocator: ^13.0.0
+  google_mlkit_barcode_scanning: ^0.14.2
 
 dev_dependencies:
   flutter_test:

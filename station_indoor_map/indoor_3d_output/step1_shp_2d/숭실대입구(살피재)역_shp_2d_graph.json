@@ -1,0 +1,201 @@
+{
+  "station_name": "숭실대입구(살피재)역",
+  "crs": "EPSG:5179",
+  "station_polygon_geojson": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          951764.236884953,
+          1944186.62859666
+        ],
+        [
+          951748.768584903,
+          1944175.87549664
+        ],
+        [
+          951644.687884921,
+          1944325.5950965
+        ],
+        [
+          951660.155184971,
+          1944336.34829652
+        ],
+        [
+          951764.236884953,
+          1944186.62859666
+        ]
+      ]
+    ]
+  },
+  "nodes": [
+    {
+      "id": "station_centroid",
+      "kind": "station_centroid",
+      "map_xy": [
+        951704.4624913128,
+        1944256.1113687854
+      ]
+    },
+    {
+      "id": "axis_start",
+      "kind": "axis_endpoint",
+      "map_xy": [
+        951748.7687723447,
+        1944175.8755171027
+      ]
+    },
+    {
+      "id": "axis_end",
+      "kind": "axis_endpoint",
+      "map_xy": [
+        951644.6876996896,
+        1944325.5956530734
+      ]
+    },
+    {
+      "id": "entrance_3",
+      "kind": "entrance",
+      "entrance_no": "3",
+      "map_xy": [
+        951720.434375013,
+        1944242.40520562
+      ],
+      "distance_to_station_m": 0.0
+    },
+    {
+      "id": "axis_projection_entrance_3",
+      "kind": "axis_projection",
+      "entrance_no": "3",
+      "map_xy": [
+        951708.3562012927,
+        1944234.0088114517
+      ]
+    },
+    {
+      "id": "entrance_1",
+      "kind": "entrance",
+      "entrance_no": "1",
+      "map_xy": [
+        951749.089622123,
+        1944183.35491372
+      ],
+      "distance_to_station_m": 0.0
+    },
+    {
+      "id": "axis_projection_entrance_1",
+      "kind": "axis_projection",
+      "entrance_no": "1",
+      "map_xy": [
+        951745.3678882972,
+        1944180.7676728908
+      ]
+    },
+    {
+      "id": "entrance_2",
+      "kind": "entrance",
+      "entrance_no": "2",
+      "map_xy": [
+        951709.125343412,
+        1944239.83658296
+      ],
+      "distance_to_station_m": 0.0
+    },
+    {
+      "id": "axis_projection_entrance_2",
+      "kind": "axis_projection",
+      "entrance_no": "2",
+      "map_xy": [
+        951705.875454101,
+        1944237.5773546784
+      ]
+    },
+    {
+      "id": "entrance_4",
+      "kind": "entrance",
+      "entrance_no": "4",
+      "map_xy": [
+        951757.715809253,
+        1944188.17214037
+      ],
+      "distance_to_station_m": 0.0
+    },
+    {
+      "id": "axis_projection_entrance_4",
+      "kind": "axis_projection",
+      "entrance_no": "4",
+      "map_xy": [
+        951745.9206678853,
+        1944179.97250204
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "axis_start",
+      "to": "station_centroid",
+      "kind": "axis",
+      "distance_m": 91.65608781816792
+    },
+    {
+      "from": "station_centroid",
+      "to": "axis_end",
+      "kind": "axis",
+      "distance_m": 91.65746819875056
+    },
+    {
+      "from": "entrance_3",
+      "to": "axis_projection_entrance_3",
+      "kind": "entrance_to_axis",
+      "distance_m": 14.709918947635089
+    },
+    {
+      "from": "entrance_1",
+      "to": "axis_projection_entrance_1",
+      "kind": "entrance_to_axis",
+      "distance_m": 4.532672255800719
+    },
+    {
+      "from": "entrance_2",
+      "to": "axis_projection_entrance_2",
+      "kind": "entrance_to_axis",
+      "distance_m": 3.9580162913616923
+    },
+    {
+      "from": "entrance_4",
+      "to": "axis_projection_entrance_4",
+      "kind": "entrance_to_axis",
+      "distance_m": 14.365215926868768
+    },
+    {
+      "from": "axis_start",
+      "to": "axis_projection_entrance_4",
+      "kind": "axis_chain",
+      "distance_m": 4.989687824704841
+    },
+    {
+      "from": "axis_projection_entrance_4",
+      "to": "axis_projection_entrance_1",
+      "kind": "axis_chain",
+      "distance_m": 0.9684327313072936
+    },
+    {
+      "from": "axis_projection_entrance_1",
+      "to": "axis_projection_entrance_3",
+      "kind": "axis_chain",
+      "distance_m": 64.84199110284365
+    },
+    {
+      "from": "axis_projection_entrance_3",
+      "to": "axis_projection_entrance_2",
+      "kind": "axis_chain",
+      "distance_m": 4.346102551700175
+    },
+    {
+      "from": "axis_projection_entrance_2",
+      "to": "axis_end",
+      "kind": "axis_chain",
+      "distance_m": 107.19683830343658
+    }
+  ]
+}

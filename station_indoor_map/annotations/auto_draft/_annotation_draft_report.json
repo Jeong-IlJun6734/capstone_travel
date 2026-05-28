@@ -1,0 +1,2423 @@
+[
+  {
+    "image": "station_image/1/동대문.jpg",
+    "station_name": "동대문역",
+    "line_no": "1",
+    "detected_exit_labels": 14,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/1_동대문역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/1/동묘앞.jpg",
+    "station_name": "동묘앞역",
+    "line_no": "1",
+    "detected_exit_labels": 26,
+    "control_points": 7,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/1_동묘앞역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/1/서울역.jpg",
+    "station_name": "서울역",
+    "line_no": "1",
+    "detected_exit_labels": 28,
+    "control_points": 6,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/1_서울역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/1/시청.jpg",
+    "station_name": "시청역",
+    "line_no": "1",
+    "detected_exit_labels": 19,
+    "control_points": 6,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/1_시청역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/1/신설동.jpg",
+    "station_name": "신설동역",
+    "line_no": "1",
+    "detected_exit_labels": 26,
+    "control_points": 7,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/1_신설동역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/1/제기동.jpg",
+    "station_name": "제기동역",
+    "line_no": "1",
+    "detected_exit_labels": 11,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/1_제기동역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/1/종각.jpg",
+    "station_name": "종각역",
+    "line_no": "1",
+    "detected_exit_labels": 22,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/1_종각역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/1/종로3가.jpg",
+    "station_name": "종로3가역",
+    "line_no": "1",
+    "detected_exit_labels": 24,
+    "control_points": 7,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/1_종로3가역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/1/종로5가.jpg",
+    "station_name": "종로5가역",
+    "line_no": "1",
+    "detected_exit_labels": 14,
+    "control_points": 6,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/1_종로5가역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/1/청량리.jpg",
+    "station_name": "청량리역",
+    "line_no": "1",
+    "detected_exit_labels": 12,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/1_청량리역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/강남역.jpg",
+    "station_name": "강남역",
+    "line_no": "2",
+    "detected_exit_labels": 31,
+    "control_points": 3,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_강남역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/강변.jpg",
+    "station_name": "강변역",
+    "line_no": "2",
+    "detected_exit_labels": 9,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/2_강변역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/건대입구.jpg",
+    "station_name": "건대입구역",
+    "line_no": "2",
+    "detected_exit_labels": 27,
+    "control_points": 3,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_건대입구역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/교대.jpg",
+    "station_name": "교대역",
+    "line_no": "2",
+    "detected_exit_labels": 26,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/2_교대역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/구의역.jpg",
+    "station_name": "구의역",
+    "line_no": "2",
+    "detected_exit_labels": 16,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/2_구의역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/당산.jpg",
+    "station_name": "당산역",
+    "line_no": "2",
+    "detected_exit_labels": 27,
+    "control_points": 10,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_당산역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/대림역.jpg",
+    "station_name": "대림역",
+    "line_no": "2",
+    "detected_exit_labels": 27,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/2_대림역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/도림천역.jpg",
+    "station_name": "도림천역",
+    "line_no": "2",
+    "detected_exit_labels": 4,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/2_도림천역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/동대문역사문화공원.jpg",
+    "station_name": "동대문역사문화공원역",
+    "line_no": "2",
+    "detected_exit_labels": 30,
+    "control_points": 9,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_동대문역사문화공원역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/뚝섬.jpg",
+    "station_name": "뚝섬역",
+    "line_no": "2",
+    "detected_exit_labels": 15,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_뚝섬역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/문래.jpg",
+    "station_name": "문래역",
+    "line_no": "2",
+    "detected_exit_labels": 14,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_문래역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/방배.jpg",
+    "station_name": "방배역",
+    "line_no": "2",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_방배역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/봉천.jpg",
+    "station_name": "봉천역",
+    "line_no": "2",
+    "detected_exit_labels": 12,
+    "control_points": 3,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_봉천역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/사당.jpg",
+    "station_name": "사당역",
+    "line_no": "2",
+    "detected_exit_labels": 23,
+    "control_points": 7,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_사당역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/삼성역.jpg",
+    "station_name": "삼성역",
+    "line_no": "2",
+    "detected_exit_labels": 25,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/2_삼성역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/상왕십리.jpg",
+    "station_name": "상왕십리역",
+    "line_no": "2",
+    "detected_exit_labels": 13,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_상왕십리역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/서울대입구.jpg",
+    "station_name": "서울대입구역",
+    "line_no": "2",
+    "detected_exit_labels": 27,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/2_서울대입구역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/서초역.jpg",
+    "station_name": "서초역",
+    "line_no": "2",
+    "detected_exit_labels": 17,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_서초역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/선릉역.jpg",
+    "station_name": "선릉역",
+    "line_no": "2",
+    "detected_exit_labels": 37,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_선릉역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/성수.jpg",
+    "station_name": "성수역",
+    "line_no": "2",
+    "detected_exit_labels": 22,
+    "control_points": 3,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_성수역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/시청-수정8.jpg",
+    "station_name": "시청-수정8역",
+    "line_no": "2",
+    "detected_exit_labels": 24,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/2_시청-수정8역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/신답.jpg",
+    "station_name": "신답역",
+    "line_no": "2",
+    "detected_exit_labels": 2,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/2_신답역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/신당.jpg",
+    "station_name": "신당역",
+    "line_no": "2",
+    "detected_exit_labels": 25,
+    "control_points": 8,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_신당역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/신대방.jpg",
+    "station_name": "신대방역",
+    "line_no": "2",
+    "detected_exit_labels": 12,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_신대방역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/신도림.jpg",
+    "station_name": "신도림역",
+    "line_no": "2",
+    "detected_exit_labels": 18,
+    "control_points": 2,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/2_신도림역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/신림.jpg",
+    "station_name": "신림역",
+    "line_no": "2",
+    "detected_exit_labels": 20,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_신림역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/신설동.jpg",
+    "station_name": "신설동역",
+    "line_no": "2",
+    "detected_exit_labels": 21,
+    "control_points": 6,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_신설동역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/신정네거리.jpg",
+    "station_name": "신정네거리역",
+    "line_no": "2",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_신정네거리역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/신촌역.jpg",
+    "station_name": "신촌역",
+    "line_no": "2",
+    "detected_exit_labels": 28,
+    "control_points": 3,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_신촌역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/아현.jpg",
+    "station_name": "아현역",
+    "line_no": "2",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_아현역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/양천구청.jpg",
+    "station_name": "양천구청역",
+    "line_no": "2",
+    "detected_exit_labels": 4,
+    "control_points": 2,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/2_양천구청역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/역삼역.jpg",
+    "station_name": "역삼역",
+    "line_no": "2",
+    "detected_exit_labels": 26,
+    "control_points": 3,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_역삼역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/영등포구청.jpg",
+    "station_name": "영등포구청역",
+    "line_no": "2",
+    "detected_exit_labels": 13,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_영등포구청역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/왕십리.jpg",
+    "station_name": "왕십리역",
+    "line_no": "2",
+    "detected_exit_labels": 28,
+    "control_points": 10,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_왕십리역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/용답.jpg",
+    "station_name": "용답역",
+    "line_no": "2",
+    "detected_exit_labels": 4,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/2_용답역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/용두.jpg",
+    "station_name": "용두역",
+    "line_no": "2",
+    "detected_exit_labels": 10,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/2_용두역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/을지로3가.jpg",
+    "station_name": "을지로3가역",
+    "line_no": "2",
+    "detected_exit_labels": 28,
+    "control_points": 6,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_을지로3가역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/을지로4가.jpg",
+    "station_name": "을지로4가역",
+    "line_no": "2",
+    "detected_exit_labels": 32,
+    "control_points": 6,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_을지로4가역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/을지로입구.jpg",
+    "station_name": "을지로입구역",
+    "line_no": "2",
+    "detected_exit_labels": 21,
+    "control_points": 3,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_을지로입구역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/이대입구.jpg",
+    "station_name": "이대입구역",
+    "line_no": "2",
+    "detected_exit_labels": 19,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/2_이대입구역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/잠실.jpg",
+    "station_name": "잠실역",
+    "line_no": "2",
+    "detected_exit_labels": 22,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/2_잠실역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/잠실나루.jpg",
+    "station_name": "잠실나루역",
+    "line_no": "2",
+    "detected_exit_labels": 11,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_잠실나루역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/잠실새내.jpg",
+    "station_name": "잠실새내역",
+    "line_no": "2",
+    "detected_exit_labels": 14,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_잠실새내역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/종합운동장.jpg",
+    "station_name": "종합운동장역",
+    "line_no": "2",
+    "detected_exit_labels": 22,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_종합운동장역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/충정로역.jpg",
+    "station_name": "충정로역",
+    "line_no": "2",
+    "detected_exit_labels": 20,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/2_충정로역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/한양대.jpg",
+    "station_name": "한양대역",
+    "line_no": "2",
+    "detected_exit_labels": 7,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/2_한양대역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/합정역.jpg",
+    "station_name": "합정역",
+    "line_no": "2",
+    "detected_exit_labels": 28,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/2_합정역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/2/홍대입구.jpg",
+    "station_name": "홍대입구역",
+    "line_no": "2",
+    "detected_exit_labels": 32,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/2_홍대입구역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/가락시장.jpg",
+    "station_name": "가락시장역",
+    "line_no": "3",
+    "detected_exit_labels": 22,
+    "control_points": 7,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_가락시장역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/경복궁.jpg",
+    "station_name": "경복궁역",
+    "line_no": "3",
+    "detected_exit_labels": 19,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/3_경복궁역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/경찰병원.jpg",
+    "station_name": "경찰병원역",
+    "line_no": "3",
+    "detected_exit_labels": 11,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/3_경찰병원역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/고속터미널.jpg",
+    "station_name": "고속터미널역",
+    "line_no": "3",
+    "detected_exit_labels": 39,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_고속터미널역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/교대.jpg",
+    "station_name": "교대역",
+    "line_no": "3",
+    "detected_exit_labels": 24,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/3_교대역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/금호.jpg",
+    "station_name": "금호역",
+    "line_no": "3",
+    "detected_exit_labels": 15,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/3_금호역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/남부터미널.jpg",
+    "station_name": "남부터미널역",
+    "line_no": "3",
+    "detected_exit_labels": 16,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/3_남부터미널역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/대청.jpg",
+    "station_name": "대청역",
+    "line_no": "3",
+    "detected_exit_labels": 15,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_대청역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/대치.jpg",
+    "station_name": "대치역",
+    "line_no": "3",
+    "detected_exit_labels": 18,
+    "control_points": 6,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_대치역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/도곡.jpg",
+    "station_name": "도곡역",
+    "line_no": "3",
+    "detected_exit_labels": 23,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_도곡역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/독립문.jpg",
+    "station_name": "독립문역",
+    "line_no": "3",
+    "detected_exit_labels": 12,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_독립문역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/동대입구.jpg",
+    "station_name": "동대입구역",
+    "line_no": "3",
+    "detected_exit_labels": 12,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_동대입구역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/매봉.jpg",
+    "station_name": "매봉역",
+    "line_no": "3",
+    "detected_exit_labels": 7,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_매봉역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/무악재.jpg",
+    "station_name": "무악재역",
+    "line_no": "3",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_무악재역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/불광.jpg",
+    "station_name": "불광역",
+    "line_no": "3",
+    "detected_exit_labels": 14,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_불광역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/수서.jpg",
+    "station_name": "수서역",
+    "line_no": "3",
+    "detected_exit_labels": 22,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_수서역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/신사.jpg",
+    "station_name": "신사역",
+    "line_no": "3",
+    "detected_exit_labels": 20,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_신사역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/안국.jpg",
+    "station_name": "안국역",
+    "line_no": "3",
+    "detected_exit_labels": 14,
+    "control_points": 3,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_안국역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/압구정.jpg",
+    "station_name": "압구정역",
+    "line_no": "3",
+    "detected_exit_labels": 11,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_압구정역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/약수.jpg",
+    "station_name": "약수역",
+    "line_no": "3",
+    "detected_exit_labels": 24,
+    "control_points": 7,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_약수역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/양재.jpg",
+    "station_name": "양재역",
+    "line_no": "3",
+    "detected_exit_labels": 19,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/3_양재역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/연신내.jpg",
+    "station_name": "연신내역",
+    "line_no": "3",
+    "detected_exit_labels": 13,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_연신내역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/오금.jpg",
+    "station_name": "오금역",
+    "line_no": "3",
+    "detected_exit_labels": 22,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_오금역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/옥수.jpg",
+    "station_name": "옥수역",
+    "line_no": "3",
+    "detected_exit_labels": 14,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_옥수역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/을지로3가.jpg",
+    "station_name": "을지로3가역",
+    "line_no": "3",
+    "detected_exit_labels": 25,
+    "control_points": 7,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_을지로3가역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/일원.jpg",
+    "station_name": "일원역",
+    "line_no": "3",
+    "detected_exit_labels": 13,
+    "control_points": 3,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_일원역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/잠원.jpg",
+    "station_name": "잠원역",
+    "line_no": "3",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_잠원역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/종로3가.jpg",
+    "station_name": "종로3가역",
+    "line_no": "3",
+    "detected_exit_labels": 25,
+    "control_points": 8,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_종로3가역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/지축.jpg",
+    "station_name": "지축역",
+    "line_no": "3",
+    "detected_exit_labels": 4,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/3_지축역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/충무로.jpg",
+    "station_name": "충무로역",
+    "line_no": "3",
+    "detected_exit_labels": 24,
+    "control_points": 6,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_충무로역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/학여울.jpg",
+    "station_name": "학여울역",
+    "line_no": "3",
+    "detected_exit_labels": 3,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/3_학여울역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/3/홍제.jpg",
+    "station_name": "홍제역",
+    "line_no": "3",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/3_홍제역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/길음.jpg",
+    "station_name": "길음역",
+    "line_no": "4",
+    "detected_exit_labels": 20,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/4_길음역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/남태령.jpg",
+    "station_name": "남태령역",
+    "line_no": "4",
+    "detected_exit_labels": 10,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/4_남태령역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/노원.jpg",
+    "station_name": "노원역",
+    "line_no": "4",
+    "detected_exit_labels": 23,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/4_노원역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/당고개.jpg",
+    "station_name": "당고개역",
+    "line_no": "4",
+    "detected_exit_labels": 12,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/4_당고개역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/동대문.jpg",
+    "station_name": "동대문역",
+    "line_no": "4",
+    "detected_exit_labels": 24,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/4_동대문역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/동대문역사문화공원.jpg",
+    "station_name": "동대문역사문화공원역",
+    "line_no": "4",
+    "detected_exit_labels": 32,
+    "control_points": 11,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/4_동대문역사문화공원역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/동작.jpg",
+    "station_name": "동작역",
+    "line_no": "4",
+    "detected_exit_labels": 22,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/4_동작역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/미아.jpg",
+    "station_name": "미아역",
+    "line_no": "4",
+    "detected_exit_labels": 15,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/4_미아역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/미아사거리.jpg",
+    "station_name": "미아사거리역",
+    "line_no": "4",
+    "detected_exit_labels": 11,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/4_미아사거리역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/사당.jpg",
+    "station_name": "사당역",
+    "line_no": "4",
+    "detected_exit_labels": 26,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/4_사당역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/삼각지.jpg",
+    "station_name": "삼각지역",
+    "line_no": "4",
+    "detected_exit_labels": 30,
+    "control_points": 8,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/4_삼각지역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/상계.jpg",
+    "station_name": "상계역",
+    "line_no": "4",
+    "detected_exit_labels": 12,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/4_상계역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/서울역.jpg",
+    "station_name": "서울역",
+    "line_no": "4",
+    "detected_exit_labels": 25,
+    "control_points": 8,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/4_서울역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/성신여대입구.jpg",
+    "station_name": "성신여대입구역",
+    "line_no": "4",
+    "detected_exit_labels": 12,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/4_성신여대입구역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/수유.jpg",
+    "station_name": "수유역",
+    "line_no": "4",
+    "detected_exit_labels": 17,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/4_수유역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/숙대입구.jpg",
+    "station_name": "숙대입구역",
+    "line_no": "4",
+    "detected_exit_labels": 20,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/4_숙대입구역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/신용산.jpg",
+    "station_name": "신용산역",
+    "line_no": "4",
+    "detected_exit_labels": 11,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/4_신용산역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/이촌.jpg",
+    "station_name": "이촌역",
+    "line_no": "4",
+    "detected_exit_labels": 11,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/4_이촌역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/창동.jpg",
+    "station_name": "창동역",
+    "line_no": "4",
+    "detected_exit_labels": 6,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/4_창동역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/총신대입구.jpg",
+    "station_name": "총신대입구역",
+    "line_no": "4",
+    "detected_exit_labels": 31,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/4_총신대입구역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/충무로.jpg",
+    "station_name": "충무로역",
+    "line_no": "4",
+    "detected_exit_labels": 26,
+    "control_points": 6,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/4_충무로역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/한성대입구.jpg",
+    "station_name": "한성대입구역",
+    "line_no": "4",
+    "detected_exit_labels": 14,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/4_한성대입구역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/혜화.jpg",
+    "station_name": "혜화역",
+    "line_no": "4",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/4_혜화역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/4/회현.jpg",
+    "station_name": "회현역",
+    "line_no": "4",
+    "detected_exit_labels": 20,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/4_회현역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/강동.jpg",
+    "station_name": "강동역",
+    "line_no": "5",
+    "detected_exit_labels": 10,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_강동역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/강일.jpg",
+    "station_name": "강일역",
+    "line_no": "5",
+    "detected_exit_labels": 4,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_강일역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/개롱.jpg",
+    "station_name": "개롱역",
+    "line_no": "5",
+    "detected_exit_labels": 8,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_개롱역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/개화산.jpg",
+    "station_name": "개화산역",
+    "line_no": "5",
+    "detected_exit_labels": 4,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_개화산역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/거여.jpg",
+    "station_name": "거여역",
+    "line_no": "5",
+    "detected_exit_labels": 17,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_거여역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/고덕.jpg",
+    "station_name": "고덕역",
+    "line_no": "5",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_고덕역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/공덕.jpg",
+    "station_name": "공덕역",
+    "line_no": "5",
+    "detected_exit_labels": 26,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_공덕역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/광나루.jpg",
+    "station_name": "광나루역",
+    "line_no": "5",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_광나루역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/광화문.jpg",
+    "station_name": "광화문역",
+    "line_no": "5",
+    "detected_exit_labels": 20,
+    "control_points": 6,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_광화문역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/군자.jpg",
+    "station_name": "군자역",
+    "line_no": "5",
+    "detected_exit_labels": 16,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_군자역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/굽은다리역.jpg",
+    "station_name": "굽은다리역",
+    "line_no": "5",
+    "detected_exit_labels": 7,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_굽은다리역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/길동.jpg",
+    "station_name": "길동역",
+    "line_no": "5",
+    "detected_exit_labels": 7,
+    "control_points": 2,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_길동역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/김포공항.jpg",
+    "station_name": "김포공항역",
+    "line_no": "5",
+    "detected_exit_labels": 22,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_김포공항역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/까치산.jpg",
+    "station_name": "까치산역",
+    "line_no": "5",
+    "detected_exit_labels": 9,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_까치산역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/답십리.jpg",
+    "station_name": "답십리역",
+    "line_no": "5",
+    "detected_exit_labels": 14,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_답십리역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/동대문역사문화공원.jpg",
+    "station_name": "동대문역사문화공원역",
+    "line_no": "5",
+    "detected_exit_labels": 16,
+    "control_points": 6,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_동대문역사문화공원역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/둔촌동.jpg",
+    "station_name": "둔촌동역",
+    "line_no": "5",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_둔촌동역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/마곡.jpg",
+    "station_name": "마곡역",
+    "line_no": "5",
+    "detected_exit_labels": 9,
+    "control_points": 3,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_마곡역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/마장.jpg",
+    "station_name": "마장역",
+    "line_no": "5",
+    "detected_exit_labels": 7,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_마장역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/마천.jpg",
+    "station_name": "마천역",
+    "line_no": "5",
+    "detected_exit_labels": 4,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_마천역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/마포.jpg",
+    "station_name": "마포역",
+    "line_no": "5",
+    "detected_exit_labels": 10,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_마포역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/명일.jpg",
+    "station_name": "명일역",
+    "line_no": "5",
+    "detected_exit_labels": 7,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_명일역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/목동.jpg",
+    "station_name": "목동역",
+    "line_no": "5",
+    "detected_exit_labels": 16,
+    "control_points": 6,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_목동역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/발산.jpg",
+    "station_name": "발산역",
+    "line_no": "5",
+    "detected_exit_labels": 17,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_발산역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/방이.jpg",
+    "station_name": "방이역",
+    "line_no": "5",
+    "detected_exit_labels": 7,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_방이역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/방화.jpg",
+    "station_name": "방화역",
+    "line_no": "5",
+    "detected_exit_labels": 9,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_방화역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/상일동.jpg",
+    "station_name": "상일동역",
+    "line_no": "5",
+    "detected_exit_labels": 14,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_상일동역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/서대문.jpg",
+    "station_name": "서대문역",
+    "line_no": "5",
+    "detected_exit_labels": 15,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_서대문역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/송정.jpg",
+    "station_name": "송정역",
+    "line_no": "5",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_송정역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/신금호.jpg",
+    "station_name": "신금호역",
+    "line_no": "5",
+    "detected_exit_labels": 11,
+    "control_points": 3,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_신금호역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/신길.jpg",
+    "station_name": "신길역",
+    "line_no": "5",
+    "detected_exit_labels": 7,
+    "control_points": 2,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_신길역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/신정.jpg",
+    "station_name": "신정역",
+    "line_no": "5",
+    "detected_exit_labels": 12,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_신정역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/아차산.jpg",
+    "station_name": "아차산역",
+    "line_no": "5",
+    "detected_exit_labels": 10,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_아차산역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/애오개.jpg",
+    "station_name": "애오개역",
+    "line_no": "5",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_애오개역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/양평.jpg",
+    "station_name": "양평역",
+    "line_no": "5",
+    "detected_exit_labels": 5,
+    "control_points": 2,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_양평역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/여의나루.jpg",
+    "station_name": "여의나루역",
+    "line_no": "5",
+    "detected_exit_labels": 10,
+    "control_points": 3,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_여의나루역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/여의도.jpg",
+    "station_name": "여의도역",
+    "line_no": "5",
+    "detected_exit_labels": 11,
+    "control_points": 3,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_여의도역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/영등포구청.jpg",
+    "station_name": "영등포구청역",
+    "line_no": "5",
+    "detected_exit_labels": 15,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_영등포구청역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/영등포시장.jpg",
+    "station_name": "영등포시장역",
+    "line_no": "5",
+    "detected_exit_labels": 10,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_영등포시장역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/오금.jpg",
+    "station_name": "오금역",
+    "line_no": "5",
+    "detected_exit_labels": 14,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_오금역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/오목교.jpg",
+    "station_name": "오목교역",
+    "line_no": "5",
+    "detected_exit_labels": 20,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_오목교역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/올림픽공원.jpg",
+    "station_name": "올림픽공원역",
+    "line_no": "5",
+    "detected_exit_labels": 10,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_올림픽공원역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/왕십리.jpg",
+    "station_name": "왕십리역",
+    "line_no": "5",
+    "detected_exit_labels": 29,
+    "control_points": 8,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_왕십리역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/우장산.jpg",
+    "station_name": "우장산역",
+    "line_no": "5",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_우장산역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/을지로4가.jpg",
+    "station_name": "을지로4가역",
+    "line_no": "5",
+    "detected_exit_labels": 22,
+    "control_points": 6,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_을지로4가역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/장한평.jpg",
+    "station_name": "장한평역",
+    "line_no": "5",
+    "detected_exit_labels": 16,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_장한평역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/종로3가.jpg",
+    "station_name": "종로3가역",
+    "line_no": "5",
+    "detected_exit_labels": 32,
+    "control_points": 9,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_종로3가역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/천호.jpg",
+    "station_name": "천호역",
+    "line_no": "5",
+    "detected_exit_labels": 24,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_천호역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/청구.jpg",
+    "station_name": "청구역",
+    "line_no": "5",
+    "detected_exit_labels": 7,
+    "control_points": 2,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_청구역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/충정로.jpg",
+    "station_name": "충정로역",
+    "line_no": "5",
+    "detected_exit_labels": 21,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_충정로역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/하남검단산.jpg",
+    "station_name": "하남검단산역",
+    "line_no": "5",
+    "detected_exit_labels": 4,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_하남검단산역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/하남시청.jpg",
+    "station_name": "하남시청역",
+    "line_no": "5",
+    "detected_exit_labels": 6,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_하남시청역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/하남풍산.JPG",
+    "station_name": "하남풍산역",
+    "line_no": "5",
+    "detected_exit_labels": 8,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/5_하남풍산역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/행당.jpg",
+    "station_name": "행당역",
+    "line_no": "5",
+    "detected_exit_labels": 9,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_행당역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/5/화곡.jpg",
+    "station_name": "화곡역",
+    "line_no": "5",
+    "detected_exit_labels": 17,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/5_화곡역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/고려대.jpg",
+    "station_name": "고려대역",
+    "line_no": "6",
+    "detected_exit_labels": 9,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_고려대역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/공덕.jpg",
+    "station_name": "공덕역",
+    "line_no": "6",
+    "detected_exit_labels": 10,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_공덕역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/광흥창.jpg",
+    "station_name": "광흥창역",
+    "line_no": "6",
+    "detected_exit_labels": 8,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_광흥창역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/구산.jpg",
+    "station_name": "구산역",
+    "line_no": "6",
+    "detected_exit_labels": 4,
+    "control_points": 2,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_구산역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/녹사평.jpg",
+    "station_name": "녹사평역",
+    "line_no": "6",
+    "detected_exit_labels": 4,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_녹사평역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/대흥.jpg",
+    "station_name": "대흥역",
+    "line_no": "6",
+    "detected_exit_labels": 5,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_대흥역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/독바위.jpg",
+    "station_name": "독바위역",
+    "line_no": "6",
+    "detected_exit_labels": 1,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_독바위역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/돌곶이.jpg",
+    "station_name": "돌곶이역",
+    "line_no": "6",
+    "detected_exit_labels": 12,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/6_돌곶이역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/동묘앞.jpg",
+    "station_name": "동묘앞역",
+    "line_no": "6",
+    "detected_exit_labels": 10,
+    "control_points": 2,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_동묘앞역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/디지털미디어시티.jpg",
+    "station_name": "디지털미디어시티역",
+    "line_no": "6",
+    "detected_exit_labels": 9,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/6_디지털미디어시티역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/마포구청.jpg",
+    "station_name": "마포구청역",
+    "line_no": "6",
+    "detected_exit_labels": 11,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/6_마포구청역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/망원.jpg",
+    "station_name": "망원역",
+    "line_no": "6",
+    "detected_exit_labels": 3,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_망원역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/버티고개.jpg",
+    "station_name": "버티고개역",
+    "line_no": "6",
+    "detected_exit_labels": 5,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_버티고개역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/보문.jpg",
+    "station_name": "보문역",
+    "line_no": "6",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/6_보문역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/봉화산.JPG",
+    "station_name": "봉화산역",
+    "line_no": "6",
+    "detected_exit_labels": 5,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_봉화산역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/불광.jpg",
+    "station_name": "불광역",
+    "line_no": "6",
+    "detected_exit_labels": 9,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/6_불광역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/삼각지.jpg",
+    "station_name": "삼각지역",
+    "line_no": "6",
+    "detected_exit_labels": 14,
+    "control_points": 7,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/6_삼각지역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/상수.jpg",
+    "station_name": "상수역",
+    "line_no": "6",
+    "detected_exit_labels": 4,
+    "control_points": 2,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_상수역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/상월곡.jpg",
+    "station_name": "상월곡역",
+    "line_no": "6",
+    "detected_exit_labels": 4,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_상월곡역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/새절.jpg",
+    "station_name": "새절역",
+    "line_no": "6",
+    "detected_exit_labels": 7,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_새절역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/석계.jpg",
+    "station_name": "석계역",
+    "line_no": "6",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/6_석계역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/신내.jpg",
+    "station_name": "신내역",
+    "line_no": "6",
+    "detected_exit_labels": 5,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_신내역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/신당.jpg",
+    "station_name": "신당역",
+    "line_no": "6",
+    "detected_exit_labels": 12,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_신당역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/안암.jpg",
+    "station_name": "안암역",
+    "line_no": "6",
+    "detected_exit_labels": 5,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_안암역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/약수.jpg",
+    "station_name": "약수역",
+    "line_no": "6",
+    "detected_exit_labels": 12,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/6_약수역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/역촌.jpg",
+    "station_name": "역촌역",
+    "line_no": "6",
+    "detected_exit_labels": 4,
+    "control_points": 2,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_역촌역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/연신내.jpg",
+    "station_name": "연신내역",
+    "line_no": "6",
+    "detected_exit_labels": 7,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/6_연신내역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/월곡.jpg",
+    "station_name": "월곡역",
+    "line_no": "6",
+    "detected_exit_labels": 7,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_월곡역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/월드컵경기장.jpg",
+    "station_name": "월드컵경기장역",
+    "line_no": "6",
+    "detected_exit_labels": 5,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_월드컵경기장역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/응암.jpg",
+    "station_name": "응암역",
+    "line_no": "6",
+    "detected_exit_labels": 5,
+    "control_points": 2,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_응암역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/이태원.jpg",
+    "station_name": "이태원역",
+    "line_no": "6",
+    "detected_exit_labels": 4,
+    "control_points": 2,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_이태원역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/증산.jpg",
+    "station_name": "증산역",
+    "line_no": "6",
+    "detected_exit_labels": 4,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_증산역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/창신.jpg",
+    "station_name": "창신역",
+    "line_no": "6",
+    "detected_exit_labels": 5,
+    "control_points": 2,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_창신역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/청구.jpg",
+    "station_name": "청구역",
+    "line_no": "6",
+    "detected_exit_labels": 4,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_청구역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/태릉입구.jpg",
+    "station_name": "태릉입구역",
+    "line_no": "6",
+    "detected_exit_labels": 8,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/6_태릉입구역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/한강진.jpg",
+    "station_name": "한강진역",
+    "line_no": "6",
+    "detected_exit_labels": 6,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_한강진역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/합정.jpg",
+    "station_name": "합정역",
+    "line_no": "6",
+    "detected_exit_labels": 12,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/6_합정역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/화랑대.jpg",
+    "station_name": "화랑대역",
+    "line_no": "6",
+    "detected_exit_labels": 9,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/6_화랑대역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/6/효창공원앞.jpg",
+    "station_name": "효창공원앞역",
+    "line_no": "6",
+    "detected_exit_labels": 6,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/6_효창공원앞역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/가산디지털단지.jpg",
+    "station_name": "가산디지털단지역",
+    "line_no": "7",
+    "detected_exit_labels": 7,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_가산디지털단지역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/강남구청.jpg",
+    "station_name": "강남구청역",
+    "line_no": "7",
+    "detected_exit_labels": 6,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_강남구청역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/건대입구.jpg",
+    "station_name": "건대입구역",
+    "line_no": "7",
+    "detected_exit_labels": 6,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_건대입구역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/고속터미널.jpg",
+    "station_name": "고속터미널역",
+    "line_no": "7",
+    "detected_exit_labels": 23,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_고속터미널역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/공릉.jpg",
+    "station_name": "공릉역",
+    "line_no": "7",
+    "detected_exit_labels": 5,
+    "control_points": 3,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_공릉역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/광명사거리.jpg",
+    "station_name": "광명사거리역",
+    "line_no": "7",
+    "detected_exit_labels": 10,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_광명사거리역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/군자.jpg",
+    "station_name": "군자역",
+    "line_no": "7",
+    "detected_exit_labels": 20,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_군자역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/남구로.jpg",
+    "station_name": "남구로역",
+    "line_no": "7",
+    "detected_exit_labels": 6,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_남구로역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/남성.jpg",
+    "station_name": "남성역",
+    "line_no": "7",
+    "detected_exit_labels": 4,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_남성역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/내방.jpg",
+    "station_name": "내방역",
+    "line_no": "7",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_내방역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/노원.jpg",
+    "station_name": "노원역",
+    "line_no": "7",
+    "detected_exit_labels": 10,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_노원역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/논현.jpg",
+    "station_name": "논현역",
+    "line_no": "7",
+    "detected_exit_labels": 10,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_논현역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/대림.jpg",
+    "station_name": "대림역",
+    "line_no": "7",
+    "detected_exit_labels": 12,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_대림역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/도봉산.jpg",
+    "station_name": "도봉산역",
+    "line_no": "7",
+    "detected_exit_labels": 4,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_도봉산역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/마들.jpg",
+    "station_name": "마들역",
+    "line_no": "7",
+    "detected_exit_labels": 8,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_마들역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/먹골.jpg",
+    "station_name": "먹골역",
+    "line_no": "7",
+    "detected_exit_labels": 7,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_먹골역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/면목.jpg",
+    "station_name": "면목역",
+    "line_no": "7",
+    "detected_exit_labels": 4,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_면목역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/반포.jpg",
+    "station_name": "반포역",
+    "line_no": "7",
+    "detected_exit_labels": 6,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_반포역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/보라매.jpg",
+    "station_name": "보라매역",
+    "line_no": "7",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_보라매역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/사가정.jpg",
+    "station_name": "사가정역",
+    "line_no": "7",
+    "detected_exit_labels": 4,
+    "control_points": 2,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_사가정역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/상도.jpg",
+    "station_name": "상도역",
+    "line_no": "7",
+    "detected_exit_labels": 6,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_상도역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/상봉.jpg",
+    "station_name": "상봉역",
+    "line_no": "7",
+    "detected_exit_labels": 8,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_상봉역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/수락산.jpg",
+    "station_name": "수락산역",
+    "line_no": "7",
+    "detected_exit_labels": 6,
+    "control_points": 3,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_수락산역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/숭실대입구.jpg",
+    "station_name": "숭실대입구역",
+    "line_no": "7",
+    "detected_exit_labels": 4,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_숭실대입구역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/신대방삼거리.jpg",
+    "station_name": "신대방삼거리역",
+    "line_no": "7",
+    "detected_exit_labels": 6,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_신대방삼거리역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/신풍.jpg",
+    "station_name": "신풍역",
+    "line_no": "7",
+    "detected_exit_labels": 6,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_신풍역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/어린이대공원.jpg",
+    "station_name": "어린이대공원역",
+    "line_no": "7",
+    "detected_exit_labels": 6,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_어린이대공원역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/온수.jpg",
+    "station_name": "온수역",
+    "line_no": "7",
+    "detected_exit_labels": 10,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_온수역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/용마산.jpg",
+    "station_name": "용마산역",
+    "line_no": "7",
+    "detected_exit_labels": 3,
+    "control_points": 1,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_용마산역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/이수.jpg",
+    "station_name": "이수역",
+    "line_no": "7",
+    "detected_exit_labels": 14,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_이수역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/자양.jpg",
+    "station_name": "자양역",
+    "line_no": "7",
+    "detected_exit_labels": 4,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_자양역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/장승배기.jpg",
+    "station_name": "장승배기역",
+    "line_no": "7",
+    "detected_exit_labels": 6,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_장승배기역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/장암.jpg",
+    "station_name": "장암역",
+    "line_no": "7",
+    "detected_exit_labels": 1,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_장암역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/중계.jpg",
+    "station_name": "중계역",
+    "line_no": "7",
+    "detected_exit_labels": 6,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_중계역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/중곡.jpg",
+    "station_name": "중곡역",
+    "line_no": "7",
+    "detected_exit_labels": 4,
+    "control_points": 2,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_중곡역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/중화.jpg",
+    "station_name": "중화역",
+    "line_no": "7",
+    "detected_exit_labels": 4,
+    "control_points": 2,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_중화역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/천왕.jpg",
+    "station_name": "천왕역",
+    "line_no": "7",
+    "detected_exit_labels": 4,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_천왕역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/철산.jpg",
+    "station_name": "철산역",
+    "line_no": "7",
+    "detected_exit_labels": 4,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/7_철산역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/청담.jpg",
+    "station_name": "청담역",
+    "line_no": "7",
+    "detected_exit_labels": 14,
+    "control_points": 7,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_청담역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/태릉입구.jpg",
+    "station_name": "태릉입구역",
+    "line_no": "7",
+    "detected_exit_labels": 9,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_태릉입구역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/하계.jpg",
+    "station_name": "하계역",
+    "line_no": "7",
+    "detected_exit_labels": 7,
+    "control_points": 3,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_하계역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/7/학동.jpg",
+    "station_name": "학동역",
+    "line_no": "7",
+    "detected_exit_labels": 10,
+    "control_points": 5,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/7_학동역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/가락시장.jpg",
+    "station_name": "가락시장역",
+    "line_no": "8",
+    "detected_exit_labels": 18,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/8_가락시장역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/강동구청.jpg",
+    "station_name": "강동구청역",
+    "line_no": "8",
+    "detected_exit_labels": 11,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/8_강동구청역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/남위례.png",
+    "station_name": "남위례역",
+    "line_no": "8",
+    "detected_exit_labels": 13,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/8_남위례역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/남한산성입구.jpg",
+    "station_name": "남한산성입구역",
+    "line_no": "8",
+    "detected_exit_labels": 7,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/8_남한산성입구역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/단대오거리.jpg",
+    "station_name": "단대오거리역",
+    "line_no": "8",
+    "detected_exit_labels": 13,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/8_단대오거리역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/모란.jpg",
+    "station_name": "모란역",
+    "line_no": "8",
+    "detected_exit_labels": 19,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/8_모란역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/몽촌토성.jpg",
+    "station_name": "몽촌토성역",
+    "line_no": "8",
+    "detected_exit_labels": 13,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/8_몽촌토성역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/문정.jpg",
+    "station_name": "문정역",
+    "line_no": "8",
+    "detected_exit_labels": 6,
+    "control_points": 3,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/8_문정역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/복정.jpg",
+    "station_name": "복정역",
+    "line_no": "8",
+    "detected_exit_labels": 12,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/8_복정역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/산성.jpg",
+    "station_name": "산성역",
+    "line_no": "8",
+    "detected_exit_labels": 7,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/8_산성역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/석촌.jpg",
+    "station_name": "석촌역",
+    "line_no": "8",
+    "detected_exit_labels": 20,
+    "control_points": 6,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/8_석촌역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/송파.jpg",
+    "station_name": "송파역",
+    "line_no": "8",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/8_송파역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/수진.jpg",
+    "station_name": "수진역",
+    "line_no": "8",
+    "detected_exit_labels": 8,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/8_수진역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/신흥.jpg",
+    "station_name": "신흥역",
+    "line_no": "8",
+    "detected_exit_labels": 8,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/8_신흥역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/암사.jpg",
+    "station_name": "암사역",
+    "line_no": "8",
+    "detected_exit_labels": 6,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/8_암사역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/암사역사공원.jpg",
+    "station_name": "암사역사공원역",
+    "line_no": "8",
+    "detected_exit_labels": 7,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/8_암사역사공원역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/잠실.jpg",
+    "station_name": "잠실역",
+    "line_no": "8",
+    "detected_exit_labels": 18,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/8_잠실역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/장지.jpg",
+    "station_name": "장지역",
+    "line_no": "8",
+    "detected_exit_labels": 8,
+    "control_points": 4,
+    "usable_for_affine": true,
+    "output": "annotations/auto_draft/8_장지역_annotation_draft.json"
+  },
+  {
+    "image": "station_image/8/천호.jpg",
+    "station_name": "천호역",
+    "line_no": "8",
+    "detected_exit_labels": 22,
+    "control_points": 0,
+    "usable_for_affine": false,
+    "output": "annotations/auto_draft/8_천호역_annotation_draft.json"
+  }
+]

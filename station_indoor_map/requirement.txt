@@ -1,0 +1,9 @@
+geopandas
+shapely
+pyproj
+pandas
+openpyxl
+numpy
+opencv-python
+pyogrio
+rtree

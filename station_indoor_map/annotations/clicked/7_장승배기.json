@@ -1,0 +1,869 @@
+{
+  "station_name": "장승배기",
+  "line_no": "7",
+  "source_image": "station_image/7/장승배기.jpg",
+  "image_width": 3402,
+  "image_height": 3402,
+  "annotation_status": "clicked_draft",
+  "created_at": "2026-05-04T17:45:15",
+  "note": "Created from clicked image coordinates using station_image/image_check.py. Review node kinds, floors, and edges before routing.",
+  "nodes": [
+    {
+      "id": "node_001",
+      "kind": "clicked_point",
+      "click_index": 1,
+      "image_xy": [
+        343,
+        1292
+      ]
+    },
+    {
+      "id": "node_002",
+      "kind": "clicked_point",
+      "click_index": 2,
+      "image_xy": [
+        410,
+        1342
+      ]
+    },
+    {
+      "id": "node_003",
+      "kind": "clicked_point",
+      "click_index": 3,
+      "image_xy": [
+        463,
+        1301
+      ]
+    },
+    {
+      "id": "node_004",
+      "kind": "clicked_point",
+      "click_index": 4,
+      "image_xy": [
+        737,
+        1282
+      ]
+    },
+    {
+      "id": "node_005",
+      "kind": "clicked_point",
+      "click_index": 5,
+      "image_xy": [
+        1099,
+        1269
+      ]
+    },
+    {
+      "id": "node_006",
+      "kind": "clicked_point",
+      "click_index": 6,
+      "image_xy": [
+        1125,
+        1320
+      ]
+    },
+    {
+      "id": "node_007",
+      "kind": "clicked_point",
+      "click_index": 7,
+      "image_xy": [
+        1162,
+        1298
+      ]
+    },
+    {
+      "id": "node_008",
+      "kind": "clicked_point",
+      "click_index": 8,
+      "image_xy": [
+        747,
+        1336
+      ]
+    },
+    {
+      "id": "node_009",
+      "kind": "clicked_point",
+      "click_index": 9,
+      "image_xy": [
+        750,
+        1244
+      ]
+    },
+    {
+      "id": "node_010",
+      "kind": "clicked_point",
+      "click_index": 10,
+      "image_xy": [
+        828,
+        1172
+      ]
+    },
+    {
+      "id": "node_011",
+      "kind": "clicked_point",
+      "click_index": 11,
+      "image_xy": [
+        866,
+        1247
+      ]
+    },
+    {
+      "id": "node_012",
+      "kind": "clicked_point",
+      "click_index": 12,
+      "image_xy": [
+        1137,
+        1216
+      ]
+    },
+    {
+      "id": "node_013",
+      "kind": "clicked_point",
+      "click_index": 13,
+      "image_xy": [
+        1329,
+        1184
+      ]
+    },
+    {
+      "id": "node_014",
+      "kind": "clicked_point",
+      "click_index": 14,
+      "image_xy": [
+        1701,
+        1128
+      ]
+    },
+    {
+      "id": "node_015",
+      "kind": "clicked_point",
+      "click_index": 15,
+      "image_xy": [
+        1695,
+        1065
+      ]
+    },
+    {
+      "id": "node_016",
+      "kind": "clicked_point",
+      "click_index": 16,
+      "image_xy": [
+        1559,
+        1058
+      ]
+    },
+    {
+      "id": "node_017",
+      "kind": "clicked_point",
+      "click_index": 17,
+      "image_xy": [
+        1405,
+        954
+      ]
+    },
+    {
+      "id": "node_018",
+      "kind": "clicked_point",
+      "click_index": 18,
+      "image_xy": [
+        1748,
+        1040
+      ]
+    },
+    {
+      "id": "node_019",
+      "kind": "clicked_point",
+      "click_index": 19,
+      "image_xy": [
+        1884,
+        898
+      ]
+    },
+    {
+      "id": "node_020",
+      "kind": "clicked_point",
+      "click_index": 20,
+      "image_xy": [
+        2123,
+        989
+      ]
+    },
+    {
+      "id": "node_021",
+      "kind": "clicked_point",
+      "click_index": 21,
+      "image_xy": [
+        1783,
+        1121
+      ]
+    },
+    {
+      "id": "node_022",
+      "kind": "clicked_point",
+      "click_index": 22,
+      "image_xy": [
+        2174,
+        1062
+      ]
+    },
+    {
+      "id": "node_023",
+      "kind": "clicked_point",
+      "click_index": 23,
+      "image_xy": [
+        2466,
+        999
+      ]
+    },
+    {
+      "id": "node_024",
+      "kind": "clicked_point",
+      "click_index": 24,
+      "image_xy": [
+        2621,
+        1008
+      ]
+    },
+    {
+      "id": "node_025",
+      "kind": "clicked_point",
+      "click_index": 25,
+      "image_xy": [
+        2577,
+        1052
+      ]
+    },
+    {
+      "id": "node_026",
+      "kind": "clicked_point",
+      "click_index": 26,
+      "image_xy": [
+        2785,
+        954
+      ]
+    },
+    {
+      "id": "node_027",
+      "kind": "clicked_point",
+      "click_index": 27,
+      "image_xy": [
+        2863,
+        876
+      ]
+    },
+    {
+      "id": "node_028",
+      "kind": "clicked_point",
+      "click_index": 28,
+      "image_xy": [
+        2844,
+        835
+      ]
+    },
+    {
+      "id": "node_029",
+      "kind": "clicked_point",
+      "click_index": 29,
+      "image_xy": [
+        2901,
+        810
+      ]
+    },
+    {
+      "id": "node_030",
+      "kind": "clicked_point",
+      "click_index": 30,
+      "image_xy": [
+        2980,
+        702
+      ]
+    },
+    {
+      "id": "node_031",
+      "kind": "clicked_point",
+      "click_index": 31,
+      "image_xy": [
+        3128,
+        772
+      ]
+    },
+    {
+      "id": "node_032",
+      "kind": "clicked_point",
+      "click_index": 32,
+      "image_xy": [
+        3040,
+        882
+      ]
+    },
+    {
+      "id": "node_033",
+      "kind": "clicked_point",
+      "click_index": 33,
+      "image_xy": [
+        2955,
+        901
+      ]
+    },
+    {
+      "id": "node_034",
+      "kind": "clicked_point",
+      "click_index": 34,
+      "image_xy": [
+        2394,
+        1402
+      ]
+    },
+    {
+      "id": "node_035",
+      "kind": "clicked_point",
+      "click_index": 35,
+      "image_xy": [
+        2218,
+        1408
+      ]
+    },
+    {
+      "id": "node_036",
+      "kind": "clicked_point",
+      "click_index": 36,
+      "image_xy": [
+        2196,
+        1307
+      ]
+    },
+    {
+      "id": "node_037",
+      "kind": "clicked_point",
+      "click_index": 37,
+      "image_xy": [
+        1931,
+        1455
+      ]
+    },
+    {
+      "id": "node_038",
+      "kind": "clicked_point",
+      "click_index": 38,
+      "image_xy": [
+        1792,
+        1477
+      ]
+    },
+    {
+      "id": "node_039",
+      "kind": "clicked_point",
+      "click_index": 39,
+      "image_xy": [
+        1796,
+        1383
+      ]
+    },
+    {
+      "id": "node_040",
+      "kind": "clicked_point",
+      "click_index": 40,
+      "image_xy": [
+        1928,
+        1544
+      ]
+    },
+    {
+      "id": "node_041",
+      "kind": "clicked_point",
+      "click_index": 41,
+      "image_xy": [
+        1666,
+        1471
+      ]
+    },
+    {
+      "id": "node_042",
+      "kind": "clicked_point",
+      "click_index": 42,
+      "image_xy": [
+        1729,
+        1411
+      ]
+    },
+    {
+      "id": "node_043",
+      "kind": "clicked_point",
+      "click_index": 43,
+      "image_xy": [
+        1606,
+        1421
+      ]
+    },
+    {
+      "id": "node_044",
+      "kind": "clicked_point",
+      "click_index": 44,
+      "image_xy": [
+        1698,
+        1559
+      ]
+    },
+    {
+      "id": "node_045",
+      "kind": "clicked_point",
+      "click_index": 45,
+      "image_xy": [
+        1521,
+        1966
+      ]
+    },
+    {
+      "id": "node_046",
+      "kind": "clicked_point",
+      "click_index": 46,
+      "image_xy": [
+        1446,
+        1796
+      ]
+    },
+    {
+      "id": "node_047",
+      "kind": "clicked_point",
+      "click_index": 47,
+      "image_xy": [
+        1701,
+        1742
+      ]
+    },
+    {
+      "id": "node_048",
+      "kind": "clicked_point",
+      "click_index": 48,
+      "image_xy": [
+        1956,
+        1714
+      ]
+    },
+    {
+      "id": "node_049",
+      "kind": "clicked_point",
+      "click_index": 49,
+      "image_xy": [
+        2123,
+        1843
+      ]
+    },
+    {
+      "id": "node_050",
+      "kind": "clicked_point",
+      "click_index": 50,
+      "image_xy": [
+        1799,
+        1925
+      ]
+    },
+    {
+      "id": "node_051",
+      "kind": "clicked_point",
+      "click_index": 51,
+      "image_xy": [
+        2687,
+        1685
+      ]
+    },
+    {
+      "id": "node_052",
+      "kind": "clicked_point",
+      "click_index": 52,
+      "image_xy": [
+        1764,
+        1890
+      ]
+    },
+    {
+      "id": "node_053",
+      "kind": "clicked_point",
+      "click_index": 53,
+      "image_xy": [
+        677,
+        2029
+      ]
+    },
+    {
+      "id": "node_054",
+      "kind": "clicked_point",
+      "click_index": 54,
+      "image_xy": [
+        655,
+        1918
+      ]
+    },
+    {
+      "id": "node_055",
+      "kind": "clicked_point",
+      "click_index": 55,
+      "image_xy": [
+        1736,
+        1789
+      ]
+    },
+    {
+      "id": "node_056",
+      "kind": "clicked_point",
+      "click_index": 56,
+      "image_xy": [
+        1298,
+        1503
+      ]
+    },
+    {
+      "id": "node_057",
+      "kind": "clicked_point",
+      "click_index": 57,
+      "image_xy": [
+        1273,
+        1443
+      ]
+    },
+    {
+      "id": "node_058",
+      "kind": "clicked_point",
+      "click_index": 58,
+      "image_xy": [
+        1093,
+        1515
+      ]
+    },
+    {
+      "id": "node_059",
+      "kind": "clicked_point",
+      "click_index": 59,
+      "image_xy": [
+        1836,
+        1534
+      ]
+    },
+    {
+      "id": "node_060",
+      "kind": "clicked_point",
+      "click_index": 60,
+      "image_xy": [
+        2599,
+        1597
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "node_001",
+      "to": "node_002",
+      "kind": "walk"
+    },
+    {
+      "from": "node_002",
+      "to": "node_003",
+      "kind": "walk"
+    },
+    {
+      "from": "node_003",
+      "to": "node_004",
+      "kind": "walk"
+    },
+    {
+      "from": "node_004",
+      "to": "node_005",
+      "kind": "walk"
+    },
+    {
+      "from": "node_005",
+      "to": "node_006",
+      "kind": "walk"
+    },
+    {
+      "from": "node_006",
+      "to": "node_007",
+      "kind": "walk"
+    },
+    {
+      "from": "node_004",
+      "to": "node_008",
+      "kind": "walk"
+    },
+    {
+      "from": "node_008",
+      "to": "node_009",
+      "kind": "walk"
+    },
+    {
+      "from": "node_009",
+      "to": "node_010",
+      "kind": "walk"
+    },
+    {
+      "from": "node_009",
+      "to": "node_011",
+      "kind": "walk"
+    },
+    {
+      "from": "node_010",
+      "to": "node_058",
+      "kind": "walk"
+    },
+    {
+      "from": "node_011",
+      "to": "node_012",
+      "kind": "walk"
+    },
+    {
+      "from": "node_012",
+      "to": "node_013",
+      "kind": "walk"
+    },
+    {
+      "from": "node_013",
+      "to": "node_014",
+      "kind": "walk"
+    },
+    {
+      "from": "node_014",
+      "to": "node_015",
+      "kind": "walk"
+    },
+    {
+      "from": "node_015",
+      "to": "node_016",
+      "kind": "walk"
+    },
+    {
+      "from": "node_016",
+      "to": "node_017",
+      "kind": "walk"
+    },
+    {
+      "from": "node_015",
+      "to": "node_019",
+      "kind": "walk"
+    },
+    {
+      "from": "node_015",
+      "to": "node_021",
+      "kind": "walk"
+    },
+    {
+      "from": "node_014",
+      "to": "node_021",
+      "kind": "walk"
+    },
+    {
+      "from": "node_021",
+      "to": "node_022",
+      "kind": "walk"
+    },
+    {
+      "from": "node_022",
+      "to": "node_020",
+      "kind": "walk"
+    },
+    {
+      "from": "node_022",
+      "to": "node_023",
+      "kind": "walk"
+    },
+    {
+      "from": "node_023",
+      "to": "node_024",
+      "kind": "walk"
+    },
+    {
+      "from": "node_024",
+      "to": "node_025",
+      "kind": "walk"
+    },
+    {
+      "from": "node_024",
+      "to": "node_026",
+      "kind": "walk"
+    },
+    {
+      "from": "node_026",
+      "to": "node_027",
+      "kind": "walk"
+    },
+    {
+      "from": "node_027",
+      "to": "node_028",
+      "kind": "walk"
+    },
+    {
+      "from": "node_028",
+      "to": "node_029",
+      "kind": "walk"
+    },
+    {
+      "from": "node_029",
+      "to": "node_030",
+      "kind": "walk"
+    },
+    {
+      "from": "node_027",
+      "to": "node_033",
+      "kind": "walk"
+    },
+    {
+      "from": "node_033",
+      "to": "node_032",
+      "kind": "walk"
+    },
+    {
+      "from": "node_032",
+      "to": "node_031",
+      "kind": "walk"
+    },
+    {
+      "from": "node_025",
+      "to": "node_034",
+      "kind": "walk"
+    },
+    {
+      "from": "node_034",
+      "to": "node_035",
+      "kind": "walk"
+    },
+    {
+      "from": "node_035",
+      "to": "node_036",
+      "kind": "walk"
+    },
+    {
+      "from": "node_035",
+      "to": "node_037",
+      "kind": "walk"
+    },
+    {
+      "from": "node_037",
+      "to": "node_038",
+      "kind": "walk"
+    },
+    {
+      "from": "node_038",
+      "to": "node_059",
+      "kind": "walk"
+    },
+    {
+      "from": "node_059",
+      "to": "node_040",
+      "kind": "walk"
+    },
+    {
+      "from": "node_040",
+      "to": "node_049",
+      "kind": "walk"
+    },
+    {
+      "from": "node_049",
+      "to": "node_051",
+      "kind": "walk"
+    },
+    {
+      "from": "node_049",
+      "to": "node_052",
+      "kind": "walk"
+    },
+    {
+      "from": "node_050",
+      "to": "node_052",
+      "kind": "walk"
+    },
+    {
+      "from": "node_052",
+      "to": "node_045",
+      "kind": "walk"
+    },
+    {
+      "from": "node_045",
+      "to": "node_053",
+      "kind": "walk"
+    },
+    {
+      "from": "node_046",
+      "to": "node_054",
+      "kind": "walk"
+    },
+    {
+      "from": "node_046",
+      "to": "node_055",
+      "kind": "walk"
+    },
+    {
+      "from": "node_047",
+      "to": "node_055",
+      "kind": "walk"
+    },
+    {
+      "from": "node_055",
+      "to": "node_048",
+      "kind": "walk"
+    },
+    {
+      "from": "node_048",
+      "to": "node_039",
+      "kind": "walk"
+    },
+    {
+      "from": "node_042",
+      "to": "node_043",
+      "kind": "walk"
+    },
+    {
+      "from": "node_042",
+      "to": "node_038",
+      "kind": "walk"
+    },
+    {
+      "from": "node_042",
+      "to": "node_041",
+      "kind": "walk"
+    },
+    {
+      "from": "node_041",
+      "to": "node_056",
+      "kind": "walk"
+    },
+    {
+      "from": "node_057",
+      "to": "node_056",
+      "kind": "walk"
+    },
+    {
+      "from": "node_056",
+      "to": "node_058",
+      "kind": "walk"
+    },
+    {
+      "from": "node_041",
+      "to": "node_038",
+      "kind": "walk"
+    },
+    {
+      "from": "node_041",
+      "to": "node_044",
+      "kind": "walk"
+    },
+    {
+      "from": "node_044",
+      "to": "node_045",
+      "kind": "walk"
+    },
+    {
+      "from": "node_046",
+      "to": "node_043",
+      "kind": "walk"
+    },
+    {
+      "from": "node_048",
+      "to": "node_060",
+      "kind": "walk"
+    },
+    {
+      "from": "node_042",
+      "to": "node_039",
+      "kind": "walk"
+    }
+  ]
+}

@@ -47,3 +47,11 @@ app.*.map.json
 # Local-only tooling and collected logs
 /build_apk.ps1
 /data/
+
+# Python local environments and generated caches
+**/.venv/
+**/__pycache__/
+*.py[cod]
+
+# Large local archive copies
+station_indoor_map/graph_tool.zip

@@ -1,0 +1,371 @@
+[
+  {
+    "id": 1,
+    "category": "요금/운임",
+    "question": "지하철 요금이 얼마예요?",
+    "answer": "교통카드 기준 기본 1,550원 (10km 이내). 거리 늘어날수록 5km마다 100원씩 추가. 1회용 티켓은 100원 더 비싼 1,650원.",
+    "steps": [],
+    "source_url": "http://www.seoulmetro.co.kr/kr/page.do?menuIdx=354"
+  },
+  {
+    "id": 2,
+    "category": "요금/운임",
+    "question": "어린이/청소년 요금은 얼마예요?",
+    "answer": "청소년(만 13~18세) 교통카드 기준 900원, 어린이(만 6~12세) 550원. 단, T-money 카드 구매 후 10일 이내에 생년월일 등록을 해야 할인이 적용돼요. 편의점·지하철역 고객안내소·티머니 홈페이지에서 등록 가능. 미등록 시 일반 요금 부과.",
+    "steps": [],
+    "source_url": "http://www.seoulmetro.co.kr/kr/page.do?menuIdx=354"
+  },
+  {
+    "id": 3,
+    "category": "요금/운임",
+    "question": "만 6세 미만 아이는 요금을 내나요?",
+    "answer": "보호자 1명당 3명까지 무료예요. 4번째 아이부터는 어린이 요금(550원) 부과.",
+    "steps": [],
+    "source_url": "http://www.seoulmetro.co.kr/kr/page.do?menuIdx=354"
+  },
+  {
+    "id": 4,
+    "category": "요금/운임",
+    "question": "아침 일찍 타면 할인이 되나요?",
+    "answer": "오전 6시 30분 이전에 첫 승차 시 기본요금 20% 할인(조조할인). 교통카드 사용 시에만 적용돼요.",
+    "steps": [],
+    "source_url": "http://www.seoulmetro.co.kr/kr/page.do?menuIdx=354"
+  },
+  {
+    "id": 5,
+    "category": "교통카드",
+    "question": "T-money 카드가 뭔가요? 어디서 사나요?",
+    "answer": "한국 대중교통 선불 교통카드예요. GS25, CU, 세븐일레븐, 이마트24, 스토리웨이 등 편의점과 지하철역 내 고객안전실(1~4호선) 또는 i센터(5~8호선)에서 구매할 수 있어요. 원하는 금액을 충전해서 사용해요.",
+    "steps": [],
+    "source_url": "https://pay.tmoney.co.kr/ncs/pct/ugd/ReadUgdMainGd.dev"
+  },
+  {
+    "id": 6,
+    "category": "교통카드",
+    "question": "교통카드는 어디서 충전하나요?",
+    "answer": "편의점(GS25, CU, 세븐일레븐 등), 지하철역 내 교통카드 무인충전기, 주요 은행 ATM(우리·신한·하나·국민·농협·우체국 등), 모바일티머니 앱에서 충전 가능해요. 1회 충전 한도는 1천원~9만원이에요.",
+    "steps": [],
+    "source_url": "https://pay.tmoney.co.kr/ncs/pct/ugd/ReadChgMnsGd.dev"
+  },
+  {
+    "id": 7,
+    "category": "교통카드",
+    "question": "내릴 때도 카드를 꼭 찍어야 하나요?",
+    "answer": "필수예요. 안 찍으면 환승 할인을 못 받고, 잔액에서 추가 요금이 빠져나가요.",
+    "steps": [],
+    "source_url": "http://www.seoulmetro.co.kr/kr/page.do?menuIdx=354"
+  },
+  {
+    "id": 8,
+    "category": "교통카드",
+    "question": "하나의 교통카드로 여러 명이 탈 수 있나요?",
+    "answer": "안 돼요. 1장 = 1인용이에요. 일행이 있으면 각자 카드가 필요하거나 1회용 티켓을 따로 구매해야 해요.",
+    "steps": [],
+    "source_url": "http://www.seoulmetro.co.kr/kr/page.do?menuIdx=355"
+  },
+  {
+    "id": 9,
+    "category": "1회용 티켓",
+    "question": "1회용 티켓은 어떻게 사나요?",
+    "answer": "역 안 1회용 발매기에서 구매해요. 목적지 선택 후 요금 + 보증금 500원을 투입하면 카드가 나와요. 개찰구 단말기에 접촉해서 탑승.",
+    "steps": [
+      "역 안 1회용 발매기로 이동",
+      "화면에서 목적지 역 선택",
+      "요금 + 보증금 500원 투입",
+      "카드 수령",
+      "개찰구 단말기에 카드 접촉"
+    ],
+    "source_url": "http://www.seoulmetro.co.kr/kr/page.do?menuIdx=355"
+  },
+  {
+    "id": 10,
+    "category": "1회용 티켓",
+    "question": "보증금 500원은 어떻게 돌려받나요?",
+    "answer": "하차 후 역 안 보증금 환급기에 카드를 넣으면 바로 반환돼요. 카드 분실·훼손 시 환급 불가.",
+    "steps": [],
+    "source_url": "http://www.seoulmetro.co.kr/kr/page.do?menuIdx=355"
+  },
+  {
+    "id": 11,
+    "category": "1회용 티켓",
+    "question": "목적지를 잘못 선택했을 때는요?",
+    "answer": "역무원에게 문의하거나 역 내 교통카드 정산·충전기에서 조정 가능해요.",
+    "steps": [],
+    "source_url": null
+  },
+  {
+    "id": 12,
+    "category": "환승",
+    "question": "지하철↔버스 환승 시 추가 요금이 드나요?",
+    "answer": "교통카드 사용 시 10km까지는 추가 요금 없어요. 전체 이동 거리 기준으로 요금이 계산되고, 탈 때와 내릴 때 모두 카드 태그가 필수예요.",
+    "steps": [],
+    "source_url": "https://news.seoul.go.kr/traffic/transfer_discount"
+  },
+  {
+    "id": 13,
+    "category": "환승",
+    "question": "환승 가능 시간이 얼마나 되나요?",
+    "answer": "내리고 30분 이내에 다음 수단을 탑승하면 환승 할인이 적용돼요. 밤 9시~익일 오전 7시는 60분으로 연장돼요.",
+    "steps": [],
+    "source_url": "https://news.seoul.go.kr/traffic/transfer_discount"
+  },
+  {
+    "id": 14,
+    "category": "환승",
+    "question": "환승은 몇 번까지 가능한가요?",
+    "answer": "최대 5회 탑승(환승 4회)까지 통합요금제가 적용돼요.",
+    "steps": [],
+    "source_url": "https://news.seoul.go.kr/traffic/transfer_discount"
+  },
+  {
+    "id": 15,
+    "category": "환승",
+    "question": "지하철에서 다른 노선으로 환승할 때 추가 요금이 드나요?",
+    "answer": "수도권 지하철 내 환승은 추가 요금 없어요. 단, 신분당선은 별도 추가 요금이 발생해요.",
+    "steps": [],
+    "source_url": null
+  },
+  {
+    "id": 16,
+    "category": "기후동행카드",
+    "question": "기후동행카드가 뭔가요?",
+    "answer": "한 번 충전으로 선택 기간 동안 서울 지하철·버스·따릉이·한강버스를 무제한 이용할 수 있는 정기권이에요. 관광객용 단기권: 1일 5,000원 / 2일 8,000원 / 3일 10,000원 / 5일 15,000원 / 7일 20,000원. 장기 거주자용 30일권: 62,000원(지하철+버스 기준).",
+    "steps": [],
+    "source_url": "https://pay.tmoney.co.kr/ncs/pct/ugd/ReadUgdMainGd.dev"
+  },
+  {
+    "id": 17,
+    "category": "기후동행카드",
+    "question": "기후동행카드 vs 일반 교통카드, 뭐가 더 유리해요?",
+    "answer": "하루에 지하철·버스를 3번 이상 탄다면 단기권이 유리해요. 1~2번만 타면 일반 교통카드가 더 저렴해요.",
+    "steps": [],
+    "source_url": "https://pay.tmoney.co.kr/ncs/pct/ugd/ReadUgdMainGd.dev"
+  },
+  {
+    "id": 18,
+    "category": "기후동행카드",
+    "question": "기후동행카드는 어디서 사나요?",
+    "answer": "안드로이드(OS 12 이상)는 모바일티머니 앱에서 바로 발급·충전 가능. 아이폰 또는 실물카드 원하는 경우: 서울교통공사 1~8호선 역사 내 키오스크(카드값 3,000원) 또는 GS25·CU·세븐일레븐·이마트24·스토리웨이 편의점에서 구매 후, 티머니 카드&페이 홈페이지에 등록하고, 역 무인충전기에서 충전해서 사용해요.",
+    "steps": [],
+    "source_url": "https://pay.tmoney.co.kr/ncs/pct/ugd/ReadUgdMainGd.dev"
+  },
+  {
+    "id": 19,
+    "category": "기후동행카드",
+    "question": "기후동행카드로 어디까지 탈 수 있나요?",
+    "answer": "서울 지하철 대부분(1~9호선, 우이신설선, 신림선, 김포골드라인 등)과 일부 경기 구간 포함. 신분당선, GTX, 코레일 서울 시계외 구간은 사용 불가. 공항철도는 김포공항역~서울역 구간만 무료이고, 인천공항 구간은 별도 요금 필요.",
+    "steps": [],
+    "source_url": "https://pay.tmoney.co.kr/ncs/pct/ugd/ReadUgdMainGd.dev"
+  },
+  {
+    "id": 20,
+    "category": "기후동행카드",
+    "question": "기후동행카드로 버스도 탈 수 있나요?",
+    "answer": "서울시 면허 버스(간선·지선·순환·마을·심야버스)에서 사용 가능해요. 광역버스·공항버스 및 경기·인천 면허 버스는 사용 불가.",
+    "steps": [],
+    "source_url": "https://pay.tmoney.co.kr/ncs/pct/ugd/ReadUgdMainGd.dev"
+  },
+  {
+    "id": 21,
+    "category": "기후동행카드",
+    "question": "기후동행카드로 내릴 때 카드 안 찍으면 어떻게 되나요?",
+    "answer": "30일권 기준으로 동일 사용기간 내 하차 미태그 2회 누적 시, 직전 승차 시점으로부터 24시간 동안 사용이 정지돼요. 단기권은 페널티 없음.",
+    "steps": [],
+    "source_url": "https://pay.tmoney.co.kr/ncs/pct/ugd/ReadUgdMainGd.dev"
+  },
+  {
+    "id": 22,
+    "category": "기후동행카드",
+    "question": "기후동행카드 환불은 어떻게 하나요?",
+    "answer": "사용기간 내에 지하철 역사 무인충전기 또는 모바일티머니 앱에서 사용정지 처리 후, 만료일+15일 이내에 티머니 카드&페이 홈페이지에서 환불 접수하면 돼요. 환불액 = 충전금 - 실사용액(일반권종 기준) - 수수료 500원. 접수 후 5일 이내 계좌 입금.",
+    "steps": [
+      "지하철 역사 무인충전기 또는 모바일티머니 앱에서 카드 사용정지",
+      "사용기간 만료일 +15일 이내 티머니 카드&페이 홈페이지 접속",
+      "전체메뉴 > 기후동행카드 > 정상/고장환불 > 환불 신청",
+      "계좌 정보 입력 후 환불 접수",
+      "접수 후 5일 이내 계좌 입금"
+    ],
+    "source_url": "https://pay.tmoney.co.kr/ncs/pct/ugd/ReadUgdMainGd.dev"
+  },
+  {
+    "id": 23,
+    "category": "공항 이동",
+    "question": "인천공항에서 서울 시내로 어떻게 가나요?",
+    "answer": "공항철도(AREX)가 가장 편해요. 직통열차(어른 13,000원, 약 43분)는 서울역 무정차 운행. 일반열차(서울역 기준 4,750원, 약 59분)는 홍대·디지털미디어시티·김포공항 등 경유. 두 열차 모두 서울역 연결.",
+    "steps": [],
+    "source_url": null
+  },
+  {
+    "id": 24,
+    "category": "공항 이동",
+    "question": "직통열차랑 일반열차, 뭐가 달라요?",
+    "answer": "직통열차는 서울역↔인천공항을 무정차 운행하며 지정 좌석제, 객실 승무원, 무료 Wi-Fi(AREX Free Wi-Fi), 생수 제공(요청 시) 서비스가 있어요. 일반열차는 8개 역을 경유하며 교통카드 사용 가능, 입석 탑승 가능. 서울역에서 두 열차의 탑승 층이 다르니 반드시 확인하세요.",
+    "steps": [],
+    "source_url": null
+  },
+  {
+    "id": 25,
+    "category": "공항 이동",
+    "question": "AREX 일반열차도 어린이·노인 할인이 되나요?",
+    "answer": "네. 유아(만 6세 미만): 무료(보호자 1인당 3명까지). 어린이(만 6~12세): 기본요금 550원 + 추가요금 50%. 청소년(만 13~18세): 기본요금 900원 + 추가요금 80%. 만 65세 이상, 장애인, 국가유공자, 독립유공자: 무임(해당 신분증 또는 우대 교통카드 제시).",
+    "steps": [],
+    "source_url": null
+  },
+  {
+    "id": 26,
+    "category": "공항 이동",
+    "question": "기후동행카드로 인천공항까지 갈 수 있나요?",
+    "answer": "안 돼요. 기후동행카드는 공항철도 김포공항역~서울역 구간까지만 적용돼요. 인천공항 구간은 별도 티켓이 필요해요.",
+    "steps": [],
+    "source_url": "https://pay.tmoney.co.kr/ncs/pct/ugd/ReadUgdMainGd.dev"
+  },
+  {
+    "id": 27,
+    "category": "공항 이동",
+    "question": "김포공항에서 시내로 가려면 어떻게 하나요?",
+    "answer": "공항철도 일반열차 또는 지하철 5호선·9호선을 이용하면 돼요. 기후동행카드 사용 가능 구간이에요.",
+    "steps": [],
+    "source_url": null
+  },
+  {
+    "id": 28,
+    "category": "버스",
+    "question": "버스는 어디서 타고 어디서 내려요?",
+    "answer": "앞문으로 승차하고, 뒷문으로 하차해요. 탈 때 앞문 단말기에 카드 태그, 내릴 때 뒷문 단말기에 반드시 태그해야 환승 할인이 적용돼요.",
+    "steps": [],
+    "source_url": null
+  },
+  {
+    "id": 29,
+    "category": "버스",
+    "question": "버스 색깔마다 종류가 달라요?",
+    "answer": "파란 버스(간선): 먼 거리 주요 간선 노선. 초록 버스(지선): 동네와 지하철역 연결. 빨간 버스(광역): 서울↔경기 장거리. 노란 버스(순환): 도심·부도심 특정 구역 순환. 초록 작은 버스(마을버스): 가까운 정류소·지하철역 연결.",
+    "steps": [],
+    "source_url": "https://news.seoul.go.kr/traffic/archives/1706"
+  },
+  {
+    "id": 30,
+    "category": "버스",
+    "question": "버스 종류별 요금이 얼마예요?",
+    "answer": "T-money 교통카드 기준(2023년 8월 기준): 간선·지선버스(파랑·초록) 어른 1,500원 / 청소년 900원 / 어린이 550원. 광역버스(빨강) 어른 3,000원 / 청소년 1,700원 / 어린이 1,500원. 순환버스(노랑) 어른 1,400원 / 청소년 800원 / 어린이 500원. 심야버스 어른 2,500원 / 청소년 1,600원 / 어린이 1,400원. 마을버스 어른 1,200원 / 청소년 600원 / 어린이 400원. 청소년 할인은 T-money 카드에 청소년 등록 후에만 적용.",
+    "steps": [],
+    "source_url": "https://news.seoul.go.kr/traffic/archives/1706"
+  },
+  {
+    "id": 31,
+    "category": "버스",
+    "question": "버스 안에서 목적지 정류장을 어떻게 확인하나요?",
+    "answer": "버스 내부 전광판과 안내 방송으로 다음 정류장을 알려줘요. 네이버지도·카카오맵 앱에서 실시간으로 몇 정거장 남았는지 확인도 가능해요.",
+    "steps": [],
+    "source_url": null
+  },
+  {
+    "id": 32,
+    "category": "택시",
+    "question": "택시 기본요금이 얼마예요?",
+    "answer": "일반 중형택시 기준 1.6km까지 4,800원. 이후 131m마다 100원씩 추가. 모범·대형택시는 3km까지 7,000원으로 더 비싸요.",
+    "steps": [],
+    "source_url": "https://news.seoul.go.kr/traffic/traffic_price"
+  },
+  {
+    "id": 33,
+    "category": "택시",
+    "question": "카카오택시는 어떻게 쓰나요?",
+    "answer": "카카오T 앱을 설치한 후 출발지·목적지를 입력하면 근처 택시를 호출할 수 있어요. 외국 카드 결제 가능하고, 목적지를 한국어로 몰라도 지도에서 선택할 수 있어서 외국인에게 유용해요.",
+    "steps": [],
+    "source_url": null
+  },
+  {
+    "id": 34,
+    "category": "지하철 이용 기본",
+    "question": "지하철 첫차·막차 시간은 어떻게 되나요?",
+    "answer": "대부분 노선 기준 첫차 오전 5시 30분경, 막차 자정(00시)경이에요. 역마다 조금씩 달라서 서울교통공사 사이버스테이션에서 출발역 선택 후 정확한 막차 시간을 확인할 수 있어요. 네이버지도·카카오맵에서도 검색 가능해요.",
+    "steps": [],
+    "source_url": "http://www.seoulmetro.co.kr/kr/cyberStation.do?menuIdx=538"
+  },
+  {
+    "id": 35,
+    "category": "지하철 이용 기본",
+    "question": "지하철 안에 큰 캐리어를 들고 탈 수 있나요?",
+    "answer": "가능해요. 단, 가로·세로·높이 합이 158cm 이상이거나 무게 32kg 초과 짐은 '휴대제한품'으로 반입이 제한돼요. 일반 여행용 캐리어(28인치 이하)는 대부분 문제없어요. 출퇴근 혼잡 시간대(오전 7~9시, 오후 6~8시)는 피하는 걸 추천해요.",
+    "steps": [],
+    "source_url": "http://www.seoulmetro.co.kr/kr/page.do?menuIdx=480"
+  },
+  {
+    "id": 36,
+    "category": "지하철 이용 기본",
+    "question": "지하철 안에서 음식을 먹어도 되나요?",
+    "answer": "서울교통공사 공식 안전수칙에 '음식물은 열차에 타기 전이나, 내리고 난 후 드세요'라고 명시되어 있어요. 열차 안에서는 음식 섭취를 삼가는 것이 원칙이에요. 특히 냄새나는 음식은 비매너로 여겨져요.",
+    "steps": [],
+    "source_url": "http://www.seoulmetro.co.kr/kr/page.do?menuIdx=480"
+  },
+  {
+    "id": 37,
+    "category": "지하철 이용 기본",
+    "question": "지하철 안에서 Wi-Fi가 되나요?",
+    "answer": "네, 서울 지하철 역사와 열차 내, 버스정류소, 공원, 관광명소, 시내·마을버스 등에서 무료 공공 Wi-Fi를 사용할 수 있어요. 보안 접속(권장): 네트워크 'SEOUL_Secure' 선택 후 ID/비밀번호 모두 seoul 입력. 한 번 접속하면 이후 자동 연결. 일반 접속: 'SEOUL' 선택 후 뜨는 페이지에서 버튼 클릭(매번 수동).",
+    "steps": [
+      "Wi-Fi 설정 열기",
+      "'SEOUL_Secure' 네트워크 선택",
+      "ID: seoul / 비밀번호: seoul 입력",
+      "연결 완료 (이후 자동 연결)"
+    ],
+    "source_url": "https://news.seoul.go.kr/gov/archives/516134"
+  },
+  {
+    "id": 38,
+    "category": "지하철 이용 기본",
+    "question": "지하철역 안에 화장실이 있나요?",
+    "answer": "거의 모든 역에 있어요. 개찰구 안팎에 위치하며 모두 무료예요. 장애인 화장실도 대부분의 역에 설치되어 있어요. 역별 배려시설 현황은 서울교통공사 홈페이지에서 확인할 수 있어요.",
+    "steps": [],
+    "source_url": "http://www.seoulmetro.co.kr/kr/page.do?menuIdx=366"
+  },
+  {
+    "id": 39,
+    "category": "지하철 이용 기본",
+    "question": "역 안에서 엘리베이터·에스컬레이터를 찾으려면?",
+    "answer": "역 안 안내판에 표시돼 있어요. 찾기 어려우면 역무원에게 문의하거나 RouteIn 실내 길찾기에서 목적지로 설정하면 안내해줘요. 현재 가동 중인 엘리베이터·에스컬레이터 현황은 서울교통공사 홈페이지 '승강설비 가동현황'에서 실시간 확인 가능해요.",
+    "steps": [],
+    "source_url": "http://www.seoulmetro.co.kr/kr/equipmentList.do?menuIdx=367"
+  },
+  {
+    "id": 40,
+    "category": "문제 상황",
+    "question": "개찰구에서 카드 오류가 났을 때는요?",
+    "answer": "개찰구 옆 역무원 호출 버튼을 누르거나 역무실로 가세요. 잔액 부족인지 카드 불량인지 확인해줘요. 잔액 부족이라면 역 내 충전기에서 충전 후 재시도하면 돼요. 1회용 티켓 관련 문제도 같은 방법으로 해결해요.",
+    "steps": [],
+    "source_url": null
+  },
+  {
+    "id": 41,
+    "category": "문제 상황",
+    "question": "지하철을 잘못 탔을 때는 어떻게 하나요?",
+    "answer": "다음 역에서 내려서 반대 방향 열차를 타면 돼요. 출구로 나가지 말고 역 내에서 환승하면 추가 요금 없어요.",
+    "steps": [],
+    "source_url": null
+  },
+  {
+    "id": 42,
+    "category": "문제 상황",
+    "question": "지하철에서 물건을 잃어버렸을 때는요?",
+    "answer": "하차한 역 역무실에 바로 문의하거나 유실물센터(1577-1234)에 연락하세요. 온라인 조회도 가능해요.",
+    "steps": [],
+    "source_url": null
+  },
+  {
+    "id": 43,
+    "category": "문제 상황",
+    "question": "역 안에서 몸이 갑자기 아플 때는요?",
+    "answer": "역무원에게 즉시 알려주세요. 모든 역에 안전 요원이 있고, 역사 내에 소화기·소화전·피난유도등 등 안전장비가 구비되어 있어요. 열차 안 비상상황 시 객실 내 비상통화장치(커버를 열고 마이크를 꺼내면 운전실에 경보음이 울리며 승무원과 통화 가능)를 사용하세요. 긴급 상황이면 119(구급) 또는 112(경찰)로 전화하세요.",
+    "steps": [],
+    "source_url": "http://www.seoulmetro.co.kr/kr/page.do?menuIdx=489"
+  },
+  {
+    "id": 44,
+    "category": "문제 상황",
+    "question": "외국어로 도움을 받을 수 있는 곳이 있나요?",
+    "answer": "1330(한국관광공사 관광안내전화)으로 전화하면 한국어·영어·일본어·중국어는 24시간 연결돼요. 러시아어·베트남어·태국어·말레이어는 매일 08:00~19:00 운영. 해외에서는 +82-2-1330으로 전화. 전화 외에도 메신저·카카오톡·페이스북·라인 채팅으로도 이용 가능 (앱 다운로드 불필요).",
+    "steps": [],
+    "source_url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=140632"
+  }
+]

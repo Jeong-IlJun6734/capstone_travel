@@ -1,0 +1,182 @@
+{
+  "station_name": "서울대입구(관악구청)역",
+  "source_image": "station_image/2/서울대입구.jpg",
+  "description": "Draft image-based 3D structure for Seoul Nat'l Univ. station. Nodes are placed from the station guide image: B1 concourse, B2 platform, visible stairs/escalators/elevators, and exit connection points.",
+  "nodes": [
+    {
+      "id": "exit_1_connection",
+      "kind": "entrance_connection",
+      "entrance_no": "1",
+      "floor": "B1",
+      "image_xy": [997, 1448]
+    },
+    {
+      "id": "exit_2_connection",
+      "kind": "entrance_connection",
+      "entrance_no": "2",
+      "floor": "B1",
+      "image_xy": [1996, 1137]
+    },
+    {
+      "id": "exit_3_connection",
+      "kind": "entrance_connection",
+      "entrance_no": "3",
+      "floor": "B1",
+      "image_xy": [1740, 2365]
+    },
+    {
+      "id": "exit_4_connection",
+      "kind": "entrance_connection",
+      "entrance_no": "4",
+      "floor": "B1",
+      "image_xy": [2282, 1428]
+    },
+    {
+      "id": "exit_5_connection",
+      "kind": "entrance_connection",
+      "entrance_no": "5",
+      "floor": "B1",
+      "image_xy": [1674, 1814]
+    },
+    {
+      "id": "exit_6_connection",
+      "kind": "entrance_connection",
+      "entrance_no": "6",
+      "floor": "B1",
+      "image_xy": [1820, 2280]
+    },
+    {
+      "id": "exit_7_connection",
+      "kind": "entrance_connection",
+      "entrance_no": "7",
+      "floor": "B1",
+      "image_xy": [1590, 2585]
+    },
+    {
+      "id": "exit_8_connection",
+      "kind": "entrance_connection",
+      "entrance_no": "8",
+      "floor": "B1",
+      "image_xy": [1305, 2685]
+    },
+    {
+      "id": "b1_west_hall",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [1175, 2350]
+    },
+    {
+      "id": "b1_center_hall",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [1545, 2355]
+    },
+    {
+      "id": "b1_east_hall",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [1980, 2230]
+    },
+    {
+      "id": "b1_information",
+      "kind": "information",
+      "floor": "B1",
+      "image_xy": [1885, 2420]
+    },
+    {
+      "id": "b1_west_stairs_to_b2",
+      "kind": "stairs_start",
+      "floor": "B1",
+      "image_xy": [1280, 2800]
+    },
+    {
+      "id": "b2_west_stairs_from_b1",
+      "kind": "stairs_end",
+      "floor": "B2",
+      "image_xy": [1040, 3290]
+    },
+    {
+      "id": "b1_center_stairs_to_b2",
+      "kind": "stairs_start",
+      "floor": "B1",
+      "image_xy": [1540, 2760]
+    },
+    {
+      "id": "b2_center_stairs_from_b1",
+      "kind": "stairs_end",
+      "floor": "B2",
+      "image_xy": [1585, 3025]
+    },
+    {
+      "id": "b1_east_stairs_to_b2",
+      "kind": "stairs_start",
+      "floor": "B1",
+      "image_xy": [2030, 2485]
+    },
+    {
+      "id": "b2_east_stairs_from_b1",
+      "kind": "stairs_end",
+      "floor": "B2",
+      "image_xy": [2220, 2920]
+    },
+    {
+      "id": "b1_elevator",
+      "kind": "elevator",
+      "floor": "B1",
+      "image_xy": [1850, 2530]
+    },
+    {
+      "id": "b2_elevator",
+      "kind": "elevator",
+      "floor": "B2",
+      "image_xy": [1880, 3135]
+    },
+    {
+      "id": "platform_west",
+      "kind": "platform",
+      "floor": "B2",
+      "direction": "to_nakseongdae",
+      "image_xy": [545, 3330]
+    },
+    {
+      "id": "platform_center",
+      "kind": "platform",
+      "floor": "B2",
+      "image_xy": [1680, 3185]
+    },
+    {
+      "id": "platform_east",
+      "kind": "platform",
+      "floor": "B2",
+      "direction": "to_bongcheon",
+      "image_xy": [2870, 2840]
+    }
+  ],
+  "edges": [
+    {"from": "exit_1_connection", "to": "b1_west_hall", "kind": "walk"},
+    {"from": "exit_2_connection", "to": "b1_center_hall", "kind": "walk"},
+    {"from": "exit_3_connection", "to": "b1_center_hall", "kind": "walk"},
+    {"from": "exit_4_connection", "to": "b1_east_hall", "kind": "walk"},
+    {"from": "exit_5_connection", "to": "b1_east_hall", "kind": "walk"},
+    {"from": "exit_6_connection", "to": "b1_east_hall", "kind": "walk"},
+    {"from": "exit_7_connection", "to": "b1_center_hall", "kind": "walk"},
+    {"from": "exit_8_connection", "to": "b1_west_hall", "kind": "walk"},
+    {"from": "b1_west_hall", "to": "b1_center_hall", "kind": "walk"},
+    {"from": "b1_center_hall", "to": "b1_east_hall", "kind": "walk"},
+    {"from": "b1_center_hall", "to": "b1_information", "kind": "walk"},
+    {"from": "b1_center_hall", "to": "b1_elevator", "kind": "walk"},
+    {"from": "b1_west_hall", "to": "b1_west_stairs_to_b2", "kind": "walk"},
+    {"from": "b1_center_hall", "to": "b1_center_stairs_to_b2", "kind": "walk"},
+    {"from": "b1_east_hall", "to": "b1_east_stairs_to_b2", "kind": "walk"},
+    {"from": "b1_west_stairs_to_b2", "to": "b2_west_stairs_from_b1", "kind": "stairs"},
+    {"from": "b1_center_stairs_to_b2", "to": "b2_center_stairs_from_b1", "kind": "stairs"},
+    {"from": "b1_east_stairs_to_b2", "to": "b2_east_stairs_from_b1", "kind": "stairs"},
+    {"from": "b1_elevator", "to": "b2_elevator", "kind": "elevator"},
+    {"from": "b2_west_stairs_from_b1", "to": "platform_west", "kind": "walk"},
+    {"from": "b2_center_stairs_from_b1", "to": "platform_center", "kind": "walk"},
+    {"from": "b2_east_stairs_from_b1", "to": "platform_east", "kind": "walk"},
+    {"from": "b2_elevator", "to": "platform_center", "kind": "walk"},
+    {"from": "platform_west", "to": "platform_center", "kind": "platform"},
+    {"from": "platform_center", "to": "platform_east", "kind": "platform"}
+  ]
+}

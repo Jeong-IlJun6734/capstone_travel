@@ -1,0 +1,361 @@
+{
+  "station_name": "신설동역",
+  "image_width": 3376,
+  "image_height": 3375,
+  "source_image": "station_image/1/신설동.jpg",
+  "note": "Draft annotation inferred visually from the guide map. Pixel coordinates should be reviewed before production use.",
+  "control_points": [
+    {
+      "entrance_no": "2",
+      "image_xy": [
+        1695,
+        1298
+      ]
+    },
+    {
+      "entrance_no": "5",
+      "image_xy": [
+        1870,
+        1364
+      ]
+    },
+    {
+      "entrance_no": "6",
+      "image_xy": [
+        1410,
+        1580
+      ]
+    },
+    {
+      "entrance_no": "10",
+      "image_xy": [
+        1430,
+        2050
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "exit_2",
+      "kind": "exit",
+      "floor": "B1",
+      "image_xy": [
+        1695,
+        1298
+      ]
+    },
+    {
+      "id": "exit_5",
+      "kind": "exit",
+      "floor": "B1",
+      "image_xy": [
+        1870,
+        1364
+      ]
+    },
+    {
+      "id": "exit_6",
+      "kind": "exit",
+      "floor": "B1",
+      "image_xy": [
+        1410,
+        1580
+      ]
+    },
+    {
+      "id": "exit_10",
+      "kind": "exit",
+      "floor": "B1",
+      "image_xy": [
+        1430,
+        2050
+      ]
+    },
+    {
+      "id": "line1_b1_hall_left",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [
+        965,
+        1470
+      ]
+    },
+    {
+      "id": "line1_b1_hall_center",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [
+        1340,
+        1535
+      ]
+    },
+    {
+      "id": "line1_b1_hall_right",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [
+        1940,
+        1395
+      ]
+    },
+    {
+      "id": "line1_info",
+      "kind": "information",
+      "floor": "B1",
+      "image_xy": [
+        1105,
+        1510
+      ]
+    },
+    {
+      "id": "line1_toilet",
+      "kind": "toilet",
+      "floor": "B1",
+      "image_xy": [
+        1248,
+        1510
+      ]
+    },
+    {
+      "id": "line1_stairs_to_platform_left",
+      "kind": "stairs",
+      "floor": "B1-B2",
+      "image_xy": [
+        1220,
+        1785
+      ]
+    },
+    {
+      "id": "line1_stairs_to_platform_center",
+      "kind": "stairs",
+      "floor": "B1-B2",
+      "image_xy": [
+        1600,
+        1810
+      ]
+    },
+    {
+      "id": "line1_stairs_to_platform_right",
+      "kind": "stairs",
+      "floor": "B1-B2",
+      "image_xy": [
+        2080,
+        1735
+      ]
+    },
+    {
+      "id": "line1_platform_left",
+      "kind": "platform",
+      "floor": "B2",
+      "image_xy": [
+        1060,
+        1885
+      ]
+    },
+    {
+      "id": "line1_platform_center",
+      "kind": "platform",
+      "floor": "B2",
+      "image_xy": [
+        1510,
+        1830
+      ]
+    },
+    {
+      "id": "line1_platform_right",
+      "kind": "platform",
+      "floor": "B2",
+      "image_xy": [
+        2050,
+        1780
+      ]
+    },
+    {
+      "id": "transfer_to_line2_from_line1",
+      "kind": "transfer",
+      "floor": "B1",
+      "image_xy": [
+        1320,
+        1985
+      ]
+    },
+    {
+      "id": "line2_b1_hall",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [
+        1765,
+        2140
+      ]
+    },
+    {
+      "id": "line2_info",
+      "kind": "information",
+      "floor": "B1",
+      "image_xy": [
+        2630,
+        1530
+      ]
+    },
+    {
+      "id": "line2_toilet",
+      "kind": "toilet",
+      "floor": "B1",
+      "image_xy": [
+        2570,
+        2120
+      ]
+    },
+    {
+      "id": "line2_stairs_to_platform_left",
+      "kind": "stairs",
+      "floor": "B1-B2",
+      "image_xy": [
+        1830,
+        2535
+      ]
+    },
+    {
+      "id": "line2_stairs_to_platform_right",
+      "kind": "stairs",
+      "floor": "B1-B2",
+      "image_xy": [
+        2770,
+        2440
+      ]
+    },
+    {
+      "id": "line2_platform_left",
+      "kind": "platform",
+      "floor": "B2",
+      "image_xy": [
+        1760,
+        2610
+      ]
+    },
+    {
+      "id": "line2_platform_center",
+      "kind": "platform",
+      "floor": "B2",
+      "image_xy": [
+        2340,
+        2500
+      ]
+    },
+    {
+      "id": "line2_platform_right",
+      "kind": "platform",
+      "floor": "B2",
+      "image_xy": [
+        2850,
+        2385
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "exit_2",
+      "to": "line1_b1_hall_right"
+    },
+    {
+      "from": "exit_5",
+      "to": "line1_b1_hall_right"
+    },
+    {
+      "from": "exit_6",
+      "to": "line1_b1_hall_center"
+    },
+    {
+      "from": "exit_10",
+      "to": "transfer_to_line2_from_line1"
+    },
+    {
+      "from": "line1_b1_hall_left",
+      "to": "line1_b1_hall_center"
+    },
+    {
+      "from": "line1_b1_hall_center",
+      "to": "line1_b1_hall_right"
+    },
+    {
+      "from": "line1_b1_hall_left",
+      "to": "line1_info"
+    },
+    {
+      "from": "line1_b1_hall_center",
+      "to": "line1_toilet"
+    },
+    {
+      "from": "line1_b1_hall_center",
+      "to": "line1_stairs_to_platform_left"
+    },
+    {
+      "from": "line1_b1_hall_center",
+      "to": "line1_stairs_to_platform_center"
+    },
+    {
+      "from": "line1_b1_hall_right",
+      "to": "line1_stairs_to_platform_right"
+    },
+    {
+      "from": "line1_stairs_to_platform_left",
+      "to": "line1_platform_left"
+    },
+    {
+      "from": "line1_stairs_to_platform_center",
+      "to": "line1_platform_center"
+    },
+    {
+      "from": "line1_stairs_to_platform_right",
+      "to": "line1_platform_right"
+    },
+    {
+      "from": "line1_platform_left",
+      "to": "line1_platform_center"
+    },
+    {
+      "from": "line1_platform_center",
+      "to": "line1_platform_right"
+    },
+    {
+      "from": "line1_b1_hall_center",
+      "to": "transfer_to_line2_from_line1"
+    },
+    {
+      "from": "transfer_to_line2_from_line1",
+      "to": "line2_b1_hall"
+    },
+    {
+      "from": "line2_b1_hall",
+      "to": "line2_info"
+    },
+    {
+      "from": "line2_b1_hall",
+      "to": "line2_toilet"
+    },
+    {
+      "from": "line2_b1_hall",
+      "to": "line2_stairs_to_platform_left"
+    },
+    {
+      "from": "line2_b1_hall",
+      "to": "line2_stairs_to_platform_right"
+    },
+    {
+      "from": "line2_stairs_to_platform_left",
+      "to": "line2_platform_left"
+    },
+    {
+      "from": "line2_stairs_to_platform_right",
+      "to": "line2_platform_right"
+    },
+    {
+      "from": "line2_platform_left",
+      "to": "line2_platform_center"
+    },
+    {
+      "from": "line2_platform_center",
+      "to": "line2_platform_right"
+    }
+  ]
+}

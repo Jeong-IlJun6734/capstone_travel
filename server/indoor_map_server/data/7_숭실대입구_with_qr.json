@@ -1,0 +1,1173 @@
+{
+  "station_name": "숭실대입구",
+  "line_no": "7",
+  "source_image": "7/숭실대입구.jpg",
+  "image_width": 3402,
+  "image_height": 3402,
+  "annotation_status": "clicked_draft",
+  "created_at": "2026-05-28T17:48:34",
+  "note": "Created from clicked image coordinates using station_image/image_check.py. Review node labels, floors, and edges before routing.",
+  "nodes": [
+    {
+      "id": "node_001",
+      "kind": "entrance_connection",
+      "click_index": 1,
+      "image_xy": [
+        356,
+        734
+      ],
+      "floor": "ground",
+      "entrance_no": "1"
+    },
+    {
+      "id": "node_002",
+      "kind": "entrance_connection",
+      "click_index": 2,
+      "image_xy": [
+        1135,
+        659
+      ],
+      "floor": "ground",
+      "entrance_no": "2"
+    },
+    {
+      "id": "node_003",
+      "kind": "entrance_connection",
+      "click_index": 3,
+      "image_xy": [
+        1119,
+        1066
+      ],
+      "floor": "ground",
+      "entrance_no": "3"
+    },
+    {
+      "id": "node_004",
+      "kind": "entrance_connection",
+      "click_index": 4,
+      "image_xy": [
+        444,
+        1123
+      ],
+      "floor": "ground",
+      "entrance_no": "4"
+    },
+    {
+      "id": "node_005",
+      "kind": "stairs_start",
+      "click_index": 5,
+      "image_xy": [
+        370,
+        735
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_006",
+      "kind": "stairs_start",
+      "click_index": 6,
+      "image_xy": [
+        1115,
+        661
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_007",
+      "kind": "stairs_start",
+      "click_index": 7,
+      "image_xy": [
+        1105,
+        1070
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_008",
+      "kind": "stairs_start",
+      "click_index": 8,
+      "image_xy": [
+        454,
+        1122
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_009",
+      "kind": "stairs_end",
+      "click_index": 9,
+      "image_xy": [
+        547,
+        832
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_010",
+      "kind": "stairs_end",
+      "click_index": 10,
+      "image_xy": [
+        895,
+        859
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_011",
+      "kind": "stairs_end",
+      "click_index": 11,
+      "image_xy": [
+        632,
+        1204
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_012",
+      "kind": "stairs_end",
+      "click_index": 12,
+      "image_xy": [
+        911,
+        1200
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_013",
+      "kind": "hall",
+      "click_index": 13,
+      "image_xy": [
+        799,
+        1210
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_014",
+      "kind": "hall",
+      "click_index": 14,
+      "image_xy": [
+        786,
+        1058
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_015",
+      "kind": "hall",
+      "click_index": 15,
+      "image_xy": [
+        753,
+        859
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_016",
+      "kind": "stairs_start",
+      "click_index": 16,
+      "image_xy": [
+        858,
+        1053
+      ],
+      "floor": "B1"
+    },
+    {
+      "id": "node_017",
+      "kind": "stairs_end",
+      "click_index": 17,
+      "image_xy": [
+        1246,
+        1235
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_018",
+      "kind": "information",
+      "click_index": 18,
+      "image_xy": [
+        1280,
+        1153
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_019",
+      "kind": "elevator",
+      "click_index": 19,
+      "image_xy": [
+        1444,
+        1086
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_020",
+      "kind": "elevator",
+      "click_index": 20,
+      "image_xy": [
+        1528,
+        1331
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_021",
+      "kind": "hall",
+      "click_index": 21,
+      "image_xy": [
+        1332,
+        1226
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_022",
+      "kind": "hall",
+      "click_index": 22,
+      "image_xy": [
+        1557,
+        1189
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_023",
+      "kind": "hall",
+      "click_index": 23,
+      "image_xy": [
+        1483,
+        1110
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_024",
+      "kind": "hall",
+      "click_index": 24,
+      "image_xy": [
+        1517,
+        1301
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_025",
+      "kind": "hall",
+      "click_index": 25,
+      "image_xy": [
+        1455,
+        1210
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_026",
+      "kind": "hall",
+      "click_index": 26,
+      "image_xy": [
+        1620,
+        1183
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_027",
+      "kind": "hall",
+      "click_index": 27,
+      "image_xy": [
+        1876,
+        1154
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_028",
+      "kind": "stairs_start",
+      "click_index": 28,
+      "image_xy": [
+        1905,
+        1230
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_029",
+      "kind": "stairs_start",
+      "click_index": 29,
+      "image_xy": [
+        1798,
+        1097
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_030",
+      "kind": "elevator",
+      "click_index": 30,
+      "image_xy": [
+        2106,
+        1039
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_031",
+      "kind": "elevator",
+      "click_index": 31,
+      "image_xy": [
+        2228,
+        1206
+      ],
+      "floor": "B2"
+    },
+    {
+      "id": "node_032",
+      "kind": "elevator",
+      "click_index": 32,
+      "image_xy": [
+        1445,
+        853
+      ],
+      "floor": "ground"
+    },
+    {
+      "id": "node_033",
+      "kind": "stairs_end",
+      "click_index": 33,
+      "image_xy": [
+        1613,
+        1799
+      ],
+      "floor": "B3"
+    },
+    {
+      "id": "node_034",
+      "kind": "stairs_end",
+      "click_index": 34,
+      "image_xy": [
+        1514,
+        1683
+      ],
+      "floor": "B3"
+    },
+    {
+      "id": "node_035",
+      "kind": "stairs_start",
+      "click_index": 35,
+      "image_xy": [
+        1854,
+        1623
+      ],
+      "floor": "B3"
+    },
+    {
+      "id": "node_036",
+      "kind": "stairs_start",
+      "click_index": 36,
+      "image_xy": [
+        1726,
+        1646
+      ],
+      "floor": "B3"
+    },
+    {
+      "id": "node_037",
+      "kind": "stairs_start",
+      "click_index": 37,
+      "image_xy": [
+        1764,
+        1795
+      ],
+      "floor": "B3"
+    },
+    {
+      "id": "node_038",
+      "kind": "stairs_start",
+      "click_index": 38,
+      "image_xy": [
+        1921,
+        1778
+      ],
+      "floor": "B3"
+    },
+    {
+      "id": "node_039",
+      "kind": "hall",
+      "click_index": 39,
+      "image_xy": [
+        1548,
+        1746
+      ],
+      "floor": "B3"
+    },
+    {
+      "id": "node_040",
+      "kind": "hall",
+      "click_index": 40,
+      "image_xy": [
+        1736,
+        1716
+      ],
+      "floor": "B3"
+    },
+    {
+      "id": "node_041",
+      "kind": "hall",
+      "click_index": 41,
+      "image_xy": [
+        1818,
+        1702
+      ],
+      "floor": "B3"
+    },
+    {
+      "id": "node_042",
+      "kind": "hall",
+      "click_index": 42,
+      "image_xy": [
+        1791,
+        1628
+      ],
+      "floor": "B3"
+    },
+    {
+      "id": "node_043",
+      "kind": "hall",
+      "click_index": 43,
+      "image_xy": [
+        1865,
+        1783
+      ],
+      "floor": "B3"
+    },
+    {
+      "id": "node_044",
+      "kind": "stairs_end",
+      "click_index": 44,
+      "image_xy": [
+        1593,
+        2155
+      ],
+      "floor": "B4"
+    },
+    {
+      "id": "node_045",
+      "kind": "stairs_end",
+      "click_index": 45,
+      "image_xy": [
+        1525,
+        2007
+      ],
+      "floor": "B4"
+    },
+    {
+      "id": "node_046",
+      "kind": "stairs_end",
+      "click_index": 46,
+      "image_xy": [
+        2005,
+        1973
+      ],
+      "floor": "B4"
+    },
+    {
+      "id": "node_047",
+      "kind": "stairs_end",
+      "click_index": 47,
+      "image_xy": [
+        2111,
+        2112
+      ],
+      "floor": "B4"
+    },
+    {
+      "id": "node_048",
+      "kind": "elevator",
+      "click_index": 48,
+      "image_xy": [
+        2103,
+        1929
+      ],
+      "floor": "B4"
+    },
+    {
+      "id": "node_049",
+      "kind": "elevator",
+      "click_index": 49,
+      "image_xy": [
+        2219,
+        2096
+      ],
+      "floor": "B4"
+    },
+    {
+      "id": "node_050",
+      "kind": "platform",
+      "click_index": 50,
+      "image_xy": [
+        2729,
+        1991
+      ],
+      "floor": "B4"
+    },
+    {
+      "id": "node_051",
+      "kind": "platform",
+      "click_index": 51,
+      "image_xy": [
+        2209,
+        2058
+      ],
+      "floor": "B4"
+    },
+    {
+      "id": "node_052",
+      "kind": "platform",
+      "click_index": 52,
+      "image_xy": [
+        1867,
+        2097
+      ],
+      "floor": "B4"
+    },
+    {
+      "id": "node_053",
+      "kind": "platform",
+      "click_index": 53,
+      "image_xy": [
+        1073,
+        2189
+      ],
+      "floor": "B4"
+    },
+    {
+      "id": "node_054",
+      "kind": "platform",
+      "click_index": 54,
+      "image_xy": [
+        827,
+        2219
+      ],
+      "floor": "B4"
+    },
+    {
+      "id": "node_055",
+      "kind": "platform",
+      "click_index": 55,
+      "image_xy": [
+        757,
+        2136
+      ],
+      "floor": "B4"
+    },
+    {
+      "id": "node_056",
+      "kind": "platform",
+      "click_index": 56,
+      "image_xy": [
+        1339,
+        2065
+      ],
+      "floor": "B4"
+    },
+    {
+      "id": "node_057",
+      "kind": "platform",
+      "click_index": 57,
+      "image_xy": [
+        1546,
+        2041
+      ],
+      "floor": "B4"
+    },
+    {
+      "id": "node_058",
+      "kind": "platform",
+      "click_index": 58,
+      "image_xy": [
+        1796,
+        2007
+      ],
+      "floor": "B4"
+    },
+    {
+      "id": "node_059",
+      "kind": "platform",
+      "click_index": 59,
+      "image_xy": [
+        2132,
+        1977
+      ],
+      "floor": "B4"
+    },
+    {
+      "id": "node_060",
+      "kind": "platform",
+      "click_index": 60,
+      "image_xy": [
+        2639,
+        1912
+      ],
+      "floor": "B4"
+    },
+    {
+      "id": "node_061",
+      "kind": "qr",
+      "click_index": 61,
+      "image_xy": [
+        849,
+        1111
+      ],
+      "floor": "B1",
+      "qr_id": "a32a1b4f714e1497a22f9d7de7e686d9ade18e43aafd733343b08e22fe3bafc7",
+      "qr_payload": {
+        "station": "숭실대입구",
+        "line": "7",
+        "qr_id": "a32a1b4f714e1497a22f9d7de7e686d9ade18e43aafd733343b08e22fe3bafc7"
+      }
+    },
+    {
+      "id": "node_062",
+      "kind": "qr",
+      "click_index": 62,
+      "image_xy": [
+        810,
+        991
+      ],
+      "floor": "B1",
+      "qr_id": "fdb4353543a8411430030883a48a6338d9b2f13f028ea213852bd468cf32ec05",
+      "qr_payload": {
+        "station": "숭실대입구",
+        "line": "7",
+        "qr_id": "fdb4353543a8411430030883a48a6338d9b2f13f028ea213852bd468cf32ec05"
+      }
+    },
+    {
+      "id": "node_063",
+      "kind": "qr",
+      "click_index": 63,
+      "image_xy": [
+        1465,
+        1157
+      ],
+      "floor": "B2",
+      "qr_id": "029d7d94fd69b1623619499f9fb5168294fe3d6f8492ad6d309e042a0fe0b905",
+      "qr_payload": {
+        "station": "숭실대입구",
+        "line": "7",
+        "qr_id": "029d7d94fd69b1623619499f9fb5168294fe3d6f8492ad6d309e042a0fe0b905"
+      }
+    },
+    {
+      "id": "node_064",
+      "kind": "qr",
+      "click_index": 64,
+      "image_xy": [
+        1496,
+        1282
+      ],
+      "floor": "B2",
+      "qr_id": "e37ab1f64f1774bc3cfcc8346d2c01a182a1ea94f5cd293d990845f74f3d6dfd",
+      "qr_payload": {
+        "station": "숭실대입구",
+        "line": "7",
+        "qr_id": "e37ab1f64f1774bc3cfcc8346d2c01a182a1ea94f5cd293d990845f74f3d6dfd"
+      }
+    },
+    {
+      "id": "node_065",
+      "kind": "qr",
+      "click_index": 65,
+      "image_xy": [
+        1732,
+        1685
+      ],
+      "floor": "B2",
+      "qr_id": "64b55a95bdd490e19a422bdb2c60e728826637f429475095e361b51a515e2d6f",
+      "qr_payload": {
+        "station": "숭실대입구",
+        "line": "7",
+        "qr_id": "64b55a95bdd490e19a422bdb2c60e728826637f429475095e361b51a515e2d6f"
+      }
+    },
+    {
+      "id": "node_066",
+      "kind": "qr",
+      "click_index": 66,
+      "image_xy": [
+        1743,
+        1739
+      ],
+      "floor": "B2",
+      "qr_id": "0781406e18f3fe3dc35ab95bbc0e099532097f0fbf6d806d193dd5f1e153b187",
+      "qr_payload": {
+        "station": "숭실대입구",
+        "line": "7",
+        "qr_id": "0781406e18f3fe3dc35ab95bbc0e099532097f0fbf6d806d193dd5f1e153b187"
+      }
+    },
+    {
+      "id": "node_067",
+      "kind": "qr",
+      "click_index": 67,
+      "image_xy": [
+        1436,
+        2034
+      ],
+      "floor": "B2",
+      "qr_id": "1a84cdce4fe7e873b370caf18a63b6c22177518d1e9aaa799e8c9c9598423c3a",
+      "qr_payload": {
+        "station": "숭실대입구",
+        "line": "7",
+        "qr_id": "1a84cdce4fe7e873b370caf18a63b6c22177518d1e9aaa799e8c9c9598423c3a"
+      }
+    },
+    {
+      "id": "node_068",
+      "kind": "qr",
+      "click_index": 68,
+      "image_xy": [
+        1518,
+        2148
+      ],
+      "floor": "B2",
+      "qr_id": "13d776a3b2ab267476978eb7d8afba34ecf08f81b53594ba371fe12f81dfff37",
+      "qr_payload": {
+        "station": "숭실대입구",
+        "line": "7",
+        "qr_id": "13d776a3b2ab267476978eb7d8afba34ecf08f81b53594ba371fe12f81dfff37"
+      }
+    },
+    {
+      "id": "node_069",
+      "kind": "qr",
+      "click_index": 69,
+      "image_xy": [
+        2103,
+        1978
+      ],
+      "floor": "B2",
+      "qr_id": "f2b1d73c35b08b34e50a286f449d95c9f992df4c94cd9206297662606c711463",
+      "qr_payload": {
+        "station": "숭실대입구",
+        "line": "7",
+        "qr_id": "f2b1d73c35b08b34e50a286f449d95c9f992df4c94cd9206297662606c711463"
+      }
+    },
+    {
+      "id": "node_070",
+      "kind": "qr",
+      "click_index": 70,
+      "image_xy": [
+        2151,
+        2069
+      ],
+      "floor": "B2",
+      "qr_id": "af04785e9f039072356136dd986d04f71eda53055492d2b2ed3b924af622113d",
+      "qr_payload": {
+        "station": "숭실대입구",
+        "line": "7",
+        "qr_id": "af04785e9f039072356136dd986d04f71eda53055492d2b2ed3b924af622113d"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "node_001",
+      "to": "node_005",
+      "kind": "walk"
+    },
+    {
+      "from": "node_005",
+      "to": "node_009",
+      "kind": "walk"
+    },
+    {
+      "from": "node_009",
+      "to": "node_015",
+      "kind": "walk"
+    },
+    {
+      "from": "node_004",
+      "to": "node_008",
+      "kind": "walk"
+    },
+    {
+      "from": "node_008",
+      "to": "node_011",
+      "kind": "walk"
+    },
+    {
+      "from": "node_011",
+      "to": "node_013",
+      "kind": "walk"
+    },
+    {
+      "from": "node_013",
+      "to": "node_014",
+      "kind": "walk"
+    },
+    {
+      "from": "node_014",
+      "to": "node_016",
+      "kind": "walk"
+    },
+    {
+      "from": "node_014",
+      "to": "node_015",
+      "kind": "walk"
+    },
+    {
+      "from": "node_010",
+      "to": "node_015",
+      "kind": "walk"
+    },
+    {
+      "from": "node_010",
+      "to": "node_006",
+      "kind": "walk"
+    },
+    {
+      "from": "node_006",
+      "to": "node_002",
+      "kind": "walk"
+    },
+    {
+      "from": "node_013",
+      "to": "node_012",
+      "kind": "walk"
+    },
+    {
+      "from": "node_012",
+      "to": "node_007",
+      "kind": "walk"
+    },
+    {
+      "from": "node_007",
+      "to": "node_003",
+      "kind": "walk"
+    },
+    {
+      "from": "node_016",
+      "to": "node_017",
+      "kind": "walk"
+    },
+    {
+      "from": "node_021",
+      "to": "node_017",
+      "kind": "walk"
+    },
+    {
+      "from": "node_021",
+      "to": "node_025",
+      "kind": "walk"
+    },
+    {
+      "from": "node_018",
+      "to": "node_021",
+      "kind": "walk"
+    },
+    {
+      "from": "node_018",
+      "to": "node_025",
+      "kind": "walk"
+    },
+    {
+      "from": "node_019",
+      "to": "node_023",
+      "kind": "walk"
+    },
+    {
+      "from": "node_023",
+      "to": "node_025",
+      "kind": "walk"
+    },
+    {
+      "from": "node_023",
+      "to": "node_022",
+      "kind": "walk"
+    },
+    {
+      "from": "node_022",
+      "to": "node_025",
+      "kind": "walk"
+    },
+    {
+      "from": "node_019",
+      "to": "node_032",
+      "kind": "walk"
+    },
+    {
+      "from": "node_025",
+      "to": "node_024",
+      "kind": "walk"
+    },
+    {
+      "from": "node_021",
+      "to": "node_024",
+      "kind": "walk"
+    },
+    {
+      "from": "node_022",
+      "to": "node_024",
+      "kind": "walk"
+    },
+    {
+      "from": "node_024",
+      "to": "node_020",
+      "kind": "walk"
+    },
+    {
+      "from": "node_022",
+      "to": "node_026",
+      "kind": "walk"
+    },
+    {
+      "from": "node_026",
+      "to": "node_027",
+      "kind": "walk"
+    },
+    {
+      "from": "node_027",
+      "to": "node_029",
+      "kind": "walk"
+    },
+    {
+      "from": "node_027",
+      "to": "node_028",
+      "kind": "walk"
+    },
+    {
+      "from": "node_027",
+      "to": "node_030",
+      "kind": "walk"
+    },
+    {
+      "from": "node_027",
+      "to": "node_031",
+      "kind": "walk"
+    },
+    {
+      "from": "node_028",
+      "to": "node_031",
+      "kind": "walk"
+    },
+    {
+      "from": "node_028",
+      "to": "node_033",
+      "kind": "walk"
+    },
+    {
+      "from": "node_034",
+      "to": "node_029",
+      "kind": "walk"
+    },
+    {
+      "from": "node_034",
+      "to": "node_039",
+      "kind": "walk"
+    },
+    {
+      "from": "node_039",
+      "to": "node_033",
+      "kind": "walk"
+    },
+    {
+      "from": "node_039",
+      "to": "node_040",
+      "kind": "walk"
+    },
+    {
+      "from": "node_040",
+      "to": "node_041",
+      "kind": "walk"
+    },
+    {
+      "from": "node_041",
+      "to": "node_042",
+      "kind": "walk"
+    },
+    {
+      "from": "node_041",
+      "to": "node_035",
+      "kind": "walk"
+    },
+    {
+      "from": "node_041",
+      "to": "node_036",
+      "kind": "walk"
+    },
+    {
+      "from": "node_036",
+      "to": "node_042",
+      "kind": "walk"
+    },
+    {
+      "from": "node_042",
+      "to": "node_035",
+      "kind": "walk"
+    },
+    {
+      "from": "node_040",
+      "to": "node_036",
+      "kind": "walk"
+    },
+    {
+      "from": "node_041",
+      "to": "node_037",
+      "kind": "walk"
+    },
+    {
+      "from": "node_040",
+      "to": "node_037",
+      "kind": "walk"
+    },
+    {
+      "from": "node_041",
+      "to": "node_043",
+      "kind": "walk"
+    },
+    {
+      "from": "node_043",
+      "to": "node_037",
+      "kind": "walk"
+    },
+    {
+      "from": "node_041",
+      "to": "node_038",
+      "kind": "walk"
+    },
+    {
+      "from": "node_043",
+      "to": "node_038",
+      "kind": "walk"
+    },
+    {
+      "from": "node_031",
+      "to": "node_049",
+      "kind": "walk"
+    },
+    {
+      "from": "node_048",
+      "to": "node_030",
+      "kind": "walk"
+    },
+    {
+      "from": "node_046",
+      "to": "node_035",
+      "kind": "walk"
+    },
+    {
+      "from": "node_038",
+      "to": "node_047",
+      "kind": "walk"
+    },
+    {
+      "from": "node_044",
+      "to": "node_037",
+      "kind": "walk"
+    },
+    {
+      "from": "node_045",
+      "to": "node_036",
+      "kind": "walk"
+    },
+    {
+      "from": "node_045",
+      "to": "node_057",
+      "kind": "walk"
+    },
+    {
+      "from": "node_058",
+      "to": "node_057",
+      "kind": "walk"
+    },
+    {
+      "from": "node_057",
+      "to": "node_056",
+      "kind": "walk"
+    },
+    {
+      "from": "node_056",
+      "to": "node_055",
+      "kind": "walk"
+    },
+    {
+      "from": "node_054",
+      "to": "node_053",
+      "kind": "walk"
+    },
+    {
+      "from": "node_053",
+      "to": "node_052",
+      "kind": "walk"
+    },
+    {
+      "from": "node_052",
+      "to": "node_044",
+      "kind": "walk"
+    },
+    {
+      "from": "node_044",
+      "to": "node_053",
+      "kind": "walk"
+    },
+    {
+      "from": "node_045",
+      "to": "node_056",
+      "kind": "walk"
+    },
+    {
+      "from": "node_058",
+      "to": "node_059",
+      "kind": "walk"
+    },
+    {
+      "from": "node_046",
+      "to": "node_058",
+      "kind": "walk"
+    },
+    {
+      "from": "node_052",
+      "to": "node_051",
+      "kind": "walk"
+    },
+    {
+      "from": "node_047",
+      "to": "node_051",
+      "kind": "walk"
+    },
+    {
+      "from": "node_047",
+      "to": "node_049",
+      "kind": "walk"
+    },
+    {
+      "from": "node_049",
+      "to": "node_051",
+      "kind": "walk"
+    },
+    {
+      "from": "node_059",
+      "to": "node_060",
+      "kind": "walk"
+    },
+    {
+      "from": "node_048",
+      "to": "node_059",
+      "kind": "walk"
+    },
+    {
+      "from": "node_046",
+      "to": "node_048",
+      "kind": "walk"
+    },
+    {
+      "from": "node_051",
+      "to": "node_050",
+      "kind": "walk"
+    }
+  ]
+}

@@ -1,0 +1,272 @@
+{
+  "station_name": "종각역",
+  "source_image": "station_image/1/종각.jpg",
+  "description": "Example indoor structure nodes/edges in image coordinates. This is an editable input for step 3.",
+  "nodes": [
+    {
+      "id": "exit_1_connection",
+      "kind": "entrance_connection",
+      "entrance_no": "1",
+      "floor": "B1",
+      "image_xy": [
+        592,
+        1680
+      ]
+    },
+    {
+      "id": "exit_2_connection",
+      "kind": "entrance_connection",
+      "entrance_no": "2",
+      "floor": "B1",
+      "image_xy": [
+        623,
+        1395
+      ]
+    },
+    {
+      "id": "exit_3_connection",
+      "kind": "entrance_connection",
+      "entrance_no": "3",
+      "floor": "B1",
+      "image_xy": [
+        1952,
+        1152
+      ]
+    },
+    {
+      "id": "exit_4_connection",
+      "kind": "entrance_connection",
+      "entrance_no": "4",
+      "floor": "B1",
+      "image_xy": [
+        1799,
+        1758
+      ]
+    },
+    {
+      "id": "exit_5_connection",
+      "kind": "entrance_connection",
+      "entrance_no": "5",
+      "floor": "B2",
+      "image_xy": [
+        2378,
+        1455
+      ]
+    },
+    {
+      "id": "exit_6_connection",
+      "kind": "entrance_connection",
+      "entrance_no": "6",
+      "floor": "B2",
+      "image_xy": [
+        1365,
+        1892
+      ]
+    },
+    {
+      "id": "b1_west_hall",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [
+        725,
+        1690
+      ]
+    },
+    {
+      "id": "b1_center_hall",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [
+        1325,
+        1585
+      ]
+    },
+    {
+      "id": "b1_east_hall",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [
+        2050,
+        1510
+      ]
+    },
+    {
+      "id": "stairs_west_b1",
+      "kind": "stairs_start",
+      "floor": "B1",
+      "image_xy": [
+        1095,
+        2105
+      ]
+    },
+    {
+      "id": "stairs_west_b2",
+      "kind": "stairs_end",
+      "floor": "B2",
+      "image_xy": [
+        920,
+        2400
+      ]
+    },
+    {
+      "id": "stairs_center_b1",
+      "kind": "stairs_start",
+      "floor": "B1",
+      "image_xy": [
+        1595,
+        1875
+      ]
+    },
+    {
+      "id": "stairs_center_b2",
+      "kind": "stairs_end",
+      "floor": "B2",
+      "image_xy": [
+        1420,
+        2250
+      ]
+    },
+    {
+      "id": "stairs_east_b1",
+      "kind": "stairs_start",
+      "floor": "B1",
+      "image_xy": [
+        2075,
+        1710
+      ]
+    },
+    {
+      "id": "stairs_east_b2",
+      "kind": "stairs_end",
+      "floor": "B2",
+      "image_xy": [
+        2050,
+        2050
+      ]
+    },
+    {
+      "id": "platform_west",
+      "kind": "platform",
+      "floor": "B2",
+      "image_xy": [
+        920,
+        2400
+      ]
+    },
+    {
+      "id": "platform_center",
+      "kind": "platform",
+      "floor": "B2",
+      "image_xy": [
+        1700,
+        2150
+      ]
+    },
+    {
+      "id": "platform_east",
+      "kind": "platform",
+      "floor": "B2",
+      "image_xy": [
+        2750,
+        1760
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "exit_1_connection",
+      "to": "b1_west_hall",
+      "kind": "walk"
+    },
+    {
+      "from": "exit_2_connection",
+      "to": "b1_west_hall",
+      "kind": "walk"
+    },
+    {
+      "from": "b1_west_hall",
+      "to": "b1_center_hall",
+      "kind": "walk"
+    },
+    {
+      "from": "b1_center_hall",
+      "to": "b1_east_hall",
+      "kind": "walk"
+    },
+    {
+      "from": "exit_3_connection",
+      "to": "b1_east_hall",
+      "kind": "walk"
+    },
+    {
+      "from": "exit_4_connection",
+      "to": "b1_east_hall",
+      "kind": "walk"
+    },
+    {
+      "from": "b1_west_hall",
+      "to": "stairs_west_b1",
+      "kind": "walk"
+    },
+    {
+      "from": "stairs_west_b1",
+      "to": "stairs_west_b2",
+      "kind": "stairs"
+    },
+    {
+      "from": "b1_center_hall",
+      "to": "stairs_center_b1",
+      "kind": "walk"
+    },
+    {
+      "from": "stairs_center_b1",
+      "to": "stairs_center_b2",
+      "kind": "stairs"
+    },
+    {
+      "from": "b1_east_hall",
+      "to": "stairs_east_b1",
+      "kind": "walk"
+    },
+    {
+      "from": "stairs_east_b1",
+      "to": "stairs_east_b2",
+      "kind": "stairs"
+    },
+    {
+      "from": "stairs_west_b2",
+      "to": "platform_west",
+      "kind": "walk"
+    },
+    {
+      "from": "stairs_center_b2",
+      "to": "platform_center",
+      "kind": "walk"
+    },
+    {
+      "from": "stairs_east_b2",
+      "to": "platform_east",
+      "kind": "walk"
+    },
+    {
+      "from": "platform_west",
+      "to": "platform_center",
+      "kind": "platform_walk"
+    },
+    {
+      "from": "platform_center",
+      "to": "platform_east",
+      "kind": "platform_walk"
+    },
+    {
+      "from": "exit_5_connection",
+      "to": "platform_east",
+      "kind": "walk"
+    },
+    {
+      "from": "exit_6_connection",
+      "to": "platform_center",
+      "kind": "walk"
+    }
+  ]
+}

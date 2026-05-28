@@ -1,0 +1,274 @@
+{
+  "station_name": "숭실대입구(살피재)역",
+  "source_image": "station_image/7/숭실대입구.jpg",
+  "description": "Draft image-based 3D structure for Soongsil University station. This guide image is highly isometric and deep, so review the generated graph carefully.",
+  "nodes": [
+    {
+      "id": "exit_1_connection",
+      "kind": "entrance_connection",
+      "entrance_no": "1",
+      "floor": "B1",
+      "image_xy": [
+        325,
+        632
+      ]
+    },
+    {
+      "id": "exit_2_connection",
+      "kind": "entrance_connection",
+      "entrance_no": "2",
+      "floor": "B1",
+      "image_xy": [
+        1117,
+        584
+      ]
+    },
+    {
+      "id": "exit_3_connection",
+      "kind": "entrance_connection",
+      "entrance_no": "3",
+      "floor": "B2",
+      "image_xy": [
+        1187,
+        1035
+      ]
+    },
+    {
+      "id": "exit_4_connection",
+      "kind": "entrance_connection",
+      "entrance_no": "4",
+      "floor": "B1",
+      "image_xy": [
+        371,
+        1155
+      ]
+    },
+    {
+      "id": "b1_left_hall",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [
+        610,
+        895
+      ]
+    },
+    {
+      "id": "b1_center_hall",
+      "kind": "hall",
+      "floor": "B1",
+      "image_xy": [
+        900,
+        920
+      ]
+    },
+    {
+      "id": "b1_stairs_to_b2",
+      "kind": "stairs_start",
+      "floor": "B1",
+      "image_xy": [
+        980,
+        1085
+      ]
+    },
+    {
+      "id": "b2_stairs_from_b1",
+      "kind": "stairs_end",
+      "floor": "B2",
+      "image_xy": [
+        1310,
+        1240
+      ]
+    },
+    {
+      "id": "b2_hall",
+      "kind": "hall",
+      "floor": "B2",
+      "image_xy": [
+        1700,
+        1225
+      ]
+    },
+    {
+      "id": "b2_information",
+      "kind": "information",
+      "floor": "B2",
+      "image_xy": [
+        1485,
+        1140
+      ]
+    },
+    {
+      "id": "b2_elevator",
+      "kind": "elevator",
+      "floor": "B2",
+      "image_xy": [
+        1580,
+        1035
+      ]
+    },
+    {
+      "id": "b2_stairs_to_b5",
+      "kind": "stairs_start",
+      "floor": "B2",
+      "image_xy": [
+        1980,
+        1285
+      ]
+    },
+    {
+      "id": "b5_stairs_from_b2",
+      "kind": "stairs_end",
+      "floor": "B5",
+      "image_xy": [
+        1780,
+        2050
+      ]
+    },
+    {
+      "id": "b5_hall",
+      "kind": "hall",
+      "floor": "B5",
+      "image_xy": [
+        1925,
+        2175
+      ]
+    },
+    {
+      "id": "b5_elevator",
+      "kind": "elevator",
+      "floor": "B5",
+      "image_xy": [
+        2220,
+        2040
+      ]
+    },
+    {
+      "id": "b5_stairs_to_platform",
+      "kind": "stairs_start",
+      "floor": "B5",
+      "image_xy": [
+        2185,
+        2330
+      ]
+    },
+    {
+      "id": "platform_west",
+      "kind": "platform",
+      "floor": "B6",
+      "image_xy": [
+        1260,
+        2690
+      ]
+    },
+    {
+      "id": "platform_center",
+      "kind": "platform",
+      "floor": "B6",
+      "image_xy": [
+        1930,
+        2600
+      ]
+    },
+    {
+      "id": "platform_east",
+      "kind": "platform",
+      "floor": "B6",
+      "image_xy": [
+        2700,
+        2440
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "exit_1_connection",
+      "to": "b1_left_hall",
+      "kind": "walk"
+    },
+    {
+      "from": "exit_2_connection",
+      "to": "b1_center_hall",
+      "kind": "walk"
+    },
+    {
+      "from": "exit_4_connection",
+      "to": "b1_left_hall",
+      "kind": "walk"
+    },
+    {
+      "from": "b1_left_hall",
+      "to": "b1_center_hall",
+      "kind": "walk"
+    },
+    {
+      "from": "b1_center_hall",
+      "to": "b1_stairs_to_b2",
+      "kind": "walk"
+    },
+    {
+      "from": "b1_stairs_to_b2",
+      "to": "b2_stairs_from_b1",
+      "kind": "stairs"
+    },
+    {
+      "from": "b2_stairs_from_b1",
+      "to": "b2_hall",
+      "kind": "walk"
+    },
+    {
+      "from": "exit_3_connection",
+      "to": "b2_hall",
+      "kind": "walk"
+    },
+    {
+      "from": "b2_hall",
+      "to": "b2_information",
+      "kind": "walk"
+    },
+    {
+      "from": "b2_hall",
+      "to": "b2_elevator",
+      "kind": "walk"
+    },
+    {
+      "from": "b2_hall",
+      "to": "b2_stairs_to_b5",
+      "kind": "walk"
+    },
+    {
+      "from": "b2_stairs_to_b5",
+      "to": "b5_stairs_from_b2",
+      "kind": "stairs"
+    },
+    {
+      "from": "b5_stairs_from_b2",
+      "to": "b5_hall",
+      "kind": "walk"
+    },
+    {
+      "from": "b5_hall",
+      "to": "b5_elevator",
+      "kind": "walk"
+    },
+    {
+      "from": "b5_hall",
+      "to": "b5_stairs_to_platform",
+      "kind": "walk"
+    },
+    {
+      "from": "b5_stairs_to_platform",
+      "to": "platform_center",
+      "kind": "stairs"
+    },
+    {
+      "from": "platform_west",
+      "to": "platform_center",
+      "kind": "platform_walk"
+    },
+    {
+      "from": "platform_center",
+      "to": "platform_east",
+      "kind": "platform_walk"
+    }
+  ]
+}
