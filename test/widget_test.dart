@@ -64,7 +64,7 @@ void main() {
   ) async {
     await tester.pumpWidget(const MaterialApp(home: OutdoorNavigationPage()));
 
-    expect(find.text('서버 일정 장소를 불러오는 중입니다.'), findsOneWidget);
+    expect(find.text('실외 길찾기'), findsOneWidget);
     expect(find.byTooltip('서버 일정 새로고침'), findsOneWidget);
   });
 
@@ -72,6 +72,6 @@ void main() {
     await tester.pumpWidget(const MaterialApp(home: OutdoorNavigationPage()));
 
     expect(find.text('내 일정 장소'), findsOneWidget);
-    expect(find.text('서버에서 사용자 일정을 불러오는 중입니다.'), findsOneWidget);
+    expect(find.byIcon(Icons.route_rounded), findsOneWidget);
   });
 }

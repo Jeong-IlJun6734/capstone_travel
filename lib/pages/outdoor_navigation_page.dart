@@ -6,16 +6,14 @@ import 'package:geolocator/geolocator.dart';
 
 import '../models/tmap_route.dart';
 import '../services/naver_map_config.dart';
+import '../services/naver_move_time_cache_service.dart';
 import '../services/schedule_api_service.dart';
 import '../services/tmap_config.dart';
 import '../services/tmap_route_service.dart';
 import '../theme/route_in_palette.dart';
 
 class OutdoorNavigationPage extends StatefulWidget {
-  const OutdoorNavigationPage({
-    super.key,
-    this.userId = defaultScheduleUserId,
-  });
+  const OutdoorNavigationPage({super.key, this.userId = defaultScheduleUserId});
 
   final int userId;
 
@@ -25,11 +23,16 @@ class OutdoorNavigationPage extends StatefulWidget {
 
 class _OutdoorNavigationPageState extends State<OutdoorNavigationPage> {
   final ScheduleApiService _scheduleApiService = ScheduleApiService();
+  final NaverMoveTimeCacheService _moveTimeCache =
+      NaverMoveTimeCacheService.instance;
 
   late Future<List<ScheduledTripDestinationDay>> _destinationDaysFuture;
 
   int _selectedDayIndex = 0;
   String? _guidedDestinationId;
+  final Map<int, List<_TravelDestination>> _moveTimeDestinationCache =
+      <int, List<_TravelDestination>>{};
+  final Set<int> _moveTimeLoadingDayIndexes = <int>{};
 
   @override
   void initState() {
@@ -45,17 +48,20 @@ class _OutdoorNavigationPageState extends State<OutdoorNavigationPage> {
         final destinationDays =
             snapshot.data ?? const <ScheduledTripDestinationDay>[];
 
+        final safeDayIndex = destinationDays.isEmpty
+            ? 0
+            : _selectedDayIndex.clamp(0, destinationDays.length - 1).toInt();
+
         final selectedDay = destinationDays.isEmpty
-          ? null
-          : destinationDays[
-              _selectedDayIndex.clamp(0, destinationDays.length - 1).toInt()
-            ];
+            ? null
+            : destinationDays[safeDayIndex];
 
         final destinations = selectedDay == null
             ? const <_TravelDestination>[]
-            : selectedDay.destinations
-                .map(_TravelDestination.fromScheduled)
-                .toList(growable: false);
+            : _moveTimeDestinationCache[safeDayIndex] ??
+                  selectedDay.destinations
+                      .map(_TravelDestination.fromScheduled)
+                      .toList(growable: false);
 
         final guidedDestination = _findDestination(
           _guidedDestinationId,
@@ -89,9 +95,7 @@ class _OutdoorNavigationPageState extends State<OutdoorNavigationPage> {
                 ),
                 Expanded(
                   child: DecoratedBox(
-                    decoration: const BoxDecoration(
-                      color: RouteInPalette.sky,
-                    ),
+                    decoration: const BoxDecoration(color: RouteInPalette.sky),
                     child: ListView(
                       padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
                       children: [
@@ -102,12 +106,8 @@ class _OutdoorNavigationPageState extends State<OutdoorNavigationPage> {
                                 guidedDestination == null
                                     ? '내 일정 장소'
                                     : '${guidedDestination.name} 안내 중',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.w900,
-                                    ),
+                                style: Theme.of(context).textTheme.titleLarge
+                                    ?.copyWith(fontWeight: FontWeight.w900),
                               ),
                             ),
                             const Icon(
@@ -121,9 +121,7 @@ class _OutdoorNavigationPageState extends State<OutdoorNavigationPage> {
                           guidedDestination == null
                               ? '일정관리에서 추가한 장소를 날짜별로 확인하고 현재 위치 기준으로 안내합니다.'
                               : '지도에서 선택한 여행지까지 이동 경로를 확인하세요.',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
+                          style: Theme.of(context).textTheme.bodyMedium
                               ?.copyWith(color: RouteInPalette.navy),
                         ),
                         const SizedBox(height: 14),
@@ -149,6 +147,9 @@ class _OutdoorNavigationPageState extends State<OutdoorNavigationPage> {
                                 _selectedDayIndex = index;
                                 _guidedDestinationId = null;
                               });
+                              unawaited(
+                                _ensureMoveTimesForDay(index, destinationDays),
+                              );
                             },
                           ),
                           const SizedBox(height: 14),
@@ -184,16 +185,116 @@ class _OutdoorNavigationPageState extends State<OutdoorNavigationPage> {
     );
   }
 
-  Future<List<ScheduledTripDestinationDay>> _loadDestinationDays() {
-    return _scheduleApiService.fetchUserDestinationDays(widget.userId);
+  Future<List<ScheduledTripDestinationDay>> _loadDestinationDays() async {
+    final days = await _scheduleApiService.fetchUserDestinationDays(
+      widget.userId,
+    );
+    unawaited(_ensureMoveTimesForDay(0, days));
+    return days;
   }
 
   void _refreshDestinations() {
     setState(() {
       _selectedDayIndex = 0;
       _guidedDestinationId = null;
+      _moveTimeDestinationCache.clear();
+      _moveTimeLoadingDayIndexes.clear();
       _destinationDaysFuture = _loadDestinationDays();
     });
+  }
+
+  Future<void> _ensureMoveTimesForDay(
+    int dayIndex,
+    List<ScheduledTripDestinationDay> days,
+  ) async {
+    if (dayIndex < 0 || dayIndex >= days.length) {
+      return;
+    }
+
+    if (_moveTimeDestinationCache.containsKey(dayIndex) ||
+        _moveTimeLoadingDayIndexes.contains(dayIndex)) {
+      return;
+    }
+
+    final scheduledDestinations = days[dayIndex].destinations
+        .map(_TravelDestination.fromScheduled)
+        .toList(growable: false);
+
+    if (scheduledDestinations.isEmpty) {
+      _moveTimeDestinationCache[dayIndex] = scheduledDestinations;
+      return;
+    }
+
+    _moveTimeLoadingDayIndexes.add(dayIndex);
+    final currentPosition = await _loadCurrentPositionForMoveTimes();
+    final updatedDestinations = <_TravelDestination>[];
+
+    for (var index = 0; index < scheduledDestinations.length; index++) {
+      final destination = scheduledDestinations[index];
+      final start = index == 0
+          ? currentPosition
+          : scheduledDestinations[index - 1].position;
+
+      if (start == null) {
+        updatedDestinations.add(destination);
+        continue;
+      }
+
+      try {
+        final moveTime = await _moveTimeCache.drivingMoveTime(
+          startLatitude: start.latitude,
+          startLongitude: start.longitude,
+          endLatitude: destination.position.latitude,
+          endLongitude: destination.position.longitude,
+        );
+        updatedDestinations.add(destination.copyWith(duration: moveTime));
+      } catch (error) {
+        debugPrint('Outdoor Naver Directions move time failed: $error');
+        updatedDestinations.add(destination);
+      }
+    }
+
+    if (!mounted) {
+      _moveTimeLoadingDayIndexes.remove(dayIndex);
+      return;
+    }
+
+    setState(() {
+      _moveTimeLoadingDayIndexes.remove(dayIndex);
+      _moveTimeDestinationCache[dayIndex] = updatedDestinations;
+    });
+  }
+
+  Future<NLatLng?> _loadCurrentPositionForMoveTimes() async {
+    try {
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        debugPrint('Outdoor move time skipped: location service off');
+        return null;
+      }
+
+      var permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        debugPrint('Outdoor move time skipped: location denied');
+        return null;
+      }
+
+      final position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
+      );
+
+      return NLatLng(position.latitude, position.longitude);
+    } catch (error) {
+      debugPrint('Outdoor current location failed: $error');
+      return null;
+    }
   }
 
   _TravelDestination? _findDestination(
@@ -263,33 +364,32 @@ class _OutdoorMap extends StatelessWidget {
                 description: '좌표가 저장된 장소가 있으면 지도에 표시됩니다.',
               )
             : !NaverMapConfig.supportsMobileMap
-                ? const _MapUnavailableState(
-                    icon: Icons.phone_android_rounded,
-                    title: '모바일에서 지도를 확인하세요.',
-                    description: '네이버 지도 화면은 Android와 iOS에서 표시됩니다.',
-                  )
-                : !NaverMapConfig.hasClientId
-                    ? const _MapUnavailableState(
-                        icon: Icons.key_rounded,
-                        title: '네이버 지도 키가 필요합니다.',
-                        description:
-                            'NAVER_MAP_CLIENT_ID를 넣어 앱을 실행하면 경로 지도가 표시됩니다.',
-                      )
-                    : !NaverMapConfig.isReady
-                        ? const _MapUnavailableState(
-                            icon: Icons.map_outlined,
-                            title: '네이버 지도를 준비 중입니다.',
-                            description: '앱 초기화가 끝나면 여행 경로가 지도에 표시됩니다.',
-                          )
-                        : NaverMap(
-                            options: NaverMapViewOptions(
-                              initialCameraPosition: NCameraPosition(
-                                target: destinations.first.position,
-                                zoom: 15,
-                              ),
-                            ),
-                            onMapReady: (controller) => _addRoute(controller),
-                          ),
+            ? const _MapUnavailableState(
+                icon: Icons.phone_android_rounded,
+                title: '모바일에서 지도를 확인하세요.',
+                description: '네이버 지도 화면은 Android와 iOS에서 표시됩니다.',
+              )
+            : !NaverMapConfig.hasClientId
+            ? const _MapUnavailableState(
+                icon: Icons.key_rounded,
+                title: '네이버 지도 키가 필요합니다.',
+                description: 'NAVER_MAP_CLIENT_ID를 넣어 앱을 실행하면 경로 지도가 표시됩니다.',
+              )
+            : !NaverMapConfig.isReady
+            ? const _MapUnavailableState(
+                icon: Icons.map_outlined,
+                title: '네이버 지도를 준비 중입니다.',
+                description: '앱 초기화가 끝나면 여행 경로가 지도에 표시됩니다.',
+              )
+            : NaverMap(
+                options: NaverMapViewOptions(
+                  initialCameraPosition: NCameraPosition(
+                    target: destinations.first.position,
+                    zoom: 15,
+                  ),
+                ),
+                onMapReady: (controller) => _addRoute(controller),
+              ),
       ),
     );
   }
@@ -332,10 +432,7 @@ class _OutdoorMap extends StatelessWidget {
       );
     } else {
       await controller.updateCamera(
-        NCameraUpdate.scrollAndZoomTo(
-          target: routeCoords.first,
-          zoom: 15,
-        ),
+        NCameraUpdate.scrollAndZoomTo(target: routeCoords.first, zoom: 15),
       );
     }
   }
@@ -387,9 +484,7 @@ class _DaySelector extends StatelessWidget {
 }
 
 class _OutdoorDaySummary extends StatelessWidget {
-  const _OutdoorDaySummary({
-    required this.day,
-  });
+  const _OutdoorDaySummary({required this.day});
 
   final ScheduledTripDestinationDay day;
 
@@ -567,9 +662,7 @@ class _DestinationTile extends StatelessWidget {
 }
 
 class _OutdoorRoutePrepPage extends StatefulWidget {
-  const _OutdoorRoutePrepPage({
-    required this.destination,
-  });
+  const _OutdoorRoutePrepPage({required this.destination});
 
   final _TravelDestination destination;
 
@@ -733,9 +826,7 @@ class _OutdoorRoutePrepPageState extends State<_OutdoorRoutePrepPage> {
 }
 
 class _RoutePrepHero extends StatelessWidget {
-  const _RoutePrepHero({
-    required this.destination,
-  });
+  const _RoutePrepHero({required this.destination});
 
   final _TravelDestination destination;
 
@@ -758,11 +849,7 @@ class _RoutePrepHero extends StatelessWidget {
               color: RouteInPalette.sky,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(
-              destination.icon,
-              color: RouteInPalette.navy,
-              size: 30,
-            ),
+            child: Icon(destination.icon, color: RouteInPalette.navy, size: 30),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -834,8 +921,8 @@ class _UserLocationCard extends StatelessWidget {
                   isLoading
                       ? '현재 위치 확인 중'
                       : error == null
-                          ? '현재 위치 확인 완료'
-                          : '현재 위치 확인 필요',
+                      ? '현재 위치 확인 완료'
+                      : '현재 위치 확인 필요',
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w900,
                   ),
@@ -1118,13 +1205,13 @@ class _OutdoorGuidancePageState extends State<_OutdoorGuidancePage> {
                       _routeStatus,
                       key: const Key('outdoor-route-status'),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: _routeError == null
-                                ? RouteInPalette.navy
-                                : RouteInPalette.ink,
-                            fontWeight: _routeError == null
-                                ? FontWeight.w700
-                                : FontWeight.w900,
-                          ),
+                        color: _routeError == null
+                            ? RouteInPalette.navy
+                            : RouteInPalette.ink,
+                        fontWeight: _routeError == null
+                            ? FontWeight.w700
+                            : FontWeight.w900,
+                      ),
                     ),
                   ),
                 ],
@@ -1272,9 +1359,7 @@ class _OutdoorGuidancePageState extends State<_OutdoorGuidancePage> {
     }
 
     final position = await Geolocator.getCurrentPosition(
-      locationSettings: const LocationSettings(
-        accuracy: LocationAccuracy.high,
-      ),
+      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
     );
 
     final currentPosition = NLatLng(position.latitude, position.longitude);
@@ -1282,10 +1367,7 @@ class _OutdoorGuidancePageState extends State<_OutdoorGuidancePage> {
     _currentPosition = currentPosition;
 
     await controller.updateCamera(
-      NCameraUpdate.scrollAndZoomTo(
-        target: currentPosition,
-        zoom: 16,
-      ),
+      NCameraUpdate.scrollAndZoomTo(target: currentPosition, zoom: 16),
     );
 
     controller.setLocationTrackingMode(NLocationTrackingMode.face);
@@ -1348,10 +1430,7 @@ class _OutdoorGuidancePageState extends State<_OutdoorGuidancePage> {
 }
 
 class _GuidanceMap extends StatelessWidget {
-  const _GuidanceMap({
-    required this.destination,
-    required this.onMapReady,
-  });
+  const _GuidanceMap({required this.destination, required this.onMapReady});
 
   final _TravelDestination destination;
   final ValueChanged<NaverMapController> onMapReady;
@@ -1487,9 +1566,9 @@ class _ScheduleServerNotice extends StatelessWidget {
                   ? text
                   : '$text\n$detailText',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: RouteInPalette.navy,
-                    fontWeight: FontWeight.w700,
-                  ),
+                color: RouteInPalette.navy,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ],
@@ -1539,4 +1618,15 @@ class _TravelDestination {
   final String duration;
   final NLatLng position;
   final IconData icon;
+
+  _TravelDestination copyWith({String? duration}) {
+    return _TravelDestination(
+      id: id,
+      name: name,
+      description: description,
+      duration: duration ?? this.duration,
+      position: position,
+      icon: icon,
+    );
+  }
 }

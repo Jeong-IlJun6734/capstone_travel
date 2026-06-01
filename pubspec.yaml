@@ -77,6 +77,8 @@ flutter:
     - server/text_prompt.md
     - server/NAVER_CLIENT_ID.txt
     - server/NAVER_CLIENT_SECRET.txt
+    - server/NAVER_DIRECTION_CLIENT_ID.txt
+    - server/NAVER_DIRECTION_CLIENT_SECRET.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

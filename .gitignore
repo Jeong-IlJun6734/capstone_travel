@@ -50,6 +50,8 @@ app.*.map.json
 /server/API_KEY.txt
 /server/NAVER_CLIENT_ID.txt
 /server/NAVER_CLIENT_SECRET.txt
+/server/NAVER_DIRECTION_CLIENT_ID.txt
+/server/NAVER_DIRECTION_CLIENT_SECRET.txt
 /server/schedule_server/*.db
 /server/schedule_server/*.db-*
 

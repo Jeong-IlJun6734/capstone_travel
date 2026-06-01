@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../services/naver_map_config.dart';
+import '../services/naver_move_time_cache_service.dart';
 import '../services/schedule_api_service.dart';
 import '../theme/route_in_palette.dart';
 import 'add_place_page.dart';
@@ -25,8 +27,12 @@ class _ScheduleManagementPageState extends State<ScheduleManagementPage> {
   List<_TripDay> _days = const [];
   Future<void>? _loadFuture;
   String? _loadError;
+  final Set<int> _moveTimesReadyDayIndexes = <int>{};
+  final Set<int> _moveTimesLoadingDayIndexes = <int>{};
 
   final ScheduleApiService _scheduleApiService = ScheduleApiService();
+  final NaverMoveTimeCacheService _moveTimeCache =
+      NaverMoveTimeCacheService.instance;
 
   int _nextPlaceId = 1;
 
@@ -125,6 +131,7 @@ class _ScheduleManagementPageState extends State<ScheduleManagementPage> {
                         setState(() {
                           _selectedDayIndex = index;
                         });
+                        unawaited(_ensureNaverMoveTimesForDay(index));
                       },
                       labelStyle: TextStyle(
                         color: isSelected
@@ -195,6 +202,8 @@ class _ScheduleManagementPageState extends State<ScheduleManagementPage> {
           _days = const [];
           _selectedDayIndex = 0;
           _nextPlaceId = 1;
+          _moveTimesReadyDayIndexes.clear();
+          _moveTimesLoadingDayIndexes.clear();
         });
         return;
       }
@@ -211,7 +220,11 @@ class _ScheduleManagementPageState extends State<ScheduleManagementPage> {
         _days = loadedDays;
         _selectedDayIndex = 0;
         _nextPlaceId = _calculateNextPlaceId(loadedDays);
+        _moveTimesReadyDayIndexes.clear();
+        _moveTimesLoadingDayIndexes.clear();
       });
+
+      unawaited(_ensureNaverMoveTimesForDay(0));
     } catch (error) {
       if (!mounted) return;
 
@@ -259,6 +272,134 @@ class _ScheduleManagementPageState extends State<ScheduleManagementPage> {
     );
   }
 
+  Future<void> _ensureNaverMoveTimesForDay(int dayIndex) async {
+    if (dayIndex < 0 || dayIndex >= _days.length) {
+      return;
+    }
+
+    if (_moveTimesReadyDayIndexes.contains(dayIndex) ||
+        _moveTimesLoadingDayIndexes.contains(dayIndex)) {
+      return;
+    }
+
+    _moveTimesLoadingDayIndexes.add(dayIndex);
+    final currentPosition = await _loadCurrentPositionForMoveTimes();
+
+    if (!mounted || dayIndex >= _days.length) {
+      _moveTimesLoadingDayIndexes.remove(dayIndex);
+      return;
+    }
+
+    await _applyNaverMoveTimesForDay(
+      _days[dayIndex],
+      currentPosition: currentPosition,
+    );
+
+    if (!mounted) {
+      _moveTimesLoadingDayIndexes.remove(dayIndex);
+      return;
+    }
+
+    setState(() {
+      _moveTimesLoadingDayIndexes.remove(dayIndex);
+      _moveTimesReadyDayIndexes.add(dayIndex);
+    });
+  }
+
+  Future<void> _applyNaverMoveTimesForDay(
+    _TripDay day, {
+    NLatLng? currentPosition,
+  }) async {
+    for (var index = 0; index < day.places.length; index++) {
+      final destination = day.places[index];
+      day.places[index] = destination.copyWith(move: null);
+
+      if (!_hasCoordinates(destination)) {
+        continue;
+      }
+
+      final start = index == 0
+          ? currentPosition
+          : _coordinatesOf(day.places[index - 1]);
+
+      if (start == null) {
+        continue;
+      }
+
+      try {
+        final moveTime = await _moveTimeCache.drivingMoveTime(
+          startLatitude: start.latitude,
+          startLongitude: start.longitude,
+          endLatitude: destination.latitude!,
+          endLongitude: destination.longitude!,
+        );
+        day.places[index] = day.places[index].copyWith(move: moveTime);
+      } catch (error) {
+        debugPrint('Naver Directions move time failed: $error');
+      }
+    }
+  }
+
+  Future<void> _refreshNaverMoveTimes(int dayIndex) async {
+    if (dayIndex < 0 || dayIndex >= _days.length) return;
+    if (_moveTimesLoadingDayIndexes.contains(dayIndex)) return;
+    _moveTimesLoadingDayIndexes.add(dayIndex);
+    _moveTimesReadyDayIndexes.remove(dayIndex);
+
+    final day = _days[dayIndex];
+    final currentPosition = await _loadCurrentPositionForMoveTimes();
+    await _applyNaverMoveTimesForDay(day, currentPosition: currentPosition);
+    if (!mounted) return;
+    setState(() {
+      _moveTimesLoadingDayIndexes.remove(dayIndex);
+      _moveTimesReadyDayIndexes.add(dayIndex);
+    });
+  }
+
+  bool _hasCoordinates(_TripPlace place) {
+    return place.latitude != null && place.longitude != null;
+  }
+
+  NLatLng? _coordinatesOf(_TripPlace place) {
+    if (!_hasCoordinates(place)) {
+      return null;
+    }
+
+    return NLatLng(place.latitude!, place.longitude!);
+  }
+
+  Future<NLatLng?> _loadCurrentPositionForMoveTimes() async {
+    try {
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        debugPrint('Naver Directions move time skipped: location service off');
+        return null;
+      }
+
+      var permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        debugPrint('Naver Directions move time skipped: location denied');
+        return null;
+      }
+
+      final position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
+      );
+
+      return NLatLng(position.latitude, position.longitude);
+    } catch (error) {
+      debugPrint('Naver Directions current location failed: $error');
+      return null;
+    }
+  }
+
   void _reloadSchedule() {
     setState(() {
       _loadFuture = _loadScheduleFromServer();
@@ -279,6 +420,7 @@ class _ScheduleManagementPageState extends State<ScheduleManagementPage> {
 
     // 서버에 순서 저장 API가 있다면 여기에서 호출하면 됩니다.
     // 예: _scheduleApiService.updatePlaceOrder(...)
+    unawaited(_refreshNaverMoveTimes(_selectedDayIndex));
   }
 
   Future<void> _openAddPlacePage() async {
@@ -336,6 +478,7 @@ class _ScheduleManagementPageState extends State<ScheduleManagementPage> {
 
         _nextPlaceId = savedPlace.id + 1;
       });
+      unawaited(_refreshNaverMoveTimes(_selectedDayIndex));
     } catch (error) {
       if (!mounted) return;
       _showSnackBar('장소 추가 실패: $error');
@@ -345,9 +488,7 @@ class _ScheduleManagementPageState extends State<ScheduleManagementPage> {
   void _removePlace(int placeId) {
     final day = _days[_selectedDayIndex];
 
-    final target = day.places
-        .where((place) => place.id == placeId)
-        .firstOrNull;
+    final target = day.places.where((place) => place.id == placeId).firstOrNull;
 
     if (target == null) {
       return;
@@ -356,6 +497,7 @@ class _ScheduleManagementPageState extends State<ScheduleManagementPage> {
     setState(() {
       day.places.removeWhere((place) => place.id == placeId);
     });
+    unawaited(_refreshNaverMoveTimes(_selectedDayIndex));
 
     final serverPlaceId = target.serverPlaceId;
     if (serverPlaceId != null) {
@@ -373,9 +515,9 @@ class _ScheduleManagementPageState extends State<ScheduleManagementPage> {
   }
 
   void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 }
 
@@ -416,24 +558,15 @@ class _ScheduleNaverMap extends StatelessWidget {
     }
 
     if (!NaverMapConfig.supportsMobileMap) {
-      return _ScheduleMapFallback(
-        title: '모바일 지도 전용입니다.',
-        day: day,
-      );
+      return _ScheduleMapFallback(title: '모바일 지도 전용입니다.', day: day);
     }
 
     if (!NaverMapConfig.hasClientId) {
-      return _ScheduleMapFallback(
-        title: '네이버 지도 키가 필요합니다.',
-        day: day,
-      );
+      return _ScheduleMapFallback(title: '네이버 지도 키가 필요합니다.', day: day);
     }
 
     if (!NaverMapConfig.isReady) {
-      return _ScheduleMapFallback(
-        title: '네이버 지도를 준비하는 중입니다.',
-        day: day,
-      );
+      return _ScheduleMapFallback(title: '네이버 지도를 준비하는 중입니다.', day: day);
     }
 
     return NaverMap(
@@ -448,10 +581,7 @@ class _ScheduleNaverMap extends StatelessWidget {
           zoom: 13,
         ),
       ),
-      onMapReady: (controller) => _addScheduleOverlays(
-        controller,
-        routePlaces,
-      ),
+      onMapReady: (controller) => _addScheduleOverlays(controller, routePlaces),
     );
   }
 
@@ -498,10 +628,7 @@ class _ScheduleNaverMap extends StatelessWidget {
 }
 
 class _ScheduleMapFallback extends StatelessWidget {
-  const _ScheduleMapFallback({
-    required this.title,
-    required this.day,
-  });
+  const _ScheduleMapFallback({required this.title, required this.day});
 
   final String title;
   final _TripDay day;
@@ -527,10 +654,7 @@ class _ScheduleMapFallback extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(
-                    Icons.map_outlined,
-                    color: RouteInPalette.navy,
-                  ),
+                  const Icon(Icons.map_outlined, color: RouteInPalette.navy),
                   const SizedBox(height: 8),
                   Text(
                     title,
@@ -762,7 +886,7 @@ class _PlaceTimelineCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        '다음 장소까지 ${place.move}',
+                        place.move!,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: RouteInPalette.coral,
                           fontWeight: FontWeight.w700,
@@ -819,10 +943,7 @@ class _PlaceThumbnail extends StatelessWidget {
 }
 
 class _ScheduleLoadError extends StatelessWidget {
-  const _ScheduleLoadError({
-    required this.message,
-    required this.onRetry,
-  });
+  const _ScheduleLoadError({required this.message, required this.onRetry});
 
   final String message;
   final VoidCallback onRetry;
@@ -958,20 +1079,12 @@ class _MapPlaceholderPainter extends CustomPainter {
 
     for (var i = 1; i < 4; i++) {
       final dx = size.width * i / 4;
-      canvas.drawLine(
-        Offset(dx, 0),
-        Offset(dx, size.height),
-        linePaint,
-      );
+      canvas.drawLine(Offset(dx, 0), Offset(dx, size.height), linePaint);
     }
 
     for (var i = 1; i < 4; i++) {
       final dy = size.height * i / 4;
-      canvas.drawLine(
-        Offset(0, dy),
-        Offset(size.width, dy),
-        linePaint,
-      );
+      canvas.drawLine(Offset(0, dy), Offset(size.width, dy), linePaint);
     }
 
     canvas.drawPath(path, routePaint);
@@ -983,16 +1096,8 @@ class _MapPlaceholderPainter extends CustomPainter {
     ];
 
     for (final point in points) {
-      canvas.drawCircle(
-        point,
-        10,
-        Paint()..color = RouteInPalette.coral,
-      );
-      canvas.drawCircle(
-        point,
-        4,
-        Paint()..color = RouteInPalette.white,
-      );
+      canvas.drawCircle(point, 10, Paint()..color = RouteInPalette.coral);
+      canvas.drawCircle(point, 4, Paint()..color = RouteInPalette.white);
     }
   }
 
@@ -1048,6 +1153,23 @@ class _TripPlace {
   final String? thumbnailUrl;
   final String? imageUrl;
   final int? serverPlaceId;
+
+  _TripPlace copyWith({String? move}) {
+    return _TripPlace(
+      id: id,
+      category: category,
+      name: name,
+      note: note,
+      move: move,
+      address: address,
+      link: link,
+      latitude: latitude,
+      longitude: longitude,
+      thumbnailUrl: thumbnailUrl,
+      imageUrl: imageUrl,
+      serverPlaceId: serverPlaceId,
+    );
+  }
 }
 
 extension _FirstOrNullExtension<T> on Iterable<T> {
