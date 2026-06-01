@@ -129,11 +129,13 @@ class DeadReckoningConfig {
     this.stepBaselineAlpha = 0.96,
     this.stepRearmHysteresis = 0.35,
     this.minimumStepPeak = 0.8,
+    this.minimumStepDetectionPeak = 1.2,
     this.maximumImuStepGyroscopeMagnitude = 3.2,
     this.maximumRapidTurnDegrees = 95,
     this.rapidTurnWindow = const Duration(milliseconds: 1200),
     this.maximumAngularVelocityDegreesPerSecond = 120,
     this.rapidTurnCooldown = const Duration(milliseconds: 650),
+    this.positionUnitsPerMeter = 1.0,
   });
 
   final double stepSensitivity;
@@ -146,11 +148,13 @@ class DeadReckoningConfig {
   final double stepBaselineAlpha;
   final double stepRearmHysteresis;
   final double minimumStepPeak;
+  final double minimumStepDetectionPeak;
   final double maximumImuStepGyroscopeMagnitude;
   final double maximumRapidTurnDegrees;
   final Duration rapidTurnWindow;
   final double maximumAngularVelocityDegreesPerSecond;
   final Duration rapidTurnCooldown;
+  final double positionUnitsPerMeter;
 }
 
 class DeadReckoningCalculator {
@@ -169,6 +173,8 @@ class DeadReckoningCalculator {
   double? _lastHeadingSampleRadians;
   DateTime? _lastHeadingSampleTimestamp;
   DateTime? _stepBlockedUntil;
+  double? _previousStepMagnitude;
+  double _previousStepMagnitudeDelta = 0;
   double _lastHeadingChangeDegrees = 0;
   double _lastAngularVelocityDegreesPerSecond = 0;
   String _lastStepDecisionSource = 'Learned classifier';
@@ -221,9 +227,11 @@ class DeadReckoningCalculator {
       activeThreshold: _activeStepThreshold ?? current.activeStepThreshold,
       gyroscopeMagnitude: sample.gyroscope.length,
     );
+    final nextStepLengthPositionUnits =
+        nextStepLengthMeters * _config.positionUnitsPerMeter;
     final nextPosition = vm.Vector2(
-      current.position.x + nextStepLengthMeters * math.cos(heading),
-      current.position.y + nextStepLengthMeters * math.sin(heading),
+      current.position.x + nextStepLengthPositionUnits * math.cos(heading),
+      current.position.y + nextStepLengthPositionUnits * math.sin(heading),
     );
     final nextRecentStepIntervals = <double>[
       ...current.recentStepIntervals,
@@ -321,6 +329,18 @@ class DeadReckoningCalculator {
       _config.minimumStepPeak,
       averageMagnitude + _config.stepSensitivity,
     );
+    final previousMagnitude = _previousStepMagnitude;
+    final magnitudeDelta = previousMagnitude == null
+        ? 0.0
+        : magnitude - previousMagnitude;
+    final isAccelerationPeak =
+        previousMagnitude != null &&
+        _previousStepMagnitudeDelta > 0 &&
+        magnitudeDelta <= 0 &&
+        previousMagnitude >= _config.minimumStepDetectionPeak;
+    _previousStepMagnitude = magnitude;
+    _previousStepMagnitudeDelta = magnitudeDelta;
+
     _activeStepThreshold = upperThreshold;
     final rapidTurnDetected = _updateRapidTurnState(
       heading: heading,
@@ -354,6 +374,7 @@ class DeadReckoningCalculator {
         sample.timestamp.difference(lastStepTimestamp) >= _config.minStepGap;
     final shouldCountStep =
         modelAccepted &&
+        isAccelerationPeak &&
         spacingSatisfied &&
         !rapidTurnDetected &&
         !stepBlocked &&
@@ -462,7 +483,8 @@ class DeadReckoningCalculator {
       final probability = selfSupervisedModel.stepProbability(features);
       _lastStepDecisionSource = 'Self-supervised model';
       _lastStepDecisionConfidence = probability;
-      return probability >= selfSupervisedModel.stepDecisionThreshold;
+      return !sample.isPhoneFlat &&
+          probability >= selfSupervisedModel.stepDecisionThreshold;
     }
 
     final model = _stepClassifierModel;
@@ -552,26 +574,34 @@ class DeadReckoningCalculator {
     required double accelToGyroRatio,
     required double gyroscopeMagnitude,
   }) {
-    final thresholdScore = _normalizedProgress(thresholdMarginRatio, -0.1, 0.7);
+    final thresholdScore = _normalizedProgress(
+      thresholdMarginRatio,
+      -0.18,
+      0.62,
+    );
     final filteredScore = _normalizedProgress(
       filteredToUserAccelRatio,
-      0.75,
+      0.65,
       1.65,
     );
-    final accelScore = _normalizedProgress(userAccelerationMagnitude, 1.0, 4.8);
+    final accelScore = _normalizedProgress(
+      userAccelerationMagnitude,
+      0.72,
+      3.8,
+    );
     final gyroPenalty = 1.0 - _normalizedProgress(gyroscopeMagnitude, 0.0, 2.2);
-    final accelGyroBalance = _normalizedProgress(accelToGyroRatio, 1.1, 9.0);
+    final accelGyroBalance = _normalizedProgress(accelToGyroRatio, 1.0, 8.5);
     final absoluteMotionScore = _normalizedProgress(
       magnitude,
-      activeThreshold - 0.15,
-      activeThreshold + 0.85,
+      activeThreshold - 0.25,
+      activeThreshold + 0.75,
     );
 
     return _clamp01(
       0.30 * thresholdScore +
           0.20 * filteredScore +
-          0.18 * accelScore +
-          0.16 * accelGyroBalance +
+          0.20 * accelScore +
+          0.14 * accelGyroBalance +
           0.10 * absoluteMotionScore +
           0.06 * gyroPenalty,
     );

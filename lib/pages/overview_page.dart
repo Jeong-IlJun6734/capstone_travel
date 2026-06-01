@@ -1,28 +1,72 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
+
+import '../services/naver_map_config.dart';
 import '../theme/route_in_palette.dart';
 import 'indoor_navigation_page.dart';
 import 'outdoor_navigation_page.dart';
+import 'realtime_help_page.dart';
 import 'schedule_management_page.dart';
 
 const _defaultSchedulePreviews = [
   OverviewSchedulePreview(
     day: 'DAY 1',
-    title: '난바 먹방 루트',
-    area: '도톤보리 - 구로몬 시장',
-    stops: ['도톤보리', '오코노미야키', '구로몬 시장'],
+    title: '서울 고궁 산책 루트',
+    area: '광화문 - 북촌',
+    stops: [
+      OverviewScheduleStop(
+        name: '경복궁',
+        position: NLatLng(37.579617, 126.977041),
+      ),
+      OverviewScheduleStop(
+        name: '북촌한옥마을',
+        position: NLatLng(37.582604, 126.983998),
+      ),
+      OverviewScheduleStop(
+        name: '인사동길',
+        position: NLatLng(37.574471, 126.984955),
+      ),
+    ],
   ),
   OverviewSchedulePreview(
     day: 'DAY 2',
-    title: '카페거리와 빈티지 샵',
-    area: '나카자키초',
-    stops: ['골목 산책', '빈티지 소품샵', '디저트 카페'],
+    title: '남산 전망 코스',
+    area: '명동 - 남산',
+    stops: [
+      OverviewScheduleStop(
+        name: '명동성당',
+        position: NLatLng(37.563177, 126.987015),
+      ),
+      OverviewScheduleStop(
+        name: '남산골한옥마을',
+        position: NLatLng(37.559106, 126.994459),
+      ),
+      OverviewScheduleStop(
+        name: 'N서울타워',
+        position: NLatLng(37.551169, 126.988227),
+      ),
+    ],
   ),
   OverviewSchedulePreview(
     day: 'DAY 3',
-    title: '우메다 쇼핑 데이',
-    area: '우메다 - 신사이바시',
-    stops: ['브런치', '헵파이브', '전망대'],
+    title: '부산 바다 산책',
+    area: '해운대 - 광안리',
+    stops: [
+      OverviewScheduleStop(
+        name: '해운대해수욕장',
+        position: NLatLng(35.158698, 129.160384),
+      ),
+      OverviewScheduleStop(
+        name: '동백섬',
+        position: NLatLng(35.152645, 129.152583),
+      ),
+      OverviewScheduleStop(
+        name: '광안대교',
+        position: NLatLng(35.153221, 129.118662),
+      ),
+    ],
   ),
 ];
 
@@ -131,9 +175,13 @@ class OverviewPage extends StatelessWidget {
                       ),
                     ),
                     _FeatureTile(
-                      label: '여행중 문제 해결',
+                      label: '실시간 문제 해결',
                       icon: Icons.support_agent_rounded,
-                      onTap: () => _openComingSoon(context, '여행중 문제 해결'),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => const RealtimeHelpPage(),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -148,12 +196,6 @@ class OverviewPage extends StatelessWidget {
   void _openSchedule(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(builder: (_) => const ScheduleManagementPage()),
-    );
-  }
-
-  void _openComingSoon(BuildContext context, String title) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: (_) => _ComingSoonPage(title: title)),
     );
   }
 }
@@ -187,7 +229,7 @@ class _ScheduleBoard extends StatelessWidget {
               ),
               TextButton(
                 onPressed: onOpenSchedule,
-                child: Text(hasSchedule ? '전체 보기' : '일정 관리'),
+                child: const Text('일정 관리하기'),
               ),
             ],
           ),
@@ -209,7 +251,7 @@ class _ScheduleBoard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            _ScheduleIllustrationCard(preview: schedules.first),
+            _ScheduleMapCard(preview: schedules.first),
           ] else
             _EmptyScheduleCard(onCreateSchedule: onOpenSchedule),
         ],
@@ -218,8 +260,8 @@ class _ScheduleBoard extends StatelessWidget {
   }
 }
 
-class _ScheduleIllustrationCard extends StatelessWidget {
-  const _ScheduleIllustrationCard({required this.preview});
+class _ScheduleMapCard extends StatelessWidget {
+  const _ScheduleMapCard({required this.preview});
 
   final OverviewSchedulePreview preview;
 
@@ -228,11 +270,11 @@ class _ScheduleIllustrationCard extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: RouteInPalette.white,
         border: Border.all(color: RouteInPalette.ink, width: 2),
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,31 +298,129 @@ class _ScheduleIllustrationCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 14),
-          SizedBox(
-            height: 118,
-            width: double.infinity,
-            child: CustomPaint(
-              painter: const _TripRoutePainter(),
+          const SizedBox(height: 12),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: SizedBox(
+              height: 170,
+              width: double.infinity,
+              child: _ScheduleNaverMap(preview: preview),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: preview.stops.map((stop) {
+              return Expanded(
+                child: Text(
+                  stop.name,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: RouteInPalette.navy,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ScheduleNaverMap extends StatelessWidget {
+  const _ScheduleNaverMap({required this.preview});
+
+  final OverviewSchedulePreview preview;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!NaverMapConfig.supportsMobileMap) {
+      return _ScheduleMapFallback(preview: preview, title: '모바일 지도 전용');
+    }
+    if (!NaverMapConfig.hasClientId) {
+      return _ScheduleMapFallback(preview: preview, title: '지도 키 필요');
+    }
+    if (!NaverMapConfig.isReady) {
+      return _ScheduleMapFallback(preview: preview, title: '네이버 지도 준비 중');
+    }
+
+    return NaverMap(
+      options: NaverMapViewOptions(
+        mapType: NMapType.basic,
+        initialCameraPosition: NCameraPosition(
+          target: preview.stops.first.position,
+          zoom: 14,
+        ),
+      ),
+      onMapReady: (controller) => _addScheduleRoute(controller),
+    );
+  }
+
+  Future<void> _addScheduleRoute(NaverMapController controller) async {
+    final coords = preview.stops.map((stop) => stop.position).toList();
+
+    await controller.addOverlayAll({
+      NPathOverlay(
+        id: 'overview_schedule_route',
+        coords: coords,
+        width: 6,
+        color: RouteInPalette.denim,
+        outlineWidth: 2,
+        outlineColor: RouteInPalette.white,
+      ),
+      for (final stop in preview.stops)
+        NMarker(
+          id: 'overview_${stop.name}',
+          position: stop.position,
+          iconTintColor: RouteInPalette.coral,
+          caption: NOverlayCaption(text: stop.name),
+        ),
+    });
+
+    if (coords.length > 1) {
+      await controller.updateCamera(
+        NCameraUpdate.fitBounds(
+          NLatLngBounds.from(coords),
+          padding: const EdgeInsets.all(36),
+        ),
+      );
+    }
+  }
+}
+
+class _ScheduleMapFallback extends StatelessWidget {
+  const _ScheduleMapFallback({required this.preview, required this.title});
+
+  final OverviewSchedulePreview preview;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: const BoxDecoration(color: RouteInPalette.mist),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          CustomPaint(painter: const _TripRoutePainter()),
+          Center(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: RouteInPalette.white.withValues(alpha: 0.86),
+                borderRadius: BorderRadius.circular(8),
+              ),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 16, 12, 12),
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Row(
-                    children: preview.stops.map((stop) {
-                      return Expanded(
-                        child: Text(
-                          stop,
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.labelMedium?.copyWith(
-                            color: RouteInPalette.navy,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      );
-                    }).toList(),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: RouteInPalette.navy,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
               ),
@@ -307,7 +447,7 @@ class _EmptyScheduleCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: RouteInPalette.white,
         border: Border.all(color: RouteInPalette.ink, width: 2),
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
         children: [
@@ -325,7 +465,7 @@ class _EmptyScheduleCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            '여행 동선을 그릴 일정을 먼저 만들어보세요.',
+            '여행 동선을 그리고 일정을 먼저 만들어보세요.',
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: RouteInPalette.navy,
@@ -357,7 +497,7 @@ class _DayPill extends StatelessWidget {
       decoration: BoxDecoration(
         color: selected ? RouteInPalette.ink : RouteInPalette.sky,
         border: Border.all(color: RouteInPalette.ink, width: 2),
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -400,9 +540,9 @@ class _FeatureTile extends StatelessWidget {
 
     return Material(
       color: RouteInPalette.denim,
-      borderRadius: BorderRadius.circular(28),
+      borderRadius: BorderRadius.circular(8),
       child: InkWell(
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(8),
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(18),
@@ -414,7 +554,7 @@ class _FeatureTile extends StatelessWidget {
                 height: 74,
                 decoration: BoxDecoration(
                   color: RouteInPalette.sky,
-                  borderRadius: BorderRadius.circular(26),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(icon, color: RouteInPalette.navy, size: 38),
               ),
@@ -464,41 +604,27 @@ class _TripRoutePainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 5
       ..style = PaintingStyle.stroke;
-    final branchPaint = Paint()
-      ..color = RouteInPalette.denim
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = 3
-      ..style = PaintingStyle.stroke;
     final route = Path()
-      ..moveTo(size.width * 0.12, size.height * 0.32)
+      ..moveTo(size.width * 0.16, size.height * 0.62)
       ..quadraticBezierTo(
-        size.width * 0.32,
-        size.height * 0.10,
-        size.width * 0.50,
-        size.height * 0.38,
+        size.width * 0.34,
+        size.height * 0.16,
+        size.width * 0.52,
+        size.height * 0.42,
       )
       ..quadraticBezierTo(
-        size.width * 0.68,
-        size.height * 0.66,
+        size.width * 0.70,
+        size.height * 0.68,
         size.width * 0.86,
-        size.height * 0.24,
-      );
-    final branch = Path()
-      ..moveTo(size.width * 0.50, size.height * 0.38)
-      ..quadraticBezierTo(
-        size.width * 0.52,
-        size.height * 0.08,
-        size.width * 0.66,
-        size.height * 0.10,
+        size.height * 0.28,
       );
 
     canvas.drawPath(route, routePaint);
-    canvas.drawPath(branch, branchPaint);
 
     for (final point in [
-      Offset(size.width * 0.12, size.height * 0.32),
-      Offset(size.width * 0.50, size.height * 0.38),
-      Offset(size.width * 0.86, size.height * 0.24),
+      Offset(size.width * 0.16, size.height * 0.62),
+      Offset(size.width * 0.52, size.height * 0.42),
+      Offset(size.width * 0.86, size.height * 0.28),
     ]) {
       canvas.drawCircle(point, 12, Paint()..color = RouteInPalette.coral);
       canvas.drawCircle(point, 5, Paint()..color = RouteInPalette.white);
@@ -507,36 +633,6 @@ class _TripRoutePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-class _ComingSoonPage extends StatelessWidget {
-  const _ComingSoonPage({required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Container(
-          margin: const EdgeInsets.all(24),
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: RouteInPalette.white,
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Text(
-            '$title 기능을 준비하고 있습니다.',
-            textAlign: TextAlign.center,
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class OverviewSchedulePreview {
@@ -550,5 +646,12 @@ class OverviewSchedulePreview {
   final String day;
   final String title;
   final String area;
-  final List<String> stops;
+  final List<OverviewScheduleStop> stops;
+}
+
+class OverviewScheduleStop {
+  const OverviewScheduleStop({required this.name, required this.position});
+
+  final String name;
+  final NLatLng position;
 }

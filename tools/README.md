@@ -89,3 +89,22 @@ py tools\train_self_supervised_step_model.py `
   --input-dir "C:\Users\user\Downloads" `
   --output models\self_supervised_step_model.json
 ```
+
+To keep the newest logs as validation data instead of training data, exclude
+them while training:
+
+```powershell
+py tools\train_self_supervised_step_model.py `
+  --input-dir data `
+  --output models\self_supervised_step_model.json `
+  --exclude-glob "imu_log_2026-05-28T22-43*.csv" `
+  --exclude-glob "imu_log_2026-05-28T22-44*.csv"
+```
+
+Then validate those held-out logs:
+
+```powershell
+py tools\validate_self_supervised_step_model.py `
+  data\imu_log_2026-05-28T22-44-10.791352.csv `
+  data\imu_log_2026-05-28T22-44-17.355230.csv
+```

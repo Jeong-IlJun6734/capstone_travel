@@ -59,39 +59,19 @@ void main() {
     expect(find.text('일정 만들기'), findsOneWidget);
   });
 
-  testWidgets('outdoor navigation keeps destinations below the map', (
+  testWidgets('outdoor navigation requests destinations from server', (
     tester,
   ) async {
     await tester.pumpWidget(const MaterialApp(home: OutdoorNavigationPage()));
 
-    expect(find.text('네이버 지도를 준비 중입니다.'), findsOneWidget);
-    expect(find.text('여행지 1'), findsOneWidget);
-    expect(find.text('여행지 2'), findsOneWidget);
-    await tester.scrollUntilVisible(
-      find.text('여행지 3'),
-      120,
-      scrollable: find.byType(Scrollable).last,
-    );
-    expect(find.text('여행지 3'), findsOneWidget);
+    expect(find.text('서버 일정 장소를 불러오는 중입니다.'), findsOneWidget);
+    expect(find.byTooltip('서버 일정 새로고침'), findsOneWidget);
   });
 
-  testWidgets('outdoor destination starts guidance after confirmation', (
-    tester,
-  ) async {
+  testWidgets('outdoor destination shows server loading state', (tester) async {
     await tester.pumpWidget(const MaterialApp(home: OutdoorNavigationPage()));
 
-    final destination = find.byKey(const Key('outdoor-destination_1'));
-    await tester.tap(destination);
-    await tester.pumpAndSettle();
-
-    expect(find.text('현재 위치에서부터 경로 안내를 시작합니다'), findsOneWidget);
-
-    await tester.tap(find.text('확인'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('현재 위치 안내'), findsOneWidget);
-    expect(find.text('현재 위치를 따라 목적지까지 안내합니다.'), findsOneWidget);
-    expect(find.text('대중교통 경로'), findsOneWidget);
-    expect(find.text('자동차 경로'), findsOneWidget);
+    expect(find.text('내 일정 장소'), findsOneWidget);
+    expect(find.text('서버에서 사용자 일정을 불러오는 중입니다.'), findsOneWidget);
   });
 }

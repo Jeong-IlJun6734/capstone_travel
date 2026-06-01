@@ -47,6 +47,11 @@ app.*.map.json
 # Local-only tooling and collected logs
 /build_apk.ps1
 /data/
+/server/API_KEY.txt
+/server/NAVER_CLIENT_ID.txt
+/server/NAVER_CLIENT_SECRET.txt
+/server/schedule_server/*.db
+/server/schedule_server/*.db-*
 
 # Python local environments and generated caches
 **/.venv/

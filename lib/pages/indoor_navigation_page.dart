@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
 
@@ -15,6 +14,7 @@ import 'package:vector_math/vector_math.dart' as vm;
 
 import '../services/dead_reckoning_calculator.dart';
 import '../services/indoor_qr_position_service.dart';
+import '../services/indoor_route_service.dart';
 import '../services/naver_map_config.dart';
 import '../services/self_supervised_step_model.dart';
 import '../theme/route_in_palette.dart';
@@ -36,14 +36,28 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   static const double _flatPhoneExitHorizontalGravityThreshold = 8.4;
   static const int _flatPhoneEnterSampleCount = 4;
   static const int _flatPhoneExitSampleCount = 6;
-  static const Duration _qrScanInterval = Duration(milliseconds: 900);
+  static const Duration _qrScanInterval = Duration(milliseconds: 450);
+  static const double _preferredQrZoomLevel = 1.4;
   static const Duration _qrCorrectionCooldown = Duration(seconds: 3);
   static const Duration _mapSyncInterval = Duration(milliseconds: 700);
-  static const NLatLng _seokgyeStationPosition = NLatLng(37.614805, 127.065707);
+  static const double _indoorMetersPerImagePixel = 0.057;
+  static const double _indoorImagePixelsPerMeter =
+      1 / _indoorMetersPerImagePixel;
+  static const NLatLng _soongsilStationPosition = NLatLng(37.49611, 126.95389);
+  static const String _defaultIndoorRouteLine = '7';
+  static const String _defaultIndoorRouteStation =
+      '\uC22D\uC2E4\uB300\uC785\uAD6C';
+  static const String _defaultIndoorRouteStartNode = 'node_003';
+  static const String _defaultIndoorRouteEndNode = 'node_050';
 
   final DeadReckoningCalculator _deadReckoningCalculator =
-      DeadReckoningCalculator();
+      DeadReckoningCalculator(
+        config: const DeadReckoningConfig(
+          positionUnitsPerMeter: _indoorImagePixelsPerMeter,
+        ),
+      );
   final IndoorQrPositionService _qrPositionService = IndoorQrPositionService();
+  final IndoorRouteService _routeService = IndoorRouteService();
   final BarcodeScanner _qrScanner = BarcodeScanner(
     formats: [BarcodeFormat.qrCode],
   );
@@ -53,6 +67,8 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   Future<void>? _cameraReady;
   NaverMapController? _indoorMapController;
   NMarker? _currentIndoorPositionMarker;
+  IndoorRoute? _indoorRoute;
+  IndoorRouteNode? _activeRouteNode;
 
   StreamSubscription<AccelerometerEvent>? _accelerometerSubscription;
   StreamSubscription<UserAccelerometerEvent>? _userAccelerometerSubscription;
@@ -82,6 +98,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   bool _isCameraPreviewActive = false;
   bool _hasStartedIndoorMapTracking = false;
   bool _canShowIndoorMap = false;
+  bool _isLoadingIndoorRoute = false;
   bool _hasStartedPdr = false;
   int _flatPhoneEnterStreak = 0;
   int _flatPhoneExitStreak = 0;
@@ -89,10 +106,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   DateTime? _lastQrCorrectionAt;
   DateTime? _lastMapSyncAt;
   String? _lastCorrectedQrValue;
-  String _cameraStatusMessage = 'Camera: preparing';
-  String _qrStatusMessage = 'QR: waiting';
-  String _mapStatusMessage = 'Map: waiting';
-  String _pdrStatusMessage = 'PDR: waiting';
+  String _routeStatusMessage = 'Route: waiting';
 
   @override
   void initState() {
@@ -119,8 +133,8 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
 
     setState(() {
       _canShowIndoorMap = true;
-      _mapStatusMessage = 'Map: preparing';
     });
+    unawaited(_loadDefaultIndoorRoute());
   }
 
   Future<void> _loadSelfSupervisedStepModel() async {
@@ -134,12 +148,57 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     }
   }
 
+  Future<void> _loadDefaultIndoorRoute() async {
+    if (_isLoadingIndoorRoute) {
+      return;
+    }
+
+    setState(() {
+      _isLoadingIndoorRoute = true;
+      _routeStatusMessage = 'Route: loading';
+    });
+
+    try {
+      final route = await _routeService.fetchRoute(
+        line: _defaultIndoorRouteLine,
+        station: _defaultIndoorRouteStation,
+        startNodeId: _defaultIndoorRouteStartNode,
+        endNodeId: _defaultIndoorRouteEndNode,
+      );
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _indoorRoute = route;
+        _activeRouteNode = route.nextNodeFrom(_deadReckoningState.position);
+        _routeStatusMessage = 'Route: ${route.nodes.length} nodes';
+      });
+    } catch (error) {
+      _reportDebugIssue('Indoor route request failed: $error');
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _routeStatusMessage = 'Route: failed';
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoadingIndoorRoute = false;
+        });
+      } else {
+        _isLoadingIndoorRoute = false;
+      }
+    }
+  }
+
   Future<void> _requestPermissions() async {
     _updateDebugStatus(camera: 'Camera: requesting permission');
     final cameraStatus = await Permission.camera.request();
 
     _updateDebugStatus(map: 'Map: requesting location permission');
-    final locationStatus = await Permission.locationWhenInUse.request();
+    await Permission.locationWhenInUse.request();
 
     _updateDebugStatus(pdr: 'PDR: requesting activity permission');
     final activityRecognitionStatus = await Permission.activityRecognition
@@ -152,15 +211,6 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     setState(() {
       _cameraPermissionGranted = cameraStatus.isGranted;
       _activityRecognitionGranted = activityRecognitionStatus.isGranted;
-      _cameraStatusMessage = cameraStatus.isGranted
-          ? 'Camera: permission granted'
-          : 'Camera: permission denied';
-      _mapStatusMessage = locationStatus.isGranted
-          ? 'Map: location permission granted'
-          : 'Map: location permission denied';
-      _pdrStatusMessage = activityRecognitionStatus.isGranted
-          ? 'PDR: activity permission granted'
-          : 'PDR: activity permission denied';
     });
   }
 
@@ -181,7 +231,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
       _updateDebugStatus(camera: 'Camera: initializing preview');
       final controller = CameraController(
         cameras.first,
-        ResolutionPreset.medium,
+        ResolutionPreset.high,
         enableAudio: false,
         imageFormatGroup: Platform.isAndroid
             ? ImageFormatGroup.nv21
@@ -191,6 +241,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
       );
 
       await controller.initialize();
+      await _configureQrCamera(controller);
 
       if (!mounted) {
         await controller.dispose();
@@ -200,7 +251,6 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
       setState(() {
         _cameraController = controller;
         _cameraError = null;
-        _cameraStatusMessage = 'Camera: preview active';
         _isCameraPreviewActive = true;
         _hasShownCameraErrorDialog = false;
       });
@@ -229,6 +279,29 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
       _updateDebugStatus(qr: 'QR: scanning');
     } catch (error) {
       _reportDebugIssue('QR image stream unavailable: $error', qr: true);
+    }
+  }
+
+  Future<void> _configureQrCamera(CameraController controller) async {
+    try {
+      await controller.setFocusMode(FocusMode.auto);
+    } catch (error) {
+      debugPrint('Camera focus mode setup skipped: $error');
+    }
+
+    try {
+      await controller.setExposureMode(ExposureMode.auto);
+    } catch (error) {
+      debugPrint('Camera exposure mode setup skipped: $error');
+    }
+
+    try {
+      final minZoom = await controller.getMinZoomLevel();
+      final maxZoom = await controller.getMaxZoomLevel();
+      final zoom = _preferredQrZoomLevel.clamp(minZoom, maxZoom).toDouble();
+      await controller.setZoomLevel(zoom);
+    } catch (error) {
+      debugPrint('Camera zoom setup skipped: $error');
     }
   }
 
@@ -347,46 +420,18 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
         _deadReckoningState = _deadReckoningState.copyWith(
           position: vm.Vector2(correction.x, correction.y),
         );
+        _activeRouteNode = _indoorRoute?.nextNodeFrom(
+          _deadReckoningState.position,
+        );
         _lastCorrectedQrValue = qrValue;
         _lastQrCorrectionAt = correction.resolvedAt;
-        _qrStatusMessage =
-            'QR: corrected (${correction.x.toStringAsFixed(1)}, ${correction.y.toStringAsFixed(1)})';
       });
       _syncIndoorMapLocation(forceCamera: true);
-      _showQrVerificationDialog(correction);
     } catch (error) {
       _reportDebugIssue('QR position request failed: $error', qr: true);
     } finally {
       _isResolvingQrPosition = false;
     }
-  }
-
-  void _showQrVerificationDialog(IndoorQrPosition correction) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) {
-        return;
-      }
-
-      showDialog<void>(
-        context: context,
-        builder: (dialogContext) {
-          return AlertDialog(
-            title: const Text('QR verification'),
-            content: SingleChildScrollView(
-              child: SelectableText(
-                const JsonEncoder.withIndent('  ').convert(correction.payload),
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(dialogContext).pop(),
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    });
   }
 
   void _setCameraError(String message) {
@@ -396,25 +441,17 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
 
     setState(() {
       _cameraError = message;
-      _cameraStatusMessage = message;
     });
     _showCameraUnavailableDialog();
   }
 
   void _reportDebugIssue(String message, {bool qr = false, bool map = false}) {
-    debugPrint(message);
-    if (!mounted) {
-      return;
-    }
-
-    setState(() {
-      if (qr) {
-        _qrStatusMessage = message;
-      }
-      if (map) {
-        _mapStatusMessage = message;
-      }
-    });
+    final source = qr
+        ? 'QR'
+        : map
+        ? 'Map'
+        : 'Debug';
+    debugPrint('$source: $message');
   }
 
   void _updateDebugStatus({
@@ -423,24 +460,10 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     String? map,
     String? pdr,
   }) {
-    if (!mounted) {
-      return;
+    final messages = [camera, qr, map, pdr].whereType<String>().join(' ');
+    if (messages.isNotEmpty) {
+      debugPrint(messages);
     }
-
-    setState(() {
-      if (camera != null) {
-        _cameraStatusMessage = camera;
-      }
-      if (qr != null) {
-        _qrStatusMessage = qr;
-      }
-      if (map != null) {
-        _mapStatusMessage = map;
-      }
-      if (pdr != null) {
-        _pdrStatusMessage = pdr;
-      }
-    });
   }
 
   void _showCameraUnavailableDialog() {
@@ -679,6 +702,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
       sample,
       _deadReckoningState,
     );
+    _activeRouteNode = _indoorRoute?.nextNodeFrom(_deadReckoningState.position);
     _scheduleIndoorMapSync();
     _enqueueLogLine(
       sample,
@@ -856,6 +880,10 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     return normalizedDelta * 180 / math.pi;
   }
 
+  double _normalizeRadians(double angle) {
+    return ((angle + math.pi) % (2 * math.pi)) - math.pi;
+  }
+
   double _stddev(List<double> values) {
     if (values.length < 2) {
       return 0;
@@ -958,15 +986,16 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
 
   NLatLng _indoorMetersToLatLng(vm.Vector2 position) {
     const metersPerLatitudeDegree = 111320.0;
+    final positionMeters = position * _indoorMetersPerImagePixel;
     final latitude =
-        _seokgyeStationPosition.latitude +
-        (position.y / metersPerLatitudeDegree);
+        _soongsilStationPosition.latitude +
+        (positionMeters.y / metersPerLatitudeDegree);
     final longitudeMetersPerDegree =
         metersPerLatitudeDegree *
-        math.cos(_seokgyeStationPosition.latitude * math.pi / 180);
+        math.cos(_soongsilStationPosition.latitude * math.pi / 180);
     final longitude =
-        _seokgyeStationPosition.longitude +
-        (position.x / longitudeMetersPerDegree);
+        _soongsilStationPosition.longitude +
+        (positionMeters.x / longitudeMetersPerDegree);
     return NLatLng(latitude, longitude);
   }
 
@@ -1026,20 +1055,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
                     ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-                    child: _DebugStatusLine(
-                      messages: [
-                        _cameraStatusMessage,
-                        _qrStatusMessage,
-                        _mapStatusMessage,
-                        _pdrStatusMessage,
-                      ],
-                    ),
-                  ),
-                ),
+                Positioned.fill(child: _buildArRouteOverlay(context)),
               ],
             ),
           ),
@@ -1128,6 +1144,149 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
     );
   }
 
+  Widget _buildArRouteOverlay(BuildContext context) {
+    final route = _indoorRoute;
+    final target = _activeRouteNode;
+    if (route == null || target == null) {
+      return Align(
+        alignment: Alignment.center,
+        child: _ArRouteStatus(
+          message: _isLoadingIndoorRoute ? '경로 불러오는 중' : _routeStatusMessage,
+          onRetry: _isLoadingIndoorRoute ? null : _loadDefaultIndoorRoute,
+        ),
+      );
+    }
+
+    final currentPosition = _deadReckoningState.position;
+    final vectorToTarget = target.position - currentPosition;
+    final distance = vectorToTarget.length;
+    final distanceMeters = distance * _indoorMetersPerImagePixel;
+    final routeAngle = math.atan2(vectorToTarget.y, vectorToTarget.x);
+    final relativeAngle = _normalizeRadians(
+      routeAngle - _deadReckoningState.headingRadians,
+    );
+    final arrowSize = (56 + distance / 6).clamp(56, 132).toDouble();
+    final targetIndex = route.nodes.indexWhere((node) => node.id == target.id);
+    final stepText = targetIndex < 0
+        ? '-'
+        : '${targetIndex + 1}/${route.nodes.length}';
+    final segment = route.segmentToNode(target.id);
+    final guidanceText = _routeGuidanceText(target, segment);
+
+    return IgnorePointer(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: RouteInPalette.ink.withValues(alpha: 0.34),
+                  boxShadow: [
+                    BoxShadow(
+                      color: RouteInPalette.ink.withValues(alpha: 0.46),
+                      blurRadius: 28,
+                      spreadRadius: 8,
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Transform.rotate(
+                    angle: relativeAngle,
+                    child: Icon(
+                      Icons.navigation_rounded,
+                      color: RouteInPalette.white,
+                      size: arrowSize,
+                      shadows: const [
+                        Shadow(color: RouteInPalette.ink, blurRadius: 18),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 14),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: RouteInPalette.ink.withValues(alpha: 0.72),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: RouteInPalette.sky),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 10,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '$stepText · ${target.floor} · ${distanceMeters.toStringAsFixed(1)} m',
+                        style: const TextStyle(
+                          color: RouteInPalette.sky,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13,
+                        ),
+                      ),
+                      if (guidanceText.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          guidanceText,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: RouteInPalette.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _routeGuidanceText(
+    IndoorRouteNode target,
+    IndoorRouteSegment? segment,
+  ) {
+    if (target.isElevatorBoardingNode) {
+      return '엘리베이터 탑승 지점';
+    }
+    if (target.isElevatorPassingNode || target.isElevatorNode) {
+      return '엘리베이터 이동 중';
+    }
+    if (segment == null) {
+      return '';
+    }
+
+    final floorChange =
+        segment.fromFloor.isNotEmpty &&
+        segment.toFloor.isNotEmpty &&
+        segment.fromFloor != segment.toFloor;
+    final distance = segment.distance > 0
+        ? ' · ${(segment.distance * _indoorMetersPerImagePixel).toStringAsFixed(1)} m'
+        : '';
+
+    if (segment.usesElevator) {
+      return '엘리베이터 ${segment.fromFloor} → ${segment.toFloor}$distance';
+    }
+    if (floorChange) {
+      return '층 이동 ${segment.fromFloor} → ${segment.toFloor}$distance';
+    }
+    if (segment.kind.isNotEmpty && segment.kind != 'walk') {
+      return '${segment.kind}$distance';
+    }
+    return '직진$distance';
+  }
+
   Widget _buildIndoorMapPanel(BuildContext context) {
     if (!_canShowIndoorMap) {
       return const _IndoorMapUnavailableState(
@@ -1162,7 +1321,7 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
                 mapType: NMapType.basic,
                 locationButtonEnable: true,
                 initialCameraPosition: NCameraPosition(
-                  target: _seokgyeStationPosition,
+                  target: _soongsilStationPosition,
                   zoom: 17,
                 ),
               ),
@@ -1172,6 +1331,9 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
   }
 
   Widget _buildNavigationSummary(BuildContext context) {
+    final positionMeters =
+        _deadReckoningState.position * _indoorMetersPerImagePixel;
+
     return DecoratedBox(
       decoration: BoxDecoration(
         color: RouteInPalette.navy.withValues(alpha: 0.9),
@@ -1218,8 +1380,8 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
                 ),
                 label: 'Position',
                 value:
-                    '${_deadReckoningState.position.x.toStringAsFixed(1)}, '
-                    '${_deadReckoningState.position.y.toStringAsFixed(1)} m',
+                    '${positionMeters.x.toStringAsFixed(1)}, '
+                    '${positionMeters.y.toStringAsFixed(1)} m',
               ),
             ),
           ],
@@ -1231,6 +1393,59 @@ class _IndoorNavigationPageState extends State<IndoorNavigationPage> {
 
 const String _csvHeader =
     'timestamp,position_x,position_y,heading_radians,heading_degrees,heading_label,steps,last_step_length_m,crossings,distance_m,filtered_accel,active_threshold,motion_magnitude,accel_x,accel_y,accel_z,user_accel_x,user_accel_y,user_accel_z,user_accel_magnitude,gyro_x,gyro_y,gyro_z,gyro_magnitude,tilt_gyro_magnitude,mag_x,mag_y,mag_z,geomagnetic_rotation_azimuth,game_rotation_azimuth,activity_recognition_granted,step_source,step_confidence,seconds_since_prev_step,heading_change_since_prev_step,heading_change_rate_since_prev_step,recent_step_interval_mean,recent_step_interval_std,filtered_to_user_accel_ratio,accel_to_gyro_ratio,phone_flat,imu_step_detected\n';
+
+class _ArRouteStatus extends StatelessWidget {
+  const _ArRouteStatus({required this.message, required this.onRetry});
+
+  final String message;
+  final VoidCallback? onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: RouteInPalette.ink.withValues(alpha: 0.72),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: RouteInPalette.sky),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.route_rounded,
+              color: RouteInPalette.white,
+              size: 18,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              message,
+              style: const TextStyle(
+                color: RouteInPalette.white,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            if (onRetry != null) ...[
+              const SizedBox(width: 8),
+              IconButton(
+                tooltip: 'Retry',
+                onPressed: onRetry,
+                icon: const Icon(Icons.refresh_rounded),
+                color: RouteInPalette.sky,
+                constraints: const BoxConstraints.tightFor(
+                  width: 32,
+                  height: 32,
+                ),
+                padding: EdgeInsets.zero,
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class _SummaryMetric extends StatelessWidget {
   const _SummaryMetric({
@@ -1278,37 +1493,6 @@ class _SummaryMetric extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _DebugStatusLine extends StatelessWidget {
-  const _DebugStatusLine({required this.messages});
-
-  final List<String> messages;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: RouteInPalette.ink.withValues(alpha: 0.82),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: RouteInPalette.sky.withValues(alpha: 0.55)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        child: Text(
-          messages.join('\n'),
-          maxLines: 4,
-          overflow: TextOverflow.ellipsis,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: RouteInPalette.white,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ),
     );
   }
 }

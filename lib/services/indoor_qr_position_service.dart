@@ -22,20 +22,16 @@ class IndoorQrPositionService {
   IndoorQrPositionService({http.Client? client})
     : _client = client ?? http.Client();
 
-  static const _host = '192.168.0.13';
-  static const _port = 8000;
+  static final Uri _baseUri = Uri.parse(
+    'https://stood-journalist-answers-procedures.trycloudflare.com',
+  );
 
   final http.Client _client;
 
   Future<IndoorQrPosition> resolveQrPosition(String qrValue) async {
     final qrId = _qrIdFromValue(qrValue);
     final response = await _client.get(
-      Uri(
-        scheme: 'http',
-        host: _host,
-        port: _port,
-        pathSegments: ['api', 'station', 'qr_verify', qrId],
-      ),
+      _baseUri.replace(pathSegments: ['api', 'station', 'qr_verify', qrId]),
       headers: const {'accept': 'application/json'},
     );
 
@@ -59,15 +55,17 @@ class IndoorQrPositionService {
   String _qrIdFromValue(String qrValue) {
     final trimmed = qrValue.trim();
 
-    try {
-      final decoded = jsonDecode(trimmed);
-      final payload = _asMap(decoded);
-      final qrId = payload['qr_id'] ?? payload['qrId'];
-      if (qrId is String && qrId.isNotEmpty) {
-        return qrId;
+    final directQrId = _qrIdFromJsonLikeValue(trimmed);
+    if (directQrId != null) {
+      return directQrId;
+    }
+
+    final decodedValue = _tryDecodeUriComponent(trimmed);
+    if (decodedValue != null && decodedValue != trimmed) {
+      final decodedQrId = _qrIdFromJsonLikeValue(decodedValue);
+      if (decodedQrId != null) {
+        return decodedQrId;
       }
-    } catch (_) {
-      // Non-JSON QR payloads are handled below.
     }
 
     final uri = Uri.tryParse(trimmed);
@@ -75,15 +73,73 @@ class IndoorQrPositionService {
       final queryQrId =
           uri.queryParameters['qr_id'] ?? uri.queryParameters['qrId'];
       if (queryQrId != null && queryQrId.isNotEmpty) {
-        return queryQrId;
+        return queryQrId.trim();
       }
 
       if (uri.pathSegments.isNotEmpty) {
-        return uri.pathSegments.last;
+        final pathQrId = _qrIdFromJsonLikeValue(uri.pathSegments.last);
+        if (pathQrId != null) {
+          return pathQrId;
+        }
+
+        final decodedPathSegment = _tryDecodeUriComponent(
+          uri.pathSegments.last,
+        );
+        if (decodedPathSegment != null) {
+          final decodedPathQrId = _qrIdFromJsonLikeValue(decodedPathSegment);
+          if (decodedPathQrId != null) {
+            return decodedPathQrId;
+          }
+        }
       }
     }
 
+    final hexQrId = RegExp(
+      r'\b[0-9a-fA-F]{64}\b',
+    ).firstMatch(decodedValue ?? trimmed)?.group(0);
+    if (hexQrId != null) {
+      return hexQrId;
+    }
+
     return trimmed;
+  }
+
+  String? _qrIdFromJsonLikeValue(String value) {
+    final trimmed = value.trim();
+
+    try {
+      final decoded = jsonDecode(trimmed);
+      final payload = _asMap(decoded);
+      final qrId = payload['qr_id'] ?? payload['qrId'];
+      if (qrId is String && qrId.trim().isNotEmpty) {
+        return qrId.trim();
+      }
+    } catch (_) {
+      // Non-JSON QR payloads are handled below.
+    }
+
+    final quotedQrId = RegExp(
+      r'''["']qr_?id["']\s*:\s*["']([^"']+)["']''',
+      caseSensitive: false,
+    ).firstMatch(trimmed)?.group(1);
+    if (quotedQrId != null && quotedQrId.trim().isNotEmpty) {
+      return quotedQrId.trim();
+    }
+
+    final hexQrId = RegExp(r'^[0-9a-fA-F]{64}$').firstMatch(trimmed)?.group(0);
+    if (hexQrId != null) {
+      return hexQrId;
+    }
+
+    return null;
+  }
+
+  String? _tryDecodeUriComponent(String value) {
+    try {
+      return Uri.decodeComponent(value);
+    } catch (_) {
+      return null;
+    }
   }
 
   (double, double) _positionFromPayload(dynamic payload) {

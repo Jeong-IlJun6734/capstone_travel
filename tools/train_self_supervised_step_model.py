@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import fnmatch
 import json
 import math
 import random
@@ -38,6 +39,30 @@ FEATURE_NAMES = [
     "accel_to_gyro_ratio",
 ]
 
+CLUSTER_FEATURE_WEIGHTS = [
+    1.25,
+    0.45,
+    0.45,
+    1.25,
+    0.8,
+    1.4,
+    1.3,
+    0.15,
+    0.15,
+    0.8,
+    0.8,
+    0.25,
+    0.25,
+    0.15,
+    0.05,
+    0.05,
+    0.05,
+    0.05,
+    0.05,
+    1.0,
+    0.65,
+]
+
 WINDOW_SIZE = 9
 
 
@@ -58,10 +83,22 @@ def parse_args() -> argparse.Namespace:
         help="Output JSON model path.",
     )
     parser.add_argument("--seed", type=int, default=13)
-    parser.add_argument("--clusters", type=int, default=3)
+    parser.add_argument("--clusters", type=int, default=5)
     parser.add_argument("--min-length", type=float, default=0.5)
     parser.add_argument("--max-length", type=float, default=0.95)
     parser.add_argument("--epochs", type=int, default=3600, help="Regression training epochs.")
+    parser.add_argument(
+        "--exclude-glob",
+        action="append",
+        default=[],
+        help="Filename glob to leave out of training. Can be passed multiple times.",
+    )
+    parser.add_argument(
+        "--include-glob",
+        action="append",
+        default=[],
+        help="Filename glob to include in training. If omitted, every CSV is included.",
+    )
     return parser.parse_args()
 
 
@@ -70,7 +107,13 @@ def main() -> None:
     random.seed(args.seed)
 
     input_dir = Path(args.input_dir)
-    csv_paths = sorted(path for path in input_dir.rglob("*.csv") if path.is_file())
+    csv_paths = sorted(
+        path
+        for path in input_dir.rglob("*.csv")
+        if path.is_file()
+        and should_include_file(path, args.include_glob)
+        and not should_exclude_file(path, args.exclude_glob)
+    )
     if not csv_paths:
         raise SystemExit(f"No CSV logs found in {input_dir}")
 
@@ -88,30 +131,35 @@ def main() -> None:
     print(f"[2/6] Normalizing {len(all_samples)} candidate windows...")
     means, stds = fit_normalization(all_samples)
     normalized = [normalize(sample.features, means, stds) for sample in all_samples]
+    weighted_normalized = [apply_feature_weights(value) for value in normalized]
 
     print(f"[3/6] Running k-means with k={args.clusters}...")
-    centroids, assignments = kmeans(normalized, args.clusters, args.seed)
+    centroids, assignments = kmeans(weighted_normalized, args.clusters, args.seed)
 
     cluster_stats = compute_cluster_stats(all_samples, assignments)
-    step_cluster_index = max(range(args.clusters), key=lambda idx: cluster_stats[idx]["cluster_score"])
+    step_cluster_index = max(
+        range(args.clusters), key=lambda idx: cluster_stats[idx]["cluster_score"]
+    )
+    step_cluster_indices = select_step_cluster_indices(cluster_stats, step_cluster_index)
     step_probabilities = [
-        softmax_step_probability(normalized[i], centroids, step_cluster_index)
+        softmax_step_probability(weighted_normalized[i], centroids, step_cluster_indices)
         for i in range(len(all_samples))
     ]
     step_threshold = clamp(
-        mean(step_probabilities) - 0.25 * stddev(step_probabilities),
-        0.3,
+        mean(step_probabilities) - 0.4 * stddev(step_probabilities),
+        0.18,
         0.8,
     )
 
-    print(f"[4/6] Selected cluster {step_cluster_index} as the step prototype")
+    print(f"[4/6] Selected cluster {step_cluster_index} as the primary step prototype")
+    print(f"      Step prototype clusters: {step_cluster_indices}")
     print(f"      Threshold set to {step_threshold:.3f}")
 
     pseudo_targets = build_pseudo_step_lengths(
         all_samples,
         step_probabilities,
         assignments,
-        step_cluster_index,
+        step_cluster_indices,
         args.min_length,
         args.max_length,
     )
@@ -145,12 +193,14 @@ def main() -> None:
     output = {
         "model_type": "self_supervised_prototype_step_model_v1",
         "feature_names": FEATURE_NAMES,
+        "feature_weights": CLUSTER_FEATURE_WEIGHTS,
         "normalization": {"means": means, "stds": stds},
         "clusters": [
             {
                 "centroid": centroid,
                 "score": cluster_stats[index]["cluster_score"],
                 "size": cluster_stats[index]["size"],
+                "size_fraction": cluster_stats[index]["size_fraction"],
                 "mean_peak_height": cluster_stats[index]["mean_peak_height"],
                 "mean_prominence": cluster_stats[index]["mean_prominence"],
                 "mean_cadence_seconds": cluster_stats[index]["mean_cadence_seconds"],
@@ -158,6 +208,7 @@ def main() -> None:
             for index, centroid in enumerate(centroids)
         ],
         "step_cluster_index": step_cluster_index,
+        "step_cluster_indices": step_cluster_indices,
         "step_decision_threshold": step_threshold,
         "minimum_step_length_meters": args.min_length,
         "maximum_step_length_meters": args.max_length,
@@ -174,6 +225,7 @@ def main() -> None:
             "candidate_count": len(all_samples),
             "cluster_count": args.clusters,
             "step_cluster_index": step_cluster_index,
+            "step_cluster_indices": step_cluster_indices,
         },
     }
 
@@ -191,12 +243,10 @@ def load_candidate_samples(path: Path) -> list[Sample]:
         rows = [row for row in reader]
 
     filtered_values = [float_or_default(row.get("filtered_accel")) for row in rows]
-    candidates = find_candidate_indices(filtered_values)
+    timestamps = [parse_timestamp(row.get("timestamp")) for row in rows]
+    candidates = find_candidate_indices(filtered_values, timestamps)
 
     samples: list[Sample] = []
-    user_buffer: list[float] = []
-    gyro_buffer: list[float] = []
-    heading_change_buffer: list[float] = []
     recent_step_intervals: list[float] = []
     previous_candidate_index: int | None = None
     previous_candidate_heading: float | None = None
@@ -212,6 +262,7 @@ def load_candidate_samples(path: Path) -> list[Sample]:
         active_threshold = estimate_active_threshold(filtered_values, index)
         threshold_margin = filtered_accel - active_threshold
         threshold_margin_ratio = threshold_margin / max(active_threshold, 1e-3)
+
         if previous_candidate_index is None:
             seconds_since_prev_step = 0.0
         else:
@@ -219,30 +270,51 @@ def load_candidate_samples(path: Path) -> list[Sample]:
                 timestamp,
                 parse_timestamp(rows[previous_candidate_index].get("timestamp")),
             )
+
         heading_change_since_prev_step = 0.0
         if previous_candidate_heading is not None:
             heading_change_since_prev_step = heading_delta_degrees(
                 heading_radians,
                 previous_candidate_heading,
             )
+
         heading_change_rate_since_prev_step = (
             0.0
             if seconds_since_prev_step <= 1e-6
             else heading_change_since_prev_step / seconds_since_prev_step
         )
+
         heading_change_degrees = heading_change_since_prev_step
         angular_velocity_dps = (
             0.0
             if seconds_since_prev_step <= 1e-6
             else heading_change_degrees / seconds_since_prev_step
         )
+
         filtered_to_user_accel_ratio = filtered_accel / max(user_accel, 0.05)
         accel_to_gyro_ratio = user_accel / max(gyro, 0.05)
 
         window_start = max(0, index - WINDOW_SIZE + 1)
         window_rows = rows[window_start : index + 1]
-        window_user = [float_or_default(row.get("user_accel_magnitude")) for row in window_rows]
-        window_gyro = [float_or_default(row.get("gyro_magnitude")) for row in window_rows]
+
+        window_user = [
+            float_or_default(window_row.get("user_accel_magnitude"))
+            for window_row in window_rows
+        ]
+        window_gyro = [
+            float_or_default(window_row.get("gyro_magnitude"))
+            for window_row in window_rows
+        ]
+        window_headings = [
+            float_or_default(window_row.get("heading_radians"))
+            for window_row in window_rows
+        ]
+
+        window_heading_changes = [
+            heading_delta_degrees(current, previous)
+            for previous, current in zip(window_headings, window_headings[1:])
+        ]
+
         prominence = estimate_prominence(filtered_values, index)
 
         features = [
@@ -255,11 +327,11 @@ def load_candidate_samples(path: Path) -> list[Sample]:
             threshold_margin_ratio,
             heading_change_degrees,
             angular_velocity_dps,
-            mean(user_buffer),
-            stddev(user_buffer),
-            mean(gyro_buffer),
-            stddev(gyro_buffer),
-            max(heading_change_buffer) if heading_change_buffer else 0.0,
+            mean(window_user),
+            stddev(window_user),
+            mean(window_gyro),
+            stddev(window_gyro),
+            max(window_heading_changes) if window_heading_changes else 0.0,
             seconds_since_prev_step,
             heading_change_since_prev_step,
             mean(recent_step_intervals),
@@ -278,28 +350,29 @@ def load_candidate_samples(path: Path) -> list[Sample]:
             )
         )
 
-        user_buffer.append(user_accel)
-        gyro_buffer.append(gyro)
-        heading_change_buffer.append(heading_change_degrees)
         if previous_candidate_index is not None:
             interval = seconds_since_prev_step
             if interval > 0:
                 recent_step_intervals.append(interval)
                 if len(recent_step_intervals) > 5:
                     recent_step_intervals.pop(0)
+
         previous_candidate_index = index
         previous_candidate_heading = heading_radians
 
     return samples
 
 
-def find_candidate_indices(values: list[float]) -> list[int]:
+def find_candidate_indices(
+    values: list[float],
+    timestamps: list[datetime],
+    min_interval_seconds: float = 0.38,
+) -> list[int]:
     if len(values) < 5:
         return list(range(len(values)))
 
     baseline_window = 20
     candidates: list[int] = []
-    last_candidate_index = -1000
     for index in range(2, len(values) - 2):
         window = values[max(0, index - baseline_window) : index]
         baseline = mean(window) + 0.25 * stddev(window) if window else values[index]
@@ -310,10 +383,13 @@ def find_candidate_indices(values: list[float]) -> list[int]:
             continue
         if value < max(values[index - 2], values[index + 2]):
             continue
-        if index - last_candidate_index < 2:
-            continue
+        if candidates:
+            seconds_since_last = seconds_between(timestamps[index], timestamps[candidates[-1]])
+            if seconds_since_last < min_interval_seconds:
+                if value > values[candidates[-1]]:
+                    candidates[-1] = index
+                continue
         candidates.append(index)
-        last_candidate_index = index
     return candidates
 
 
@@ -334,35 +410,56 @@ def build_pseudo_step_lengths(
     samples: list[Sample],
     step_probabilities: list[float],
     assignments: list[int],
-    step_cluster_index: int,
+    step_cluster_indices: list[int],
     min_length: float,
     max_length: float,
 ) -> list[float]:
     pseudo_targets: list[float] = []
-    step_samples = [sample for sample, assignment in zip(samples, assignments) if assignment == step_cluster_index]
-    step_probs = [prob for prob, assignment in zip(step_probabilities, assignments) if assignment == step_cluster_index]
-    if not step_samples:
-        step_samples = samples
-        step_probs = step_probabilities
-
-    for sample, step_prob in zip(step_samples, step_probs):
+    for sample, step_prob, assignment in zip(samples, step_probabilities, assignments):
         cadence_seconds = sample.features[14]
         cadence_component = 1.0 - clamp((cadence_seconds - 0.95) / 1.1, 0.0, 1.0)
         intensity_component = clamp(sample.peak_height / 4.5, 0.0, 1.0)
         prominence_component = clamp(sample.prominence / 2.5, 0.0, 1.0)
+        cluster_component = 1.0 if assignment in step_cluster_indices else 0.45
         pseudo = min_length + (max_length - min_length) * (
-            0.42 * cadence_component +
-            0.30 * intensity_component +
-            0.18 * prominence_component +
-            0.10 * step_prob
+            0.22 * cadence_component +
+            0.34 * intensity_component +
+            0.22 * prominence_component +
+            0.14 * step_prob +
+            0.08 * cluster_component
         )
         pseudo_targets.append(clamp(pseudo, min_length, max_length))
 
     return pseudo_targets
 
 
+def select_step_cluster_indices(
+    cluster_stats: list[dict[str, float]],
+    primary_index: int,
+) -> list[int]:
+    primary_score = cluster_stats[primary_index]["cluster_score"]
+    selected: list[int] = []
+    for index, stats in enumerate(cluster_stats):
+        cadence = stats["mean_cadence_seconds"]
+        size_fraction = stats["size_fraction"]
+        peak_height = stats["mean_peak_height"]
+        prominence = stats["mean_prominence"]
+        score = stats["cluster_score"]
+        looks_like_supported_walking = (
+            size_fraction >= 0.12
+            and 0.48 <= cadence <= 0.82
+            and 1.5 <= peak_height <= 3.4
+            and 0.08 <= prominence <= 0.45
+        )
+        close_to_primary = score >= primary_score - 0.08
+        if index == primary_index or (looks_like_supported_walking and close_to_primary):
+            selected.append(index)
+    return selected
+
+
 def compute_cluster_stats(samples: list[Sample], assignments: list[int]) -> list[dict[str, float]]:
     cluster_count = max(assignments) + 1 if assignments else 0
+    sample_count = max(len(samples), 1)
     stats: list[dict[str, float]] = []
     for cluster_index in range(cluster_count):
         cluster_samples = [
@@ -372,6 +469,7 @@ def compute_cluster_stats(samples: list[Sample], assignments: list[int]) -> list
             stats.append(
                 {
                     "size": 0,
+                    "size_fraction": 0.0,
                     "cluster_score": -1e9,
                     "mean_peak_height": 0.0,
                     "mean_prominence": 0.0,
@@ -385,16 +483,27 @@ def compute_cluster_stats(samples: list[Sample], assignments: list[int]) -> list
         mean_cadence = mean(cadence_seconds) if cadence_seconds else 0.0
         cadence_consistency = 1.0 / (1.0 + stddev(cadence_seconds)) if len(cadence_seconds) >= 2 else 0.5
         gyro_penalty = mean(sample.features[1] for sample in cluster_samples)
+        size_fraction = len(cluster_samples) / sample_count
+        cadence_score = 1.0 - clamp(abs(mean_cadence - 0.65) / 0.35, 0.0, 1.0)
+        peak_score = 1.0 - clamp(abs(mean_peak_height - 2.4) / 2.4, 0.0, 1.0)
+        prominence_score = 1.0 - clamp(abs(mean_prominence - 0.22) / 0.55, 0.0, 1.0)
+        support_score = clamp(size_fraction / 0.18, 0.0, 1.0)
+        tiny_cluster_penalty = 1.5 if size_fraction < 0.05 else 0.0
+        extreme_peak_penalty = clamp((mean_peak_height - 4.0) / 3.0, 0.0, 1.0)
         cluster_score = (
-            0.38 * mean_peak_height
-            + 0.24 * mean_prominence
-            + 0.20 * cadence_consistency
-            + 0.12 * (1.0 - clamp(abs(mean_cadence - 0.9) / 1.3, 0.0, 1.0))
-            - 0.06 * gyro_penalty
+            0.34 * cadence_score
+            + 0.22 * support_score
+            + 0.16 * peak_score
+            + 0.14 * prominence_score
+            + 0.10 * cadence_consistency
+            - 0.04 * gyro_penalty
+            - tiny_cluster_penalty
+            - extreme_peak_penalty
         )
         stats.append(
             {
                 "size": len(cluster_samples),
+                "size_fraction": size_fraction,
                 "cluster_score": cluster_score,
                 "mean_peak_height": mean_peak_height,
                 "mean_prominence": mean_prominence,
@@ -469,7 +578,11 @@ def fit_linear_regression(
     return weights, bias
 
 
-def softmax_step_probability(value: list[float], centroids: list[list[float]], step_cluster_index: int) -> float:
+def softmax_step_probability(
+    value: list[float],
+    centroids: list[list[float]],
+    step_cluster_indices: list[int],
+) -> float:
     distances = [_distance(value, centroid) for centroid in centroids]
     inverted = [-distance for distance in distances]
     max_score = max(inverted)
@@ -477,7 +590,7 @@ def softmax_step_probability(value: list[float], centroids: list[list[float]], s
     total = sum(exps)
     if total <= 1e-9:
         return 0.5
-    return exps[step_cluster_index] / total
+    return sum(exps[index] for index in step_cluster_indices) / total
 
 
 def fit_normalization(samples: list[Sample]) -> tuple[list[float], list[float]]:
@@ -495,6 +608,13 @@ def fit_normalization(samples: list[Sample]) -> tuple[list[float], list[float]]:
 def normalize(features: list[float], means: list[float], stds: list[float]) -> list[float]:
     return [
         (value - means[index]) / stds[index]
+        for index, value in enumerate(features)
+    ]
+
+
+def apply_feature_weights(features: list[float]) -> list[float]:
+    return [
+        value * CLUSTER_FEATURE_WEIGHTS[index]
         for index, value in enumerate(features)
     ]
 
@@ -555,6 +675,14 @@ def heading_delta_degrees(a: float, b: float) -> float:
     delta = abs(a - b)
     normalized = (2 * math.pi) - delta if delta > math.pi else delta
     return normalized * 180.0 / math.pi
+
+
+def should_exclude_file(path: Path, patterns: list[str]) -> bool:
+    return any(fnmatch.fnmatch(path.name, pattern) for pattern in patterns)
+
+
+def should_include_file(path: Path, patterns: list[str]) -> bool:
+    return not patterns or any(fnmatch.fnmatch(path.name, pattern) for pattern in patterns)
 
 
 if __name__ == "__main__":

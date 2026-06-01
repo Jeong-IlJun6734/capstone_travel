@@ -1,9 +1,20 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
+
+import '../services/naver_map_config.dart';
+import '../services/schedule_api_service.dart';
 import '../theme/route_in_palette.dart';
+import 'add_place_page.dart';
 
 class ScheduleManagementPage extends StatefulWidget {
-  const ScheduleManagementPage({super.key});
+  const ScheduleManagementPage({
+    super.key,
+    this.userId = defaultScheduleUserId,
+  });
+
+  final int userId;
 
   @override
   State<ScheduleManagementPage> createState() => _ScheduleManagementPageState();
@@ -11,280 +22,253 @@ class ScheduleManagementPage extends StatefulWidget {
 
 class _ScheduleManagementPageState extends State<ScheduleManagementPage> {
   int _selectedDayIndex = 0;
-  late final List<_TripDay> _days;
+  List<_TripDay> _days = const [];
+  Future<void>? _loadFuture;
+  String? _loadError;
+
+  final ScheduleApiService _scheduleApiService = ScheduleApiService();
+
   int _nextPlaceId = 1;
 
-  static const List<_TripDay> _seedDays = [
-    _TripDay(
-      label: 'DAY 1',
-      title: '난바 먹방 루트',
-      area: '도톤보리 - 구로몬 시장',
-      totalTime: '6시간 20분',
-      walkingDistance: '1.3km',
-      places: [
-        _TripPlace(
-          id: 1,
-          category: '관광',
-          name: '도톤보리',
-          note: '네온사인 거리에서 여행 시작, 사진 스팟 체크',
-          move: '도보 7분',
-        ),
-        _TripPlace(
-          id: 2,
-          category: '식당',
-          name: '오코노미야키 런치',
-          note: '대기 줄이 짧은 점심 타임에 방문',
-          move: '도보 9분',
-        ),
-        _TripPlace(
-          id: 3,
-          category: '시장',
-          name: '구로몬 시장',
-          note: '간식, 해산물, 기념품까지 한 번에 보기',
-          move: '도보 12분',
-        ),
-        _TripPlace(
-          id: 4,
-          category: '바',
-          name: '우라 난바 이자카야',
-          note: '저녁 마무리, 예약 여부 확인 필요',
-        ),
-      ],
-    ),
-    _TripDay(
-      label: 'DAY 2',
-      title: '카페거리와 빈티지 샵',
-      area: '나카자키초',
-      totalTime: '5시간 10분',
-      walkingDistance: '1.0km',
-      places: [
-        _TripPlace(
-          id: 5,
-          category: '산책',
-          name: '나카자키초 골목',
-          note: '오픈 전 조용한 거리 먼저 둘러보기',
-          move: '도보 5분',
-        ),
-        _TripPlace(
-          id: 6,
-          category: '쇼핑',
-          name: '빈티지 소품샵',
-          note: '문 여는 시간 11:00 체크',
-          move: '도보 4분',
-        ),
-        _TripPlace(
-          id: 7,
-          category: '카페',
-          name: '디저트 카페',
-          note: '브레이크 타임 전에 방문',
-          move: '도보 8분',
-        ),
-        _TripPlace(
-          id: 8,
-          category: '포토',
-          name: '감성 골목 사진 코스',
-          note: '해질녘 촬영 추천',
-        ),
-      ],
-    ),
-    _TripDay(
-      label: 'DAY 3',
-      title: '우메다 쇼핑 데이',
-      area: '우메다 - 신사이바시',
-      totalTime: '7시간 00분',
-      walkingDistance: '2.1km',
-      places: [
-        _TripPlace(
-          id: 9,
-          category: '브런치',
-          name: '우동 브런치',
-          note: '아침 줄이 짧을 때 입장',
-          move: '지하철 18분',
-        ),
-        _TripPlace(
-          id: 10,
-          category: '쇼핑',
-          name: '헵파이브',
-          note: '관람차와 쇼핑 동선 함께 잡기',
-          move: '도보 11분',
-        ),
-        _TripPlace(
-          id: 11,
-          category: '전망대',
-          name: '공중정원 전망대',
-          note: '야경 시간대 입장권 확보',
-          move: '지하철 15분',
-        ),
-        _TripPlace(
-          id: 12,
-          category: '카페',
-          name: '신사이바시 커피 스톱',
-          note: '쇼핑 중간 휴식 포인트',
-        ),
-      ],
-    ),
-    _TripDay(
-      label: 'DAY 4',
-      title: '텐마 먹거리 산책',
-      area: '텐진바시스지',
-      totalTime: '4시간 40분',
-      walkingDistance: '0.9km',
-      places: [
-        _TripPlace(
-          id: 13,
-          category: '시장',
-          name: '텐진바시스지 상점가',
-          note: '기념품 마지막 구매 추천',
-          move: '도보 6분',
-        ),
-        _TripPlace(
-          id: 14,
-          category: '식당',
-          name: '스시 점심',
-          note: '오픈 시간 맞춰 방문',
-          move: '도보 3분',
-        ),
-        _TripPlace(
-          id: 15,
-          category: '디저트',
-          name: '와라비모찌 카페',
-          note: '포장 가능 여부 확인',
-          move: '도보 5분',
-        ),
-        _TripPlace(
-          id: 16,
-          category: '휴식',
-          name: '마무리 티타임',
-          note: '공항 이동 전 짐 정리 체크',
-        ),
-      ],
-    ),
-  ];
+  int get _serverUserId => widget.userId;
 
   @override
   void initState() {
     super.initState();
-    _days = _seedDays.map((day) => day.copy()).toList();
-    _nextPlaceId =
-        _days
-            .expand((day) => day.places)
-            .map((place) => place.id)
-            .fold<int>(0, (maxId, id) => id > maxId ? id : maxId) +
-        1;
+    _loadFuture = _loadScheduleFromServer();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final day = _days[_selectedDayIndex];
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('일정관리'),
         backgroundColor: RouteInPalette.white,
+        actions: [
+          IconButton(
+            onPressed: _reloadSchedule,
+            icon: const Icon(Icons.refresh_rounded),
+            tooltip: '서버 일정 새로고침',
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: _showAddPlaceDialog,
+        onPressed: _days.isEmpty ? null : _openAddPlacePage,
         backgroundColor: RouteInPalette.navy,
         foregroundColor: RouteInPalette.white,
         icon: const Icon(Icons.add),
         label: const Text('일정 추가'),
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 100),
-        children: [
-          _MapPreviewSection(day: day),
-          const SizedBox(height: 20),
-          Row(
+      body: FutureBuilder<void>(
+        future: _loadFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (_loadError != null) {
+            return _ScheduleLoadError(
+              message: _loadError!,
+              onRetry: _reloadSchedule,
+            );
+          }
+
+          if (_days.isEmpty) {
+            return _ScheduleLoadError(
+              message: '서버에 저장된 일정 데이터가 없습니다.',
+              onRetry: _reloadSchedule,
+            );
+          }
+
+          final safeIndex = _selectedDayIndex.clamp(0, _days.length - 1);
+          final day = _days[safeIndex];
+
+          return ListView(
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 100),
             children: [
-              Expanded(
-                child: Text(
-                  '여행 일정',
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w800,
+              _MapPreviewSection(day: day),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      '여행 일정',
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
                   ),
+                  TextButton.icon(
+                    onPressed: _openAddPlacePage,
+                    icon: const Icon(Icons.add_circle_outline),
+                    label: const Text('추가'),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 52,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _days.length,
+                  separatorBuilder: (_, _) => const SizedBox(width: 10),
+                  itemBuilder: (context, index) {
+                    final item = _days[index];
+                    final isSelected = index == _selectedDayIndex;
+
+                    return ChoiceChip(
+                      label: Text(item.label),
+                      selected: isSelected,
+                      onSelected: (_) {
+                        setState(() {
+                          _selectedDayIndex = index;
+                        });
+                      },
+                      labelStyle: TextStyle(
+                        color: isSelected
+                            ? RouteInPalette.white
+                            : RouteInPalette.ink,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      selectedColor: RouteInPalette.navy,
+                      backgroundColor: RouteInPalette.white,
+                      side: BorderSide.none,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                    );
+                  },
                 ),
               ),
-              TextButton.icon(
-                onPressed: _showAddPlaceDialog,
-                icon: const Icon(Icons.add_circle_outline),
-                label: const Text('추가'),
+              const SizedBox(height: 18),
+              _DaySummaryCard(day: day),
+              const SizedBox(height: 12),
+              Text(
+                '카드를 길게 눌러 순서를 바꿀 수 있습니다.',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: RouteInPalette.ink,
+                ),
+              ),
+              const SizedBox(height: 12),
+              ReorderableListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                buildDefaultDragHandles: false,
+                itemCount: day.places.length,
+                onReorder: _reorderPlaces,
+                itemBuilder: (context, index) {
+                  final place = day.places[index];
+
+                  return Padding(
+                    key: ValueKey(place.id),
+                    padding: const EdgeInsets.only(bottom: 14),
+                    child: _PlaceTimelineCard(
+                      index: index,
+                      place: place,
+                      onDelete: () => _removePlace(place.id),
+                    ),
+                  );
+                },
               ),
             ],
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            height: 52,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: _days.length,
-              separatorBuilder: (_, _) => const SizedBox(width: 10),
-              itemBuilder: (context, index) {
-                final item = _days[index];
-                final isSelected = index == _selectedDayIndex;
-
-                return ChoiceChip(
-                  label: Text(item.label),
-                  selected: isSelected,
-                  onSelected: (_) {
-                    setState(() {
-                      _selectedDayIndex = index;
-                    });
-                  },
-                  labelStyle: TextStyle(
-                    color: isSelected
-                        ? RouteInPalette.white
-                        : RouteInPalette.ink,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  selectedColor: RouteInPalette.navy,
-                  backgroundColor: RouteInPalette.white,
-                  side: BorderSide.none,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 18),
-          _DaySummaryCard(day: day),
-          const SizedBox(height: 12),
-          Text(
-            '카드를 길게 눌러 순서를 바꿀 수 있습니다.',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: RouteInPalette.ink,
-            ),
-          ),
-          const SizedBox(height: 12),
-          ReorderableListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            buildDefaultDragHandles: false,
-            itemCount: day.places.length,
-            onReorder: _reorderPlaces,
-            itemBuilder: (context, index) {
-              final place = day.places[index];
-              return Padding(
-                key: ValueKey(place.id),
-                padding: const EdgeInsets.only(bottom: 14),
-                child: _PlaceTimelineCard(
-                  index: index,
-                  place: place,
-                  onDelete: () => _removePlace(place.id),
-                ),
-              );
-            },
-          ),
-        ],
+          );
+        },
       ),
     );
+  }
+
+  Future<void> _loadScheduleFromServer() async {
+    setState(() {
+      _loadError = null;
+    });
+
+    try {
+      final trips = await _scheduleApiService.fetchUserTrips(_serverUserId);
+
+      if (!mounted) return;
+
+      if (trips.isEmpty) {
+        setState(() {
+          _days = const [];
+          _selectedDayIndex = 0;
+          _nextPlaceId = 1;
+        });
+        return;
+      }
+
+      final detail = await _scheduleApiService.fetchTrip(trips.first.id);
+
+      if (!mounted) return;
+
+      final loadedDays = detail.days
+          .map(_tripDayFromServer)
+          .toList(growable: false);
+
+      setState(() {
+        _days = loadedDays;
+        _selectedDayIndex = 0;
+        _nextPlaceId = _calculateNextPlaceId(loadedDays);
+      });
+    } catch (error) {
+      if (!mounted) return;
+
+      setState(() {
+        _loadError = '$error';
+      });
+    }
+  }
+
+  int _calculateNextPlaceId(List<_TripDay> days) {
+    final maxId = days
+        .expand((day) => day.places)
+        .map((place) => place.id)
+        .fold<int>(0, (maxId, id) => id > maxId ? id : maxId);
+
+    return maxId + 1;
+  }
+
+  _TripDay _tripDayFromServer(ScheduleTripDay day) {
+    return _TripDay(
+      serverDayId: day.id,
+      label: day.label,
+      title: day.title,
+      area: day.area,
+      totalTime: day.totalTime,
+      walkingDistance: day.walkingDistance,
+      places: day.places.map(_tripPlaceFromServer).toList(growable: true),
+    );
+  }
+
+  _TripPlace _tripPlaceFromServer(SchedulePlace place) {
+    return _TripPlace(
+      id: place.id,
+      serverPlaceId: place.id,
+      category: place.category,
+      name: place.name,
+      note: place.note,
+      move: place.move,
+      address: place.address,
+      link: place.link,
+      latitude: place.latitude,
+      longitude: place.longitude,
+      thumbnailUrl: place.thumbnailUrl,
+      imageUrl: place.imageUrl,
+    );
+  }
+
+  void _reloadSchedule() {
+    setState(() {
+      _loadFuture = _loadScheduleFromServer();
+    });
   }
 
   void _reorderPlaces(int oldIndex, int newIndex) {
     setState(() {
       final places = _days[_selectedDayIndex].places;
+
       if (newIndex > oldIndex) {
         newIndex -= 1;
       }
@@ -292,100 +276,106 @@ class _ScheduleManagementPageState extends State<ScheduleManagementPage> {
       final item = places.removeAt(oldIndex);
       places.insert(newIndex, item);
     });
+
+    // 서버에 순서 저장 API가 있다면 여기에서 호출하면 됩니다.
+    // 예: _scheduleApiService.updatePlaceOrder(...)
   }
 
-  Future<void> _showAddPlaceDialog() async {
-    final categoryController = TextEditingController();
-    final nameController = TextEditingController();
-    final noteController = TextEditingController();
-    final moveController = TextEditingController();
-
-    final created = await showDialog<_TripPlace>(
-      context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
-          title: const Text('일정 추가'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: categoryController,
-                  decoration: const InputDecoration(labelText: '카테고리'),
-                ),
-                TextField(
-                  controller: nameController,
-                  decoration: const InputDecoration(labelText: '장소 이름'),
-                ),
-                TextField(
-                  controller: noteController,
-                  decoration: const InputDecoration(labelText: '메모'),
-                  maxLines: 2,
-                ),
-                TextField(
-                  controller: moveController,
-                  decoration: const InputDecoration(
-                    labelText: '이동 정보',
-                    hintText: '예: 도보 8분',
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: const Text('취소'),
-            ),
-            FilledButton(
-              onPressed: () {
-                final category = categoryController.text.trim();
-                final name = nameController.text.trim();
-                final note = noteController.text.trim();
-                final move = moveController.text.trim();
-
-                if (category.isEmpty || name.isEmpty || note.isEmpty) {
-                  return;
-                }
-
-                Navigator.of(dialogContext).pop(
-                  _TripPlace(
-                    id: _nextPlaceId,
-                    category: category,
-                    name: name,
-                    note: note,
-                    move: move.isEmpty ? null : move,
-                  ),
-                );
-              },
-              child: const Text('추가'),
-            ),
-          ],
-        );
-      },
+  Future<void> _openAddPlacePage() async {
+    final draft = await Navigator.of(context).push<AddedTripPlaceDraft>(
+      MaterialPageRoute(
+        builder: (_) => AddPlacePage(nextPlaceId: _nextPlaceId),
+      ),
     );
 
-    categoryController.dispose();
-    nameController.dispose();
-    noteController.dispose();
-    moveController.dispose();
+    if (draft == null || !mounted) {
+      return;
+    }
 
-    if (created == null || !mounted) {
+    final day = _days[_selectedDayIndex];
+
+    if (day.serverDayId == null) {
+      _showSnackBar('서버 일정 ID가 없어 장소를 추가할 수 없습니다.');
+      return;
+    }
+
+    try {
+      final savedPlace = await _scheduleApiService.createPlace(
+        dayId: day.serverDayId!,
+        category: draft.category,
+        name: draft.name,
+        note: draft.note,
+        move: draft.move,
+        address: draft.address,
+        link: draft.link,
+        latitude: draft.latitude,
+        longitude: draft.longitude,
+        thumbnailUrl: draft.thumbnailUrl,
+        imageUrl: draft.imageUrl,
+      );
+
+      if (!mounted) return;
+
+      setState(() {
+        _days[_selectedDayIndex].places.add(
+          _TripPlace(
+            id: savedPlace.id,
+            serverPlaceId: savedPlace.id,
+            category: savedPlace.category,
+            name: savedPlace.name,
+            note: savedPlace.note,
+            move: savedPlace.move,
+            address: savedPlace.address,
+            link: savedPlace.link,
+            latitude: savedPlace.latitude,
+            longitude: savedPlace.longitude,
+            thumbnailUrl: savedPlace.thumbnailUrl,
+            imageUrl: savedPlace.imageUrl,
+          ),
+        );
+
+        _nextPlaceId = savedPlace.id + 1;
+      });
+    } catch (error) {
+      if (!mounted) return;
+      _showSnackBar('장소 추가 실패: $error');
+    }
+  }
+
+  void _removePlace(int placeId) {
+    final day = _days[_selectedDayIndex];
+
+    final target = day.places
+        .where((place) => place.id == placeId)
+        .firstOrNull;
+
+    if (target == null) {
       return;
     }
 
     setState(() {
-      _days[_selectedDayIndex].places.add(created);
-      _nextPlaceId += 1;
+      day.places.removeWhere((place) => place.id == placeId);
     });
+
+    final serverPlaceId = target.serverPlaceId;
+    if (serverPlaceId != null) {
+      unawaited(_deletePlaceFromServer(serverPlaceId));
+    }
   }
 
-  void _removePlace(int placeId) {
-    setState(() {
-      _days[_selectedDayIndex].places.removeWhere(
-        (place) => place.id == placeId,
-      );
-    });
+  Future<void> _deletePlaceFromServer(int placeId) async {
+    try {
+      await _scheduleApiService.deletePlace(placeId);
+    } catch (error) {
+      if (!mounted) return;
+      _showSnackBar('서버 장소 삭제 실패: $error');
+    }
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 }
 
@@ -396,82 +386,170 @@ class _MapPreviewSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: SizedBox(
+        height: 250,
+        width: double.infinity,
+        child: _ScheduleNaverMap(day: day),
+      ),
+    );
+  }
+}
+
+class _ScheduleNaverMap extends StatelessWidget {
+  const _ScheduleNaverMap({required this.day});
+
+  final _TripDay day;
+
+  @override
+  Widget build(BuildContext context) {
+    final routePlaces = day.places
+        .where((place) => place.latitude != null && place.longitude != null)
+        .toList(growable: false);
+
+    if (routePlaces.isEmpty) {
+      return _ScheduleMapFallback(
+        title: '좌표가 있는 장소를 추가하면 지도가 표시됩니다.',
+        day: day,
+      );
+    }
+
+    if (!NaverMapConfig.supportsMobileMap) {
+      return _ScheduleMapFallback(
+        title: '모바일 지도 전용입니다.',
+        day: day,
+      );
+    }
+
+    if (!NaverMapConfig.hasClientId) {
+      return _ScheduleMapFallback(
+        title: '네이버 지도 키가 필요합니다.',
+        day: day,
+      );
+    }
+
+    if (!NaverMapConfig.isReady) {
+      return _ScheduleMapFallback(
+        title: '네이버 지도를 준비하는 중입니다.',
+        day: day,
+      );
+    }
+
+    return NaverMap(
+      key: ValueKey('${day.label}_${routePlaces.length}'),
+      options: NaverMapViewOptions(
+        mapType: NMapType.basic,
+        initialCameraPosition: NCameraPosition(
+          target: NLatLng(
+            routePlaces.first.latitude!,
+            routePlaces.first.longitude!,
+          ),
+          zoom: 13,
+        ),
+      ),
+      onMapReady: (controller) => _addScheduleOverlays(
+        controller,
+        routePlaces,
+      ),
+    );
+  }
+
+  Future<void> _addScheduleOverlays(
+    NaverMapController controller,
+    List<_TripPlace> routePlaces,
+  ) async {
+    final coords = routePlaces
+        .map((place) => NLatLng(place.latitude!, place.longitude!))
+        .toList(growable: false);
+
+    await controller.addOverlayAll({
+      if (coords.length > 1)
+        NPathOverlay(
+          id: 'schedule_route_${day.label}',
+          coords: coords,
+          width: 6,
+          color: RouteInPalette.denim,
+          outlineWidth: 2,
+          outlineColor: RouteInPalette.white,
+        ),
+      for (var index = 0; index < routePlaces.length; index++)
+        NMarker(
+          id: 'schedule_${day.label}_${routePlaces[index].id}',
+          position: coords[index],
+          iconTintColor: index == 0
+              ? RouteInPalette.coral
+              : RouteInPalette.navy,
+          caption: NOverlayCaption(
+            text: '${index + 1}. ${routePlaces[index].name}',
+          ),
+        ),
+    });
+
+    if (coords.length > 1) {
+      await controller.updateCamera(
+        NCameraUpdate.fitBounds(
+          NLatLngBounds.from(coords),
+          padding: const EdgeInsets.all(42),
+        ),
+      );
+    }
+  }
+}
+
+class _ScheduleMapFallback extends StatelessWidget {
+  const _ScheduleMapFallback({
+    required this.title,
+    required this.day,
+  });
+
+  final String title;
+  final _TripDay day;
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Container(
-      height: 240,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        gradient: const LinearGradient(
-          colors: [RouteInPalette.sky, RouteInPalette.mist],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
+      color: RouteInPalette.sky,
       child: Stack(
         fit: StackFit.expand,
         children: [
           CustomPaint(painter: _MapPlaceholderPainter()),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
+          Center(
+            child: Container(
+              margin: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: RouteInPalette.white.withValues(alpha: 0.92),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.map_outlined,
+                    color: RouteInPalette.navy,
                   ),
-                  decoration: BoxDecoration(
-                    color: RouteInPalette.white,
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  child: const Text(
-                    'MAP AREA',
-                    style: TextStyle(
-                      fontSize: 12,
+                  const SizedBox(height: 8),
+                  Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: RouteInPalette.navy,
                       fontWeight: FontWeight.w800,
-                      letterSpacing: 0.8,
                     ),
                   ),
-                ),
-                const Spacer(),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: RouteInPalette.navy,
-                    borderRadius: BorderRadius.circular(22),
+                  const SizedBox(height: 4),
+                  Text(
+                    '${day.label} · ${day.area}',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: RouteInPalette.ink,
+                    ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '실제 지도 자리',
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          color: RouteInPalette.white,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        '${day.label} · ${day.area}',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: RouteInPalette.white,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        '이 영역은 이후 실제 지도와 장소 마커, 경로 선을 붙일 수 있도록 남겨둔 공간입니다.',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: RouteInPalette.white,
-                          height: 1.4,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
@@ -579,7 +657,7 @@ class _PlaceTimelineCard extends StatelessWidget {
                   ),
                 ),
               ),
-              if (place.move != null)
+              if (place.move != null && place.move!.isNotEmpty)
                 Container(
                   width: 2,
                   height: 48,
@@ -589,6 +667,8 @@ class _PlaceTimelineCard extends StatelessWidget {
             ],
           ),
           const SizedBox(width: 14),
+          _PlaceThumbnail(url: place.thumbnailUrl),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -638,15 +718,40 @@ class _PlaceTimelineCard extends StatelessWidget {
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  place.note,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: RouteInPalette.ink,
-                    height: 1.4,
+                if (place.note.isNotEmpty) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    place.note,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: RouteInPalette.ink,
+                      height: 1.4,
+                    ),
                   ),
-                ),
-                if (place.move != null) ...[
+                ],
+                if (place.address != null && place.address!.isNotEmpty) ...[
+                  const SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(
+                        Icons.place_outlined,
+                        size: 18,
+                        color: RouteInPalette.denim,
+                      ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          place.address!,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: RouteInPalette.denim,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+                if (place.move != null && place.move!.isNotEmpty) ...[
                   const SizedBox(height: 12),
                   Row(
                     children: [
@@ -670,6 +775,96 @@ class _PlaceTimelineCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _PlaceThumbnail extends StatelessWidget {
+  const _PlaceThumbnail({required this.url});
+
+  final String? url;
+
+  @override
+  Widget build(BuildContext context) {
+    final imageUrl = url;
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: SizedBox(
+        width: 72,
+        height: 72,
+        child: imageUrl == null || imageUrl.isEmpty
+            ? Container(
+                color: RouteInPalette.denim,
+                child: const Icon(
+                  Icons.place_outlined,
+                  color: RouteInPalette.white,
+                ),
+              )
+            : Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                errorBuilder: (_, _, _) => Container(
+                  color: RouteInPalette.denim,
+                  child: const Icon(
+                    Icons.broken_image_outlined,
+                    color: RouteInPalette.white,
+                  ),
+                ),
+              ),
+      ),
+    );
+  }
+}
+
+class _ScheduleLoadError extends StatelessWidget {
+  const _ScheduleLoadError({
+    required this.message,
+    required this.onRetry,
+  });
+
+  final String message;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.cloud_off_rounded,
+              color: RouteInPalette.denim,
+              size: 42,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              '서버 일정 연결이 필요합니다.',
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: RouteInPalette.navy,
+              ),
+            ),
+            const SizedBox(height: 16),
+            FilledButton.icon(
+              onPressed: onRetry,
+              icon: const Icon(Icons.refresh_rounded),
+              label: const Text('다시 불러오기'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -763,12 +958,20 @@ class _MapPlaceholderPainter extends CustomPainter {
 
     for (var i = 1; i < 4; i++) {
       final dx = size.width * i / 4;
-      canvas.drawLine(Offset(dx, 0), Offset(dx, size.height), linePaint);
+      canvas.drawLine(
+        Offset(dx, 0),
+        Offset(dx, size.height),
+        linePaint,
+      );
     }
 
     for (var i = 1; i < 4; i++) {
       final dy = size.height * i / 4;
-      canvas.drawLine(Offset(0, dy), Offset(size.width, dy), linePaint);
+      canvas.drawLine(
+        Offset(0, dy),
+        Offset(size.width, dy),
+        linePaint,
+      );
     }
 
     canvas.drawPath(path, routePaint);
@@ -780,8 +983,16 @@ class _MapPlaceholderPainter extends CustomPainter {
     ];
 
     for (final point in points) {
-      canvas.drawCircle(point, 10, Paint()..color = RouteInPalette.coral);
-      canvas.drawCircle(point, 4, Paint()..color = RouteInPalette.white);
+      canvas.drawCircle(
+        point,
+        10,
+        Paint()..color = RouteInPalette.coral,
+      );
+      canvas.drawCircle(
+        point,
+        4,
+        Paint()..color = RouteInPalette.white,
+      );
     }
   }
 
@@ -791,6 +1002,7 @@ class _MapPlaceholderPainter extends CustomPainter {
 
 class _TripDay {
   const _TripDay({
+    this.serverDayId,
     required this.label,
     required this.title,
     required this.area,
@@ -799,23 +1011,13 @@ class _TripDay {
     required this.places,
   });
 
+  final int? serverDayId;
   final String label;
   final String title;
   final String area;
   final String totalTime;
   final String walkingDistance;
   final List<_TripPlace> places;
-
-  _TripDay copy() {
-    return _TripDay(
-      label: label,
-      title: title,
-      area: area,
-      totalTime: totalTime,
-      walkingDistance: walkingDistance,
-      places: places.map((place) => place.copy()).toList(),
-    );
-  }
 }
 
 class _TripPlace {
@@ -825,6 +1027,13 @@ class _TripPlace {
     required this.name,
     required this.note,
     this.move,
+    this.address,
+    this.link,
+    this.latitude,
+    this.longitude,
+    this.thumbnailUrl,
+    this.imageUrl,
+    this.serverPlaceId,
   });
 
   final int id;
@@ -832,14 +1041,23 @@ class _TripPlace {
   final String name;
   final String note;
   final String? move;
+  final String? address;
+  final String? link;
+  final double? latitude;
+  final double? longitude;
+  final String? thumbnailUrl;
+  final String? imageUrl;
+  final int? serverPlaceId;
+}
 
-  _TripPlace copy() {
-    return _TripPlace(
-      id: id,
-      category: category,
-      name: name,
-      note: note,
-      move: move,
-    );
+extension _FirstOrNullExtension<T> on Iterable<T> {
+  T? get firstOrNull {
+    final iterator = this.iterator;
+
+    if (iterator.moveNext()) {
+      return iterator.current;
+    }
+
+    return null;
   }
 }

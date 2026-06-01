@@ -8,9 +8,11 @@ class SelfSupervisedStepModel {
     required this.featureNames,
     required this.means,
     required this.stds,
+    required this.featureWeights,
     required this.centroids,
     required this.stepDecisionThreshold,
     required this.stepClusterIndex,
+    required this.stepClusterIndices,
     required this.minimumStepLengthMeters,
     required this.maximumStepLengthMeters,
     required this.lengthWeights,
@@ -32,6 +34,14 @@ class SelfSupervisedStepModel {
           (dynamic value) => (value as num).toDouble(),
         ),
       ),
+      featureWeights: List<double>.from(
+        ((json['feature_weights'] as List<dynamic>?) ??
+                List<double>.filled(
+                  (json['feature_names'] as List<dynamic>).length,
+                  1,
+                ))
+            .map((dynamic value) => (value as num).toDouble()),
+      ),
       centroids: clusters
           .map(
             (dynamic cluster) => List<double>.from(
@@ -39,13 +49,18 @@ class SelfSupervisedStepModel {
             ).map((dynamic value) => (value as num).toDouble()).toList(),
           )
           .toList(),
-      stepDecisionThreshold:
-          (json['step_decision_threshold'] as num).toDouble(),
+      stepDecisionThreshold: (json['step_decision_threshold'] as num)
+          .toDouble(),
       stepClusterIndex: (json['step_cluster_index'] as num).toInt(),
-      minimumStepLengthMeters:
-          (json['minimum_step_length_meters'] as num).toDouble(),
-      maximumStepLengthMeters:
-          (json['maximum_step_length_meters'] as num).toDouble(),
+      stepClusterIndices: List<int>.from(
+        ((json['step_cluster_indices'] as List<dynamic>?) ??
+                <dynamic>[json['step_cluster_index']])
+            .map((dynamic value) => (value as num).toInt()),
+      ),
+      minimumStepLengthMeters: (json['minimum_step_length_meters'] as num)
+          .toDouble(),
+      maximumStepLengthMeters: (json['maximum_step_length_meters'] as num)
+          .toDouble(),
       lengthWeights: List<double>.from(
         (json['length_weights'] as List<dynamic>).map(
           (dynamic value) => (value as num).toDouble(),
@@ -65,22 +80,22 @@ class SelfSupervisedStepModel {
   final List<String> featureNames;
   final List<double> means;
   final List<double> stds;
+  final List<double> featureWeights;
   final List<List<double>> centroids;
   final double stepDecisionThreshold;
   final int stepClusterIndex;
+  final List<int> stepClusterIndices;
   final double minimumStepLengthMeters;
   final double maximumStepLengthMeters;
   final List<double> lengthWeights;
   final double lengthBias;
 
   double stepProbability(List<double> features) {
-    final normalized = _normalize(features);
+    final normalized = _weightedNormalize(features);
     final distances = centroids
         .map((centroid) => _distance(normalized, centroid))
         .toList();
-    final maxScore = distances
-        .map((distance) => -distance)
-        .reduce(math.max);
+    final maxScore = distances.map((distance) => -distance).reduce(math.max);
     final expScores = distances
         .map((distance) => math.exp((-distance) - maxScore))
         .toList();
@@ -88,7 +103,11 @@ class SelfSupervisedStepModel {
     if (total <= 1e-9) {
       return 0.5;
     }
-    return expScores[stepClusterIndex] / total;
+    var selectedScore = 0.0;
+    for (final index in stepClusterIndices) {
+      selectedScore += expScores[index];
+    }
+    return selectedScore / total;
   }
 
   bool classifyStep(List<double> features) {
@@ -100,7 +119,9 @@ class SelfSupervisedStepModel {
     final linearScore = lengthBias + _dot(lengthWeights, normalized);
     final confidence = stepProbability(features);
     final adjusted = linearScore + (confidence - 0.5) * 0.04;
-    return adjusted.clamp(minimumStepLengthMeters, maximumStepLengthMeters).toDouble();
+    return adjusted
+        .clamp(minimumStepLengthMeters, maximumStepLengthMeters)
+        .toDouble();
   }
 
   List<double> _normalize(List<double> features) {
@@ -112,6 +133,19 @@ class SelfSupervisedStepModel {
     return [
       for (var i = 0; i < features.length; i += 1)
         (features[i] - means[i]) / stds[i],
+    ];
+  }
+
+  List<double> _weightedNormalize(List<double> features) {
+    final normalized = _normalize(features);
+    if (featureWeights.length != normalized.length) {
+      throw ArgumentError(
+        'Feature weight length ${featureWeights.length} does not match model length ${normalized.length}.',
+      );
+    }
+    return [
+      for (var i = 0; i < normalized.length; i += 1)
+        normalized[i] * featureWeights[i],
     ];
   }
 
